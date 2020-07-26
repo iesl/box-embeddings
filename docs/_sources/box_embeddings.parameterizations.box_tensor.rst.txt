@@ -1,0 +1,7 @@
+box\_embeddings.parameterizations.box\_tensor
+=============================================
+
+.. automodule:: box_embeddings.parameterizations.box_tensor
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,10 @@
+box\_embeddings.parameterizations
+=================================
+
+
+
+.. toctree::
+   :maxdepth: 4
+
+   box_embeddings.parameterizations.box_tensor
+

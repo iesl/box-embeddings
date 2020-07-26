@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>box_embeddings.parameterizations.box_tensor &mdash; Box Embeddings  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Box Embeddings
+          
+
+          
+            
+            <img src="_static/UMass_IESL.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">box_embeddings.parameterizations.box_tensor</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Box Embeddings</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>box_embeddings.parameterizations.box_tensor</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/box_embeddings.parameterizations.box_tensor.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-box_embeddings.parameterizations.box_tensor">
+<span id="box-embeddings-parameterizations-box-tensor"></span><h1>box_embeddings.parameterizations.box_tensor<a class="headerlink" href="#module-box_embeddings.parameterizations.box_tensor" title="Permalink to this headline">¶</a></h1>
+<p>Base class for creating a wrapper around the torch.Tensor to represent boxes</p>
+<p>A BoxTensor contains single tensor which represents single or multiple boxes.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>note:</dt><dd><p>Have to use composition instead of inheritance because currently it is not safe to interit from <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code> because creating an instance of such a class will always make it a leaf node. This works for <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Parameter</span></code> but won’t work for a general BoxTensor. This most likely will change in the future as pytorch starts offical support for inheriting from a Tensor. Give this point some thought when this happens.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py class">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor">
+<em class="property">class </em><code class="sig-prename descclassname">box_embeddings.parameterizations.box_tensor.</code><code class="sig-name descname">BoxTensor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract base class defining the interface for BoxTensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> – Tensor of shape (…, zZ, num_dims). Here, zZ=2, where
+the 0th dim is for bottom left corner and 1st dim is for
+top right corner of the box</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.Z">
+<em class="property">property </em><code class="sig-name descname">Z</code><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.Z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Top right coordinate as Tensor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.centre">
+<em class="property">property </em><code class="sig-name descname">centre</code><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.centre" title="Permalink to this definition">¶</a></dt>
+<dd><p>Centre coordinate as Tensor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.from_split">
+<em class="property">classmethod </em><code class="sig-name descname">from_split</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">dim</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">- 1</span></em><span class="sig-paren">)</span> &#x2192; TBoxTensor<a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.from_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a BoxTensor by splitting on the dimension dim at midpoint</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> – input</p></li>
+<li><p><strong>dim</strong> – dimension to split on</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>output BoxTensor</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#box_embeddings.parameterizations.box_tensor.BoxTensor" title="box_embeddings.parameterizations.box_tensor.BoxTensor">BoxTensor</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – <cite>dim</cite> has to be even</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.from_zZ">
+<em class="property">classmethod </em><code class="sig-name descname">from_zZ</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">Z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; TBoxTensor<a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.from_zZ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a box by stacking z and Z along -2 dim.
+That is if z.shape == Z.shape == (…, num_dim),
+then the result would be box of shape (…, 2, num_dim)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.z">
+<em class="property">property </em><code class="sig-name descname">z</code><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lower left coordinate as Tensor</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright Information Extraction and Synthesis Lab., UMass
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

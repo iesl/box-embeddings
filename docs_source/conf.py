@@ -1,0 +1,30 @@
+# -*- coding: utf-8 -*-
+#
+
+import sys
+import os
+
+sys.path.insert(0, os.path.abspath('../'))
+
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.todo',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.graphviz',
+    'sphinx.ext.inheritance_diagram',
+    'sphinx.ext.githubpages',   'm2r'
+]
+source_suffix = ['.rst', '.md']
+#source_suffix = '.rst'
+master_doc = 'index'
+project = u'Box Embeddings'
+copyright = u'Information Extraction and Synthesis Lab., UMass'
+exclude_patterns = ['_build', '**/docs', '**/.docs']
+pygments_style = 'sphinx'
+html_theme = 'sphinx_rtd_theme'
+autoclass_content = "class"
+html_baseurl = "http://dhruveshp.com/boxes/"
+html_logo = "images/UMass_IESL.png"
+
+# https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#confval-autoclass_content
+autoclass_content = "both"
