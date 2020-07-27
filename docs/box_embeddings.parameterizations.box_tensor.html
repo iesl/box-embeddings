@@ -37,6 +37,8 @@
 
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="box_embeddings.parameterizations.delta_box_tensor" href="box_embeddings.parameterizations.delta_box_tensor.html" />
+    <link rel="prev" title="box_embeddings.parameterizations" href="box_embeddings.parameterizations.html" />
 </head>
 
 <body class="wy-body-for-nav">
@@ -84,11 +86,22 @@
 
 
 
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">box_embeddings.parameterizations.box_tensor</a></li>
+              <p class="caption"><span class="caption-text">Code Tree</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="box_embeddings.html">box_embeddings</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.embeddings.html">box_embeddings.embeddings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.intersection.html">box_embeddings.intersection</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="box_embeddings.parameterizations.html">box_embeddings.parameterizations</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">box_embeddings.parameterizations.box_tensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings.parameterizations.delta_box_tensor.html">box_embeddings.parameterizations.delta_box_tensor</a></li>
 </ul>
-</div>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.regularizations.html">box_embeddings.regularizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.volume.html">box_embeddings.volume</a></li>
+</ul>
+</li>
+</ul>
+
 
 
         </div>
@@ -133,6 +146,10 @@
 
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
 
+          <li><a href="box_embeddings.html">box_embeddings</a> &raquo;</li>
+
+          <li><a href="box_embeddings.parameterizations.html">box_embeddings.parameterizations</a> &raquo;</li>
+
       <li>box_embeddings.parameterizations.box_tensor</li>
 
 
@@ -167,23 +184,43 @@
 <em class="property">class </em><code class="sig-prename descclassname">box_embeddings.parameterizations.box_tensor.</code><code class="sig-name descname">BoxTensor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <p>Abstract base class defining the interface for BoxTensor.</p>
+<p>Constructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>data</strong> – Tensor of shape (…, zZ, num_dims). Here, zZ=2, where
 the 0th dim is for bottom left corner and 1st dim is for
 top right corner of the box</p>
 </dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If shape of <cite>data</cite> is not correct.</p>
+</dd>
 </dl>
 <dl class="py method">
 <dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.Z">
 <em class="property">property </em><code class="sig-name descname">Z</code><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.Z" title="Permalink to this definition">¶</a></dt>
 <dd><p>Top right coordinate as Tensor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>top right corner</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Tensor</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.centre">
 <em class="property">property </em><code class="sig-name descname">centre</code><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.centre" title="Permalink to this definition">¶</a></dt>
 <dd><p>Centre coordinate as Tensor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Center</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Tensor</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -212,15 +249,37 @@ top right corner of the box</p>
 <dl class="py method">
 <dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.from_zZ">
 <em class="property">classmethod </em><code class="sig-name descname">from_zZ</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">Z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; TBoxTensor<a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.from_zZ" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a box by stacking z and Z along -2 dim.
-That is if z.shape == Z.shape == (…, num_dim),
+<dd><p>Creates a box by stacking z and Z along -2 dim.</p>
+<p>That is if z.shape == Z.shape == (…, num_dim),
 then the result would be box of shape (…, 2, num_dim)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>z</strong> – lower left</p></li>
+<li><p><strong>Z</strong> – top right</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A BoxTensor</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If <cite>z</cite> and <cite>Z</cite> do not have the same shape</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.z">
 <em class="property">property </em><code class="sig-name descname">z</code><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.z" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lower left coordinate as Tensor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>lower left corner</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Tensor</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -232,6 +291,15 @@ then the result would be box of shape (…, 2, num_dim)</p>
 
           </div>
           <footer>
+
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+
+        <a href="box_embeddings.parameterizations.delta_box_tensor.html" class="btn btn-neutral float-right" title="box_embeddings.parameterizations.delta_box_tensor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+
+
+        <a href="box_embeddings.parameterizations.html" class="btn btn-neutral float-left" title="box_embeddings.parameterizations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+    </div>
 
 
   <hr/>

@@ -37,6 +37,8 @@
 
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="box_embeddings.intersection.intersection" href="box_embeddings.intersection.intersection.html" />
+    <link rel="prev" title="box_embeddings.intersection" href="box_embeddings.intersection.html" />
 </head>
 
 <body class="wy-body-for-nav">
@@ -84,11 +86,22 @@
 
 
 
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">box_embeddings.intersection.hard_intersection</a></li>
+              <p class="caption"><span class="caption-text">Code Tree</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="box_embeddings.html">box_embeddings</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.embeddings.html">box_embeddings.embeddings</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="box_embeddings.intersection.html">box_embeddings.intersection</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">box_embeddings.intersection.hard_intersection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings.intersection.intersection.html">box_embeddings.intersection.intersection</a></li>
 </ul>
-</div>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.parameterizations.html">box_embeddings.parameterizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.regularizations.html">box_embeddings.regularizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.volume.html">box_embeddings.volume</a></li>
+</ul>
+</li>
+</ul>
+
 
 
         </div>
@@ -133,6 +146,10 @@
 
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
 
+          <li><a href="box_embeddings.html">box_embeddings</a> &raquo;</li>
+
+          <li><a href="box_embeddings.intersection.html">box_embeddings.intersection</a> &raquo;</li>
+
       <li>box_embeddings.intersection.hard_intersection</li>
 
 
@@ -164,6 +181,17 @@
 <dt id="box_embeddings.intersection.hard_intersection.HardIntersection.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">left</span><span class="p">:</span> <span class="n">TBoxTensor</span></em>, <em class="sig-param"><span class="n">right</span><span class="p">:</span> <span class="n">TBoxTensor</span></em><span class="sig-paren">)</span> &#x2192; TBoxTensor<a class="headerlink" href="#box_embeddings.intersection.hard_intersection.HardIntersection.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gives intersection of self and other.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> – First operand for intersection</p></li>
+<li><p><strong>right</strong> – Second operand</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Intersection box</p>
+</dd>
+</dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This function can give fipped boxes, i.e. where z[i] &gt; Z[i]</p>
@@ -174,7 +202,7 @@
 
 <dl class="py function">
 <dt id="box_embeddings.intersection.hard_intersection.intersection">
-<code class="sig-prename descclassname">box_embeddings.intersection.hard_intersection.</code><code class="sig-name descname">intersection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">left</span><span class="p">:</span> <span class="n">TBoxTensor</span></em>, <em class="sig-param"><span class="n">right</span><span class="p">:</span> <span class="n">TBoxTensor</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="headerlink" href="#box_embeddings.intersection.hard_intersection.intersection" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">box_embeddings.intersection.hard_intersection.</code><code class="sig-name descname">intersection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">left</span><span class="p">:</span> <span class="n">TBoxTensor</span></em>, <em class="sig-param"><span class="n">right</span><span class="p">:</span> <span class="n">TBoxTensor</span></em><span class="sig-paren">)</span> &#x2192; TBoxTensor<a class="headerlink" href="#box_embeddings.intersection.hard_intersection.intersection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hard Intersection operation as a function.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -183,19 +211,13 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> – BoxTensor which is the left operand</p></li>
-<li><p><strong>other</strong> – BoxTensor which is the right operand</p></li>
+<li><p><strong>left</strong> – BoxTensor which is the left operand</p></li>
+<li><p><strong>right</strong> – BoxTensor which is the right operand</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>The resulting BoxTensor obtained by interection.</dt><dd><p>It has the same concrete type as the <cite>self</cite> (left operand).</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>intersection</p>
+<dd class="field-even"><p>The resulting BoxTensor obtained by interection.
+It has the same concrete type as the <cite>self</cite> (left operand).</p>
 </dd>
 </dl>
 </dd></dl>
@@ -207,6 +229,15 @@
 
           </div>
           <footer>
+
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+
+        <a href="box_embeddings.intersection.intersection.html" class="btn btn-neutral float-right" title="box_embeddings.intersection.intersection" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+
+
+        <a href="box_embeddings.intersection.html" class="btn btn-neutral float-left" title="box_embeddings.intersection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+    </div>
 
 
   <hr/>
