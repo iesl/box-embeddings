@@ -16,7 +16,7 @@ jobs:
       matrix:
         python-version: [3.6, 3.7, 3.8]
         #torch-version: ["1.5.0", "1.4.0"]
-    
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
