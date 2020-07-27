@@ -1,2 +1,12 @@
+mypy
 pytest
 hypothesis
+black
+pytest-flake8
+flake8
+flake8-docstrings
+flake8-annotations
+flake8-black
+pre-commit
+darglint
+coverage

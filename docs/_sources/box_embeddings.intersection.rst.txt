@@ -8,4 +8,3 @@ box\_embeddings.intersection
 
    box_embeddings.intersection.hard_intersection
    box_embeddings.intersection.intersection
-

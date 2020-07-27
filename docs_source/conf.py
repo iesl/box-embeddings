@@ -12,10 +12,11 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.graphviz',
     'sphinx.ext.inheritance_diagram',
-    'sphinx.ext.githubpages',   'm2r'
+    'sphinx.ext.githubpages',
+    'm2r',
 ]
 source_suffix = ['.rst', '.md']
-#source_suffix = '.rst'
+# source_suffix = '.rst'
 master_doc = 'index'
 project = u'Box Embeddings'
 copyright = u'Information Extraction and Synthesis Lab., UMass'

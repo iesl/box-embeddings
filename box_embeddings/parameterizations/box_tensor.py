@@ -22,10 +22,13 @@ def _box_shape_ok(t: Tensor) -> bool:
         return True
 
 
-def _shape_error_str(tensor_name, expected_shape, actual_shape):
-    return "Shape of {} has to be {} but is {}".format(tensor_name,
-                                                       expected_shape,
-                                                       tuple(actual_shape))
+def _shape_error_str(
+    tensor_name: str, expected_shape: Any, actual_shape: Tuple
+) -> str:
+
+    return "Shape of {} has to be {} but is {}".format(
+        tensor_name, expected_shape, tuple(actual_shape)
+    )
 
 
 # see: https://realpython.com/python-type-checking/#type-hints-for-methods
@@ -39,59 +42,90 @@ class BoxTensor(ABC):
 
     def __init__(self, data: Tensor) -> None:
         """
-            Arguments:
-                data: Tensor of shape (..., zZ, num_dims). Here, zZ=2, where
-                    the 0th dim is for bottom left corner and 1st dim is for
-                    top right corner of the box
+        Constructor.
+
+        Arguments:
+            data: Tensor of shape (..., zZ, num_dims). Here, zZ=2, where
+                the 0th dim is for bottom left corner and 1st dim is for
+                top right corner of the box
+
+        Raises:
+            ValueError: If shape of `data` is not correct.
         """
 
         if _box_shape_ok(data):
             self.data = data
         else:
             raise ValueError(
-                _shape_error_str('data', '(...,2,num_dims)', data.shape))
+                _shape_error_str("data", "(...,2,num_dims)", data.shape)
+            )
         super().__init__()
 
-    def __repr__(self):
-        return 'box_tensor_wrapper(' + self.data.__repr__() + ')'
+    def __repr__(self) -> str:
+        return "box_tensor_wrapper(" + self.data.__repr__() + ")"
 
     @property
     def z(self) -> Tensor:
-        """Lower left coordinate as Tensor"""
+        """Lower left coordinate as Tensor
+
+        Returns:
+            Tensor: lower left corner
+        """
 
         return self.data[..., 0, :]
 
     @property
     def Z(self) -> Tensor:
-        """Top right coordinate as Tensor"""
+        """Top right coordinate as Tensor
+
+        Returns:
+            Tensor: top right corner
+        """
 
         return self.data[..., 1, :]
 
     @property
     def centre(self) -> Tensor:
-        """Centre coordinate as Tensor"""
+        """Centre coordinate as Tensor
+
+        Returns:
+            Tensor: Center
+        """
 
         return (self.z + self.Z) / 2
 
     @classmethod
     def from_zZ(cls: Type[TBoxTensor], z: Tensor, Z: Tensor) -> TBoxTensor:
-        """
-        Creates a box by stacking z and Z along -2 dim.
+        """Creates a box by stacking z and Z along -2 dim.
+
         That is if z.shape == Z.shape == (..., num_dim),
         then the result would be box of shape (..., 2, num_dim)
+
+        Args:
+            z: lower left
+            Z: top right
+
+        Returns:
+            A BoxTensor
+
+        Raises:
+            ValueError: If `z` and `Z` do not have the same shape
         """
 
         if z.shape != Z.shape:
             raise ValueError(
                 "Shape of z and Z should be same but is {} and {}".format(
-                    z.shape, Z.shape))
+                    z.shape, Z.shape
+                )
+            )
         box_val: Tensor = torch.stack((z, Z), -2)
 
         return cls(box_val)
 
     @classmethod
-    def from_split(cls: Type[TBoxTensor], t: Tensor,
-                   dim: int = -1) -> TBoxTensor:
+    def from_split(
+        cls: Type[TBoxTensor], t: Tensor, dim: int = -1
+    ) -> TBoxTensor:
         """Creates a BoxTensor by splitting on the dimension dim at midpoint
 
         Args:
@@ -99,7 +133,7 @@ class BoxTensor(ABC):
             dim: dimension to split on
 
         Returns:
-            BoxTensor: output BoxTensor
+            TBoxTensor: output BoxTensor
 
         Raises:
             ValueError: `dim` has to be even
@@ -109,18 +143,24 @@ class BoxTensor(ABC):
         if len_dim % 2 != 0:
             raise ValueError(
                 "dim has to be even to split on it but is {}".format(
-                    t.size(dim)))
+                    t.size(dim)
+                )
+            )
         split_point = int(len_dim / 2)
         z = t.index_select(
             dim,
             torch.tensor(
-                list(range(split_point)), dtype=torch.int64, device=t.device))
+                list(range(split_point)), dtype=torch.int64, device=t.device
+            ),
+        )
 
         Z = t.index_select(
             dim,
             torch.tensor(
                 list(range(split_point, len_dim)),
                 dtype=torch.int64,
-                device=t.device))
+                device=t.device,
+            ),
+        )
 
         return cls.from_zZ(z, Z)

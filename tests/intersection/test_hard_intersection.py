@@ -1,5 +1,8 @@
 from box_embeddings.parameterizations.box_tensor import BoxTensor
-from box_embeddings.intersection.hard_intersection import intersection, Intersection
+from box_embeddings.intersection.hard_intersection import (
+    intersection,
+    Intersection,
+)
 import torch
 
 

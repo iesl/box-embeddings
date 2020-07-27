@@ -55,4 +55,3 @@ url={https://openreview.net/forum?id=J246NSqR_l}
 ```
 
 The code for this library can be found [here](https://github.com/iesl/box-embeddings).
-

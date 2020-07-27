@@ -5,7 +5,7 @@ from .intersection import Intersection
 from box_embeddings.parameterizations import TBoxTensor
 
 
-def intersection(left: TBoxTensor, right: TBoxTensor) -> Tuple[Tensor, Tensor]:
+def intersection(left: TBoxTensor, right: TBoxTensor) -> TBoxTensor:
     """Hard Intersection operation as a function.
 
     note:
@@ -15,12 +15,12 @@ def intersection(left: TBoxTensor, right: TBoxTensor) -> Tuple[Tensor, Tensor]:
         Add support for broadcasting
 
     Args:
-        self: BoxTensor which is the left operand
-        other: BoxTensor which is the right operand
+        left: BoxTensor which is the left operand
+        right: BoxTensor which is the right operand
 
     Returns:
-        intersection: The resulting BoxTensor obtained by interection.
-            It has the same concrete type as the `self` (left operand).
+         The resulting BoxTensor obtained by interection.
+         It has the same concrete type as the `self` (left operand).
     """
     t1 = left
     t2 = right
@@ -36,7 +36,15 @@ class HardIntersection(Intersection):
     def forward(self, left: TBoxTensor, right: TBoxTensor) -> TBoxTensor:
         """ Gives intersection of self and other.
 
-        .. note:: This function can give fipped boxes, i.e. where z[i] > Z[i]
+        Args:
+            left: First operand for intersection
+            right: Second operand
+
+        Returns:
+            Intersection box
+
+        note:
+            This function can give fipped boxes, i.e. where z[i] > Z[i]
         """
 
         return intersection(left, right)

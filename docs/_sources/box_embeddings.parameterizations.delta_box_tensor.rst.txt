@@ -1,0 +1,7 @@
+box\_embeddings.parameterizations.delta\_box\_tensor
+====================================================
+
+.. automodule:: box_embeddings.parameterizations.delta_box_tensor
+   :members:
+   :undoc-members:
+   :show-inheritance:

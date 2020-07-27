@@ -7,4 +7,4 @@ box\_embeddings.parameterizations
    :maxdepth: 4
 
    box_embeddings.parameterizations.box_tensor
-
+   box_embeddings.parameterizations.delta_box_tensor

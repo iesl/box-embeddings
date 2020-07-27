@@ -1,0 +1,15 @@
+[build-system]
+requires = [
+    "setuptools",
+    "wheel",
+]
+
+[tool.autopep8]
+max_line_length = 120
+ignore = ["W504", "W504", "E402", "E731", "C40", "E741", "F40", "F841"]
+
+[tool.black]
+# https://github.com/psf/black
+line-length = 79
+target-version = ["py37"]
+exclude = "(.eggs|.git|.hg|.mypy_cache|.nox|.tox|.venv*|.svn|_build|buck-out|build|dist|__pycache__)"

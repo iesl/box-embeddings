@@ -10,4 +10,3 @@ box\_embeddings
    box_embeddings.parameterizations
    box_embeddings.regularizations
    box_embeddings.volume
-
