@@ -1,0 +1,47 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Tests for pull requests and pushes on master
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+        torch-version: ["1.5.0", "1.4.0", "1.3.0"]
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Cache pip
+      id: cache
+      uses: actions/cache@v1
+      with:
+        path: ~/.cache/pip # This path is specific to Ubuntu
+        # Look to see if there is a cache hit for the corresponding requirements file
+        key: ${{ runner.os }}-pip-${{ hashFiles('*_requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          ${{ runner.os }}-
+    - name: Install box_embeddings as a package
+      run: pip install .
+    - name: Install pytorch version {{ matrix.torch-version }}
+      run: pip install torch=={{ matrix.torch-version }}
+    - name: Run tests
+      shell: bash
+      run: |
+        echo "Running style, typing and doc checks"
+        pre-commit run --all-files -v
+        echo "Running tests"
+        python -m coverage run --source box_embeddings -m py.test tests -v --flake8
+        python -m coverage report -m
