@@ -35,6 +35,10 @@ jobs:
           ${{ runner.os }}-
     - name: Install box_embeddings as a package
       run: pip install .
+    - name: Install test req as a package
+      run: |
+        pip install -r test_requirements.txt
+        pip install -r doc_requirements.txt
     #- name: Install pytorch version ${{ matrix.torch-version }}
     #  run: |
     #    pip uninstall torch
