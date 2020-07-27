@@ -42,6 +42,12 @@ pre-commit run --all-files -v
 
 Fix all documentation and typing issues shown in the output.
 
+5. Run tests locally.
+
+```
+./.run_local_tests.sh
+```
+
 5. Git re-stage the files after fixing the errors and commit. When you commit, `pre-commit` will run once again but only on the changed files
 
 6. Push to remote. Create a PR if your feature is completed.
