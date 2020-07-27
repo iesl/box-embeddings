@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8]
-        torch-version: ["1.5.0", "1.4.0"]
+        #torch-version: ["1.5.0", "1.4.0"]
     
     steps:
     - uses: actions/checkout@v2
@@ -29,16 +29,16 @@ jobs:
       with:
         path: ~/.cache/pip # This path is specific to Ubuntu
         # Look to see if there is a cache hit for the corresponding requirements file
-        key: ${{ runner.os }}-pip-${{ hashFiles('*_requirements.txt') }}-torch-${{ matrix.torch-version }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('*_requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
           ${{ runner.os }}-
     - name: Install box_embeddings as a package
       run: pip install .
-    - name: Install pytorch version ${{ matrix.torch-version }}
-      run: |
-        pip uninstall torch
-        pip install torch==${{ matrix.torch-version }}
+    #- name: Install pytorch version ${{ matrix.torch-version }}
+    #  run: |
+    #    pip uninstall torch
+    #    pip install torch==${{ matrix.torch-version }}
     - name: Run tests
       shell: bash
       run: |
