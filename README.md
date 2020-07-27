@@ -5,7 +5,7 @@ Pytorch implementation for box embeddings as well as box representations.
 
 # Status
 
-![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg)
+![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg) ![Typing/Doc/Style](https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg)
 
 
 # Contributors
