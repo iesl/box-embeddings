@@ -36,7 +36,9 @@ jobs:
     - name: Install box_embeddings as a package
       run: pip install .
     - name: Install pytorch version ${{ matrix.torch-version }}
-      run: pip install torch==${{ matrix.torch-version }}
+      run: |
+        pip uninstall torch
+        pip install torch==${{ matrix.torch-version }}
     - name: Run tests
       shell: bash
       run: |
