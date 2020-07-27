@@ -24,6 +24,13 @@ repos:
         language: system
         types: [python]
 
+      - id: mypy
+        name: mypy
+        entry: python -m mypy
+        language: system
+        types: [python]
+
+
   - repo: https://github.com/terrencepreilly/darglint
     rev: master
     hooks:
