@@ -12,7 +12,7 @@ Pytorch implementation for box embeddings as well as box representations.
 
 1. Dhruvesh Patel [@dhruvdcoder](https://github.com/dhruvdcoder) (Active Maintainer)
 
-2. Shib Shankar Dasgupta [@ssdasgupta](https://github.com/ssdasgupta) (Active Maintainer)
+2. Shib Sankar Dasgupta [@ssdasgupta](https://github.com/ssdasgupta) (Active Maintainer)
 
 3. Michael Boratko [@mboratko](https://github.com/mboratko)
 
