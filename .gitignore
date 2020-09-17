@@ -1,3 +1,5 @@
 __pycache__
 .venv*
 *.pyc
+!docs_source/index.rst
+docs_source/*.rst

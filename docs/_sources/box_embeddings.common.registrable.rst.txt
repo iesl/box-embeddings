@@ -1,0 +1,7 @@
+box\_embeddings.common.registrable
+==================================
+
+.. automodule:: box_embeddings.common.registrable
+   :members:
+   :undoc-members:
+   :show-inheritance:
