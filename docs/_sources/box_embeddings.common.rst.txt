@@ -1,0 +1,9 @@
+box\_embeddings.common
+======================
+
+
+
+.. toctree::
+   :maxdepth: 4
+
+   box_embeddings.common.registrable

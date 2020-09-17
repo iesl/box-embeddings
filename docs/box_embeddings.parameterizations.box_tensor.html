@@ -89,6 +89,7 @@
               <p class="caption"><span class="caption-text">Code Tree</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="box_embeddings.html">box_embeddings</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.common.html">box_embeddings.common</a></li>
 <li class="toctree-l2"><a class="reference internal" href="box_embeddings.embeddings.html">box_embeddings.embeddings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="box_embeddings.intersection.html">box_embeddings.intersection</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="box_embeddings.parameterizations.html">box_embeddings.parameterizations</a><ul class="current">
@@ -179,6 +180,41 @@
 </dd>
 </dl>
 </div></blockquote>
+<dl class="py class">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxFactory">
+<em class="property">class </em><code class="sig-prename descclassname">box_embeddings.parameterizations.box_tensor.</code><code class="sig-name descname">BoxFactory</code><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="box_embeddings.common.registrable.html#box_embeddings.common.registrable.DummyRegistrable" title="box_embeddings.common.registrable.DummyRegistrable"><code class="xref py py-class docutils literal notranslate"><span class="pre">box_embeddings.common.registrable.DummyRegistrable</span></code></a></p>
+<p>A factory class which will be subclassed (one for each box type).</p>
+<dl class="py attribute">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxFactory.box_registry">
+<code class="sig-name descname">box_registry</code><em class="property">: Dict<span class="p">[</span>str<span class="p">, </span>Tuple<span class="p">[</span>Type<span class="p">[</span>R<span class="p">]</span><span class="p">, </span>str<span class="p">]</span><span class="p">]</span></em><em class="property"> = {'boxtensor': (&lt;class 'box_embeddings.parameterizations.box_tensor.BoxTensor'&gt;, None), 'boxtensor_from_split': (&lt;class 'box_embeddings.parameterizations.box_tensor.BoxTensor'&gt;, 'from_split'), 'boxtensor_from_zZ': (&lt;class 'box_embeddings.parameterizations.box_tensor.BoxTensor'&gt;, 'from_zZ')}</em><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxFactory.box_registry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxFactory.construct">
+<code class="sig-name descname">construct</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#box_embeddings.parameterizations.box_tensor.BoxTensor" title="box_embeddings.parameterizations.box_tensor.BoxTensor">box_embeddings.parameterizations.box_tensor.BoxTensor</a><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxFactory.construct" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxFactory.register_box_class">
+<em class="property">classmethod </em><code class="sig-name descname">register_box_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">constructor</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exist_ok</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Callable<span class="p">[</span><span class="p">[</span>Type<span class="p">[</span><a class="reference internal" href="#box_embeddings.parameterizations.box_tensor.BoxTensor" title="box_embeddings.parameterizations.box_tensor.BoxTensor">box_embeddings.parameterizations.box_tensor.BoxTensor</a><span class="p">]</span><span class="p">]</span><span class="p">, </span>Type<span class="p">[</span><a class="reference internal" href="#box_embeddings.parameterizations.box_tensor.BoxTensor" title="box_embeddings.parameterizations.box_tensor.BoxTensor">box_embeddings.parameterizations.box_tensor.BoxTensor</a><span class="p">]</span><span class="p">]</span><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxFactory.register_box_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is different from allennlp registrable because what this class registers
+is not subclasses but subclasses of BoxTensor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>TODO</em>) – TODO</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Kwargs:</dt><dd><p>constructor (TODO): TODO
+exist_ok (TODO): TODO</p>
+</dd>
+</dl>
+<p>Returns: ()</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt id="box_embeddings.parameterizations.box_tensor.BoxTensor">
 <em class="property">class </em><code class="sig-prename descclassname">box_embeddings.parameterizations.box_tensor.</code><code class="sig-name descname">BoxTensor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor" title="Permalink to this definition">¶</a></dt>

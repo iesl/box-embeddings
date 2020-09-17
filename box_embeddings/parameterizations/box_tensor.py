@@ -9,7 +9,21 @@ A BoxTensor contains single tensor which represents single or multiple boxes.
 import torch
 from torch import Tensor
 from abc import ABC
-from typing import List, Tuple, Union, Dict, Any, Optional, Type, TypeVar
+from typing import (
+    List,
+    Tuple,
+    Union,
+    Dict,
+    Any,
+    Optional,
+    Type,
+    TypeVar,
+    Callable,
+)
+from box_embeddings.common.registrable import Registrable
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def _box_shape_ok(t: Tensor) -> bool:
@@ -25,7 +39,6 @@ def _box_shape_ok(t: Tensor) -> bool:
 def _shape_error_str(
     tensor_name: str, expected_shape: Any, actual_shape: Tuple
 ) -> str:
-
     return "Shape of {} has to be {} but is {}".format(
         tensor_name, expected_shape, tuple(actual_shape)
     )
@@ -164,3 +177,81 @@ class BoxTensor(ABC):
         )
 
         return cls.from_zZ(z, Z)
+
+
+R = TypeVar("R", bound="BoxTensor")
+
+
+class BoxFactory(Registrable):
+
+    """A factory class which will be subclassed (one for each box type)."""
+
+    box_registry: Dict[str, Tuple[Type[R], str]] = {}  # type:ignore
+
+    @classmethod
+    def register_box_class(
+        cls, name: str, constructor: str = None, exist_ok: bool = False,
+    ) -> Callable[[Type[BoxTensor]], Type[BoxTensor]]:
+        """This is different from allennlp registrable because what this class registers
+        is not subclasses but subclasses of BoxTensor
+
+        Args:
+            name: TODO
+            constructor: TODO
+            exist_ok: TODO
+
+        Returns:
+            ()
+
+        Raises:
+            RuntimeError: if
+
+        """
+
+        def add_box_class(subclass: Type[TBoxTensor]) -> Type[TBoxTensor]:
+            if name in cls.box_registry:
+                if exist_ok:
+                    message = (
+                        f"{name} has already been registered as a "  # type:ignore
+                        f"box class {cls.box_registry[name][0].__name__}"
+                        f", but exist_ok=True, so overriting with {subclass.__name__}"
+                    )
+                    logger.warning(message)
+                else:
+                    message = (
+                        f"Cannot register {name} as box class"  # type:ignore
+                        f"name already in use for {cls.box_registry[name][0].__name__}"
+                    )
+                    raise RuntimeError(message)
+            cls.box_registry[name] = (subclass, constructor)  # type: ignore
+
+            return subclass
+
+        return add_box_class
+
+    def construct(self, name: str, *args: Any, **kwargs: Any) -> BoxTensor:
+        try:
+            subclass, constructor = self.box_registry[name]
+        except KeyError as ke:
+            raise KeyError(
+                f"{name} not present in box_registry: {list(self.box_registry.keys())}"
+            )
+
+        if not constructor:
+            creator: Type[TBoxTensor] = subclass  # type: ignore
+        else:
+            try:
+                creator = getattr(subclass, constructor)
+            except AttributeError as ae:
+                raise ValueError(
+                    f"{subclass.__name__} registered as {name} "
+                    f"with constructor {constructor} "
+                    f"but no method {constructor} found."
+                )
+
+        return creator(*args, **kwargs)  # type:ignore
+
+
+BoxFactory.register_box_class("boxtensor")(BoxTensor)
+BoxFactory.register_box_class("boxtensor_from_zZ", "from_zZ")(BoxTensor)
+BoxFactory.register_box_class("boxtensor_from_split", "from_split")(BoxTensor)

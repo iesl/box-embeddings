@@ -5,6 +5,7 @@ box\_embeddings
 .. toctree::
    :maxdepth: 4
 
+   box_embeddings.common
    box_embeddings.embeddings
    box_embeddings.intersection
    box_embeddings.parameterizations
