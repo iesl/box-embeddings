@@ -1,0 +1,10 @@
+box\_embeddings.modules.volume
+==============================
+
+
+
+.. toctree::
+   :maxdepth: 4
+
+   box_embeddings.modules.volume.soft_volume
+   box_embeddings.modules.volume.volume

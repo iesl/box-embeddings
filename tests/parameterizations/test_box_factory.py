@@ -24,12 +24,14 @@ class TestBoxFactory(BaseTestCase):
         max_examples=5, verbosity=hypothesis.Verbosity.verbose
     )
     def test_simple_creation(self, inp1: np.ndarray, inp2: np.ndarray) -> None:
+        inp1[..., 1] += inp1[..., 0]  # make sure Z>z
         tensor = torch.tensor(inp1)
-        box_tensor: BoxTensor = BoxFactory().construct("boxtensor", tensor)
+        box_tensor: BoxTensor = BoxFactory("boxtensor")(tensor)
         assert (tensor.data.numpy() == box_tensor.data.numpy()).all()
         assert isinstance(box_tensor, BoxTensor)
+        inp2[..., 1] += inp2[..., 0]
         tensor = torch.tensor(inp2)
-        box_tensor2: BoxTensor = BoxFactory().construct("boxtensor", tensor)
+        box_tensor2: BoxTensor = BoxFactory("boxtensor")(tensor)
         assert (tensor.data.numpy() == box_tensor2.data.numpy()).all()
         assert isinstance(box_tensor, BoxTensor)
 
@@ -42,15 +44,15 @@ class TestBoxFactory(BaseTestCase):
         Z=arrays(
             shape=(3, 5, 10),
             dtype=np.float,
-            elements=hypothesis.strategies.floats(-100, 100),
+            elements=hypothesis.strategies.floats(0, 100),
         ),
     )
     @hypothesis.settings(
         max_examples=5, verbosity=hypothesis.Verbosity.verbose
     )
     def test_creation_from_zZ(self, z, Z) -> None:
-        box: BoxTensor = BoxFactory().construct(
-            "boxtensor_from_zZ", torch.tensor(z), torch.tensor(Z)
+        box: BoxTensor = BoxFactory("boxtensor_from_zZ")(
+            torch.tensor(z), torch.tensor(z + Z)
         )
         assert list(box.data.shape) == [3, 5, 2, 10]
         assert type(box) is BoxTensor

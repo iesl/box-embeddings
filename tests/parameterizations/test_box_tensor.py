@@ -30,6 +30,6 @@ def test_shape_validation_during_creation():
 def test_creation_from_zZ():
     shape = (3, 1, 5)
     z = torch.tensor(np.random.rand(*shape))
-    Z = torch.tensor(np.random.rand(*shape))
+    Z = z + torch.tensor(np.random.rand(*shape))
     box = BoxTensor.from_zZ(z, Z)
     assert box.data.shape == (3, 1, 2, 5)

@@ -1,0 +1,18 @@
+box\_embeddings.modules
+=======================
+
+
+.. toctree::
+   :maxdepth: 4
+
+   box_embeddings.modules.intersection
+   box_embeddings.modules.regularization
+   box_embeddings.modules.volume
+
+
+
+.. toctree::
+   :maxdepth: 4
+
+   box_embeddings.modules.box_module
+   box_embeddings.modules.embedding

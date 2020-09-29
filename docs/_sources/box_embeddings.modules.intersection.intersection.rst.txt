@@ -1,0 +1,7 @@
+box\_embeddings.modules.intersection.intersection
+=================================================
+
+.. automodule:: box_embeddings.modules.intersection.intersection
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+box\_embeddings.modules.box\_module
+===================================
+
+.. automodule:: box_embeddings.modules.box_module
+   :members:
+   :undoc-members:
+   :show-inheritance:

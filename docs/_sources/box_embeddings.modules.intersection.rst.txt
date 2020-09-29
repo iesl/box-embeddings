@@ -1,0 +1,11 @@
+box\_embeddings.modules.intersection
+====================================
+
+
+
+.. toctree::
+   :maxdepth: 4
+
+   box_embeddings.modules.intersection.gumbel_intersection
+   box_embeddings.modules.intersection.hard_intersection
+   box_embeddings.modules.intersection.intersection

@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>box_embeddings.common.utils &mdash; Box Embeddings  documentation</title>
+
+
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+
+
+
+
+
+
+
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="box_embeddings.modules" href="box_embeddings.modules.html" />
+    <link rel="prev" title="box_embeddings.common.registrable" href="box_embeddings.common.registrable.html" />
+</head>
+
+<body class="wy-body-for-nav">
+
+
+  <div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Box Embeddings
+
+
+
+
+            <img src="_static/UMass_IESL.png" class="logo" alt="Logo"/>
+
+          </a>
+
+
+
+
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+
+
+
+
+              <p class="caption"><span class="caption-text">Code Tree</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="box_embeddings.html">box_embeddings</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="box_embeddings.common.html">box_embeddings.common</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings.common.registrable.html">box_embeddings.common.registrable</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">box_embeddings.common.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.modules.html">box_embeddings.modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.parameterizations.html">box_embeddings.parameterizations</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+        </div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+      <nav class="wy-nav-top" aria-label="top navigation">
+
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Box Embeddings</a>
+
+      </nav>
+
+
+      <div class="wy-nav-content">
+
+        <div class="rst-content">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+
+          <li><a href="box_embeddings.html">box_embeddings</a> &raquo;</li>
+
+          <li><a href="box_embeddings.common.html">box_embeddings.common</a> &raquo;</li>
+
+      <li>box_embeddings.common.utils</li>
+
+
+      <li class="wy-breadcrumbs-aside">
+
+
+            <a href="_sources/box_embeddings.common.utils.rst.txt" rel="nofollow"> View page source</a>
+
+
+      </li>
+
+  </ul>
+
+
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <div class="section" id="module-box_embeddings.common.utils">
+<span id="box-embeddings-common-utils"></span><h1>box_embeddings.common.utils<a class="headerlink" href="#module-box_embeddings.common.utils" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="box_embeddings.common.utils.log1mexp">
+<code class="sig-prename descclassname">box_embeddings.common.utils.</code><code class="sig-name descname">log1mexp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">split_point</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">- 0.6931471805599453</span></em>, <em class="sig-param"><span class="n">exp_zero_eps</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1e-07</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#box_embeddings.common.utils.log1mexp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes log(1 - exp(x)).</p>
+<p>Splits at x=log(1/2) for x in (-inf, 0] i.e. at -x=log(2) for -x in [0, inf).</p>
+<p>= log1p(-exp(x)) when x &lt;= log(1/2)
+or
+= log(-expm1(x)) when log(1/2) &lt; x &lt;= 0</p>
+<p>For details, see</p>
+<p><a class="reference external" href="https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf">https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf</a></p>
+<p><a class="reference external" href="https://github.com/visinf/n3net/commit/31968bd49c7d638cef5f5656eb62793c46b41d76">https://github.com/visinf/n3net/commit/31968bd49c7d638cef5f5656eb62793c46b41d76</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="box_embeddings.common.utils.log1pexp">
+<code class="sig-prename descclassname">box_embeddings.common.utils.</code><code class="sig-name descname">log1pexp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#box_embeddings.common.utils.log1pexp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes log(1+exp(x))</p>
+<p>see: Page 7, eqn 10 of <a class="reference external" href="https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf">https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf</a>
+also see: <a class="reference external" href="https://github.com/SurajGupta/r-source/blob/master/src/nmath/plogis.c">https://github.com/SurajGupta/r-source/blob/master/src/nmath/plogis.c</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="box_embeddings.common.utils.softplus_inverse">
+<code class="sig-prename descclassname">box_embeddings.common.utils.</code><code class="sig-name descname">softplus_inverse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">beta</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">20</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#box_embeddings.common.utils.softplus_inverse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="box_embeddings.common.utils.tiny_value_of_dtype">
+<code class="sig-prename descclassname">box_embeddings.common.utils.</code><code class="sig-name descname">tiny_value_of_dtype</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dtype</span><span class="p">:</span> <span class="n">torch.dtype</span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#box_embeddings.common.utils.tiny_value_of_dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>This implementation is adopted from AllenNLP.</p>
+<p>Returns a moderately tiny value for a given PyTorch data type that is used to avoid numerical
+issues such as division by zero.
+This is different from <cite>info_value_of_dtype(dtype).tiny</cite> because it causes some NaN bugs.
+Only supports floating point dtypes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> – torch dtype of supertype float</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tiny value</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TypeError</strong> – Given non-float or unknown type</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+
+          </div>
+          <footer>
+
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+
+        <a href="box_embeddings.modules.html" class="btn btn-neutral float-right" title="box_embeddings.modules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+
+
+        <a href="box_embeddings.common.registrable.html" class="btn btn-neutral float-left" title="box_embeddings.common.registrable" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+    </div>
+
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+        &copy; Copyright Information Extraction and Synthesis Lab., UMass
+
+    </p>
+  </div>
+
+
+
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+
+
+
+
+
+</body>
+</html>

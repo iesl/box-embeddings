@@ -7,3 +7,4 @@ box\_embeddings.common
    :maxdepth: 4
 
    box_embeddings.common.registrable
+   box_embeddings.common.utils

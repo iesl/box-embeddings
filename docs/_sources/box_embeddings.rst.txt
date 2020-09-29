@@ -6,8 +6,5 @@ box\_embeddings
    :maxdepth: 4
 
    box_embeddings.common
-   box_embeddings.embeddings
-   box_embeddings.intersection
+   box_embeddings.modules
    box_embeddings.parameterizations
-   box_embeddings.regularizations
-   box_embeddings.volume

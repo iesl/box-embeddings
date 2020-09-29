@@ -8,7 +8,6 @@ A BoxTensor contains single tensor which represents single or multiple boxes.
 """
 import torch
 from torch import Tensor
-from abc import ABC
 from typing import (
     List,
     Tuple,
@@ -49,8 +48,8 @@ def _shape_error_str(
 TBoxTensor = TypeVar("TBoxTensor", bound="BoxTensor")
 
 
-class BoxTensor(ABC):
-    """Abstract base class defining the interface for BoxTensor.
+class BoxTensor(object):
+    """Base class defining the interface for BoxTensor.
     """
 
     def __init__(self, data: Tensor) -> None:
@@ -75,7 +74,9 @@ class BoxTensor(ABC):
         super().__init__()
 
     def __repr__(self) -> str:
-        return "box_tensor_wrapper(" + self.data.__repr__() + ")"
+        return (
+            f"{self.__class__.__name__}({self.data.__repr__()})"  # type:ignore
+        )
 
     @property
     def z(self) -> Tensor:
@@ -108,22 +109,24 @@ class BoxTensor(ABC):
         return (self.z + self.Z) / 2
 
     @classmethod
-    def from_zZ(cls: Type[TBoxTensor], z: Tensor, Z: Tensor) -> TBoxTensor:
-        """Creates a box by stacking z and Z along -2 dim.
+    def check_if_valid_zZ(cls: Type[TBoxTensor], z: Tensor, Z: Tensor) -> None:
+        """Check of (z,Z) form a valid box.
 
-        That is if z.shape == Z.shape == (..., num_dim),
-        then the result would be box of shape (..., 2, num_dim)
+        If your child class parameterization bounds the boxes to some universe
+        box then this is the right place to check that.
 
         Args:
-            z: lower left
-            Z: top right
-
-        Returns:
-            A BoxTensor
+            z: Lower left coordinate of shape (..., hidden_dims)
+            Z: Top right coordinate of shape (..., hidden_dims)
 
         Raises:
             ValueError: If `z` and `Z` do not have the same shape
+            ValueError: If `Z` < `z`
+
         """
+
+        if not (Z >= z).all().item():  # type: ignore
+            raise ValueError(f"Invalid box: Z < z where\nZ = {Z}\nz={z}")
 
         if z.shape != Z.shape:
             raise ValueError(
@@ -131,52 +134,49 @@ class BoxTensor(ABC):
                     z.shape, Z.shape
                 )
             )
-        box_val: Tensor = torch.stack((z, Z), -2)
-
-        return cls(box_val)
 
     @classmethod
-    def from_split(
-        cls: Type[TBoxTensor], t: Tensor, dim: int = -1
-    ) -> TBoxTensor:
-        """Creates a BoxTensor by splitting on the dimension dim at midpoint
+    def W(cls: Type[TBoxTensor], z: Tensor, Z: Tensor) -> Tensor:
+        """Given (z,Z), it returns one set of valid box weights W, such that
+        Box(W) = (z,Z).
+
+        For the base `BoxTensor` class, we just return z and Z stacked together.
+        If you implement any new parameterization for boxes. You most likely
+        need to override this method.
 
         Args:
-            t: input
-            dim: dimension to split on
+            z: Lower left coordinate of shape (..., hidden_dims)
+            Z: Top right coordinate of shape (..., hidden_dims)
 
         Returns:
-            TBoxTensor: output BoxTensor
-
-        Raises:
-            ValueError: `dim` has to be even
+            Tensor: Parameters of the box. In base class implementation, this
+                will have shape (..., 2, hidden_dims).
         """
-        len_dim = t.size(dim)
 
-        if len_dim % 2 != 0:
-            raise ValueError(
-                "dim has to be even to split on it but is {}".format(
-                    t.size(dim)
-                )
-            )
-        split_point = int(len_dim / 2)
-        z = t.index_select(
-            dim,
-            torch.tensor(
-                list(range(split_point)), dtype=torch.int64, device=t.device
-            ),
-        )
+        return torch.stack((z, Z), -2)
 
-        Z = t.index_select(
-            dim,
-            torch.tensor(
-                list(range(split_point, len_dim)),
-                dtype=torch.int64,
-                device=t.device,
-            ),
-        )
+    @classmethod
+    def from_zZ(
+        cls: Type[TBoxTensor], z: Tensor, Z: Tensor, *args: Any, **kwargs: Any
+    ) -> TBoxTensor:
+        """Creates a box for the given min-max coordinates (z,Z).
 
-        return cls.from_zZ(z, Z)
+        In the this base implementation we do this by
+        stacking z and Z along -2 dim to form W.
+
+        Args:
+            z: lower left
+            Z: top right
+            *args: extra arguments for child class
+            **kwargs: extra arguments for child class
+
+        Returns:
+            A BoxTensor
+
+        """
+        cls.check_if_valid_zZ(z, Z)
+
+        return cls(cls.W(z, Z))
 
 
 R = TypeVar("R", bound="BoxTensor")
@@ -184,9 +184,31 @@ R = TypeVar("R", bound="BoxTensor")
 
 class BoxFactory(Registrable):
 
-    """A factory class which will be subclassed (one for each box type)."""
+    """A factory class which will be subclassed(one for each box type)."""
 
     box_registry: Dict[str, Tuple[Type[R], str]] = {}  # type:ignore
+
+    def __init__(self, name: str, kwargs_dict: Dict = None):
+        self.name = str  #: Name of the registered BoxTensor class
+        self.kwargs_dict = kwargs_dict
+        try:
+            box_subclass, box_constructor = self.box_registry[name]
+        except KeyError as ke:
+            raise KeyError(
+                f"{name} not present in box_registry: {list(self.box_registry.keys())}"
+            )
+
+        if not box_constructor:
+            self.creator: Type[TBoxTensor] = box_subclass  # type: ignore
+        else:
+            try:
+                self.creator = getattr(box_subclass, box_constructor)
+            except AttributeError as ae:
+                raise ValueError(
+                    f"{box_subclass.__name__} registered as {name} "
+                    f"with constructor {box_constructor} "
+                    f"but no method {box_constructor} found."
+                )
 
     @classmethod
     def register_box_class(
@@ -229,29 +251,10 @@ class BoxFactory(Registrable):
 
         return add_box_class
 
-    def construct(self, name: str, *args: Any, **kwargs: Any) -> BoxTensor:
-        try:
-            subclass, constructor = self.box_registry[name]
-        except KeyError as ke:
-            raise KeyError(
-                f"{name} not present in box_registry: {list(self.box_registry.keys())}"
-            )
+    def __call__(self, *args: Any, **kwargs: Any) -> BoxTensor:
 
-        if not constructor:
-            creator: Type[TBoxTensor] = subclass  # type: ignore
-        else:
-            try:
-                creator = getattr(subclass, constructor)
-            except AttributeError as ae:
-                raise ValueError(
-                    f"{subclass.__name__} registered as {name} "
-                    f"with constructor {constructor} "
-                    f"but no method {constructor} found."
-                )
-
-        return creator(*args, **kwargs)  # type:ignore
+        return self.creator(*args, **kwargs)  # type:ignore
 
 
 BoxFactory.register_box_class("boxtensor")(BoxTensor)
 BoxFactory.register_box_class("boxtensor_from_zZ", "from_zZ")(BoxTensor)
-BoxFactory.register_box_class("boxtensor_from_split", "from_split")(BoxTensor)
