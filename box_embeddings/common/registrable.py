@@ -13,15 +13,14 @@ from typing import (
     Callable,
 )
 import logging
+from box_embeddings.common import ALLENNLP_PRESENT
 
 logger = logging.getLogger(__name__)
-_allennlp_available = False
-try:
+
+if ALLENNLP_PRESENT:
     from allennlp.common.registrable import Registrable
 
-    _allennlp_available = True
-except ImportError as e:
-    _allennlp_available = False
+else:
     logger.warning("AllenNLP not available. Registrable won't work.")
 
 T = TypeVar("T", bound="DummyRegistrable")
@@ -56,5 +55,5 @@ class DummyRegistrable(object):
         return foo
 
 
-if not _allennlp_available:
-    Registrable = DummyRegistrable  # noqa
+if not ALLENNLP_PRESENT:
+    Registrable = DummyRegistrable  # type:ignore # noqa
