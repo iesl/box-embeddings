@@ -28,9 +28,9 @@ def test_shape_validation_during_creation():
         box_tensor = MinDeltaBoxTensor(tensor)
 
 
-def test_warning_in_creation_from_zZ():
-    shape = (3, 1, 5)
-    z = torch.tensor(np.random.rand(*shape))
-    Z = z + torch.tensor(np.random.rand(*shape))
-    with pytest.warns(UserWarning):
-        box = MinDeltaBoxTensor.from_zZ(z, Z)
+# def test_warning_in_creation_from_zZ():
+#    shape = (3, 1, 5)
+#    z = torch.tensor(np.random.rand(*shape))
+#    Z = z + torch.tensor(np.random.rand(*shape))
+#    with pytest.warns(UserWarning):
+#        box = MinDeltaBoxTensor.from_zZ(z, Z)

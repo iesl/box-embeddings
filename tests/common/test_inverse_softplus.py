@@ -35,3 +35,27 @@ def test_softplus_inverse(inp, beta, threshold):
         inp,
         atol=tol,
     )
+
+
+@hypothesis.given(
+    inp=arrays(
+        shape=(3, 2, 10),
+        dtype=np.float,
+        elements=hypothesis.strategies.floats(0.01, 100),
+    ),
+    beta=floats(1.0, 50.0),
+    threshold=floats(20.0, 50.0),
+)
+@hypothesis.settings(max_examples=100, verbosity=hypothesis.Verbosity.verbose)
+def test_softplus_inverse_positive_numbers(inp, beta, threshold):
+
+    inp = torch.tensor(inp)
+    assert torch.allclose(
+        softplus_inverse(
+            torch.nn.functional.softplus(inp, beta=beta, threshold=threshold),
+            beta=beta,
+            threshold=threshold,
+        ),
+        inp,
+        atol=1e-8,
+    )

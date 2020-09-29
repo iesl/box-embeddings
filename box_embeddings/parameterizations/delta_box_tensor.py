@@ -80,7 +80,7 @@ class MinDeltaBoxTensor(BoxTensor):
 
         The min coordinate is stored as is:
         W[...,0,:] = z
-        W[...,1,:] = softplus_inverse(Z)
+        W[...,1,:] = softplus_inverse(Z-z)
 
         The max coordinate is transformed
 
@@ -93,12 +93,15 @@ class MinDeltaBoxTensor(BoxTensor):
             Tensor: Parameters of the box. In base class implementation, this
                 will have shape (..., 2, hidden_dims).
         """
-        warnings.warn(
-            "W() method for MinDeltaBoxTensor is numerically unstable."
-            " It can produce high error when input Z is < 0."
-        )
+        cls.check_if_valid_zZ(z, Z)
 
-        return torch.stack((z, softplus_inverse(Z)), -2)
+        if ((Z - z) < 0).any():
+            warnings.warn(
+                "W() method for MinDeltaBoxTensor is numerically unstable."
+                " It can produce high error when input Z-z is < 0."
+            )
+
+        return torch.stack((z, softplus_inverse(Z - z)), -2)
 
     @classmethod
     def from_zZ(  # type:ignore
@@ -131,7 +134,4 @@ class MinDeltaBoxTensor(BoxTensor):
         return cls(cls.W(z, Z))
 
 
-BoxFactory.register_box_class("mindelta-boxtensor")(MinDeltaBoxTensor)
-BoxFactory.register_box_class("mindelta-boxtensor_from_zZ", "from_zZ")(
-    MinDeltaBoxTensor
-)
+BoxFactory.register_box_class("mindelta_from_zZ", "from_zZ")(MinDeltaBoxTensor)

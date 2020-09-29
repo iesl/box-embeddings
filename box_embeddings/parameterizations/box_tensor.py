@@ -52,6 +52,8 @@ class BoxTensor(object):
     """Base class defining the interface for BoxTensor.
     """
 
+    w2z_ratio: int = 2  #: number of parameters required per dim
+
     def __init__(self, data: Tensor) -> None:
         """
         Constructor.
@@ -77,6 +79,14 @@ class BoxTensor(object):
         return (
             f"{self.__class__.__name__}({self.data.__repr__()})"  # type:ignore
         )
+
+    def reinit(self, data: torch.Tensor) -> None:
+        if _box_shape_ok(data):
+            self.data = data
+        else:
+            raise ValueError(
+                _shape_error_str("data", "(...,2,num_dims)", data.shape)
+            )
 
     @property
     def z(self) -> Tensor:
@@ -192,20 +202,20 @@ class BoxFactory(Registrable):
         self.name = str  #: Name of the registered BoxTensor class
         self.kwargs_dict = kwargs_dict
         try:
-            box_subclass, box_constructor = self.box_registry[name]
+            self.box_subclass, box_constructor = self.box_registry[name]
         except KeyError as ke:
             raise KeyError(
                 f"{name} not present in box_registry: {list(self.box_registry.keys())}"
             )
 
         if not box_constructor:
-            self.creator: Type[TBoxTensor] = box_subclass  # type: ignore
+            self.creator: Type[TBoxTensor] = self.box_subclass  # type: ignore
         else:
             try:
-                self.creator = getattr(box_subclass, box_constructor)
+                self.creator = getattr(self.box_subclass, box_constructor)
             except AttributeError as ae:
                 raise ValueError(
-                    f"{box_subclass.__name__} registered as {name} "
+                    f"{self.box_subclass.__name__} registered as {name} "
                     f"with constructor {box_constructor} "
                     f"but no method {box_constructor} found."
                 )
