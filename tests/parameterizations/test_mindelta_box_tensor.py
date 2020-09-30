@@ -28,6 +28,23 @@ def test_shape_validation_during_creation():
         box_tensor = MinDeltaBoxTensor(tensor)
 
 
+def test_creation_from_zZ():
+    shape = (3, 1, 5)
+    z = torch.tensor(np.random.rand(*shape))
+    Z = z + torch.tensor(np.random.rand(*shape))
+    box = MinDeltaBoxTensor.from_zZ(z, Z)
+    assert box.data.shape == (3, 1, 2, 5)
+
+
+def test_creation_from_vector():
+    shape = (3, 1, 5)
+    z = torch.tensor(np.random.rand(*shape))
+    delta = torch.tensor(np.random.rand(*shape))
+    v = torch.cat((z, z + delta), dim=-1)
+    box = MinDeltaBoxTensor.from_vector(v)
+    assert box.data.shape == (3, 1, 2, 5)
+
+
 # def test_warning_in_creation_from_zZ():
 #    shape = (3, 1, 5)
 #    z = torch.tensor(np.random.rand(*shape))
