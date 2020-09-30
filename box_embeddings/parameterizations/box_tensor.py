@@ -275,7 +275,7 @@ class BoxFactory(Registrable):
     box_registry: Dict[str, Tuple[Type[R], str]] = {}  # type:ignore
 
     def __init__(self, name: str, kwargs_dict: Dict = None):
-        self.name = str  #: Name of the registered BoxTensor class
+        self.name = name  #: Name of the registered BoxTensor class
         self.kwargs_dict = kwargs_dict or {}
         try:
             self.box_subclass, box_constructor = self.box_registry[name]
@@ -339,7 +339,7 @@ class BoxFactory(Registrable):
 
     def __call__(self, *args: Any, **kwargs: Any) -> BoxTensor:
 
-        return self.creator(*args, **kwargs)  # type:ignore
+        return self.creator(*args, **kwargs, **self.kwargs_dict)  # type:ignore
 
 
 BoxFactory.register("box_factory")(BoxFactory)  # register itself

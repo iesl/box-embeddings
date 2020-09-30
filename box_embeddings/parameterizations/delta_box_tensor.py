@@ -62,7 +62,7 @@ class MinDeltaBoxTensor(BoxTensor):
         """
 
         return self.z + torch.nn.functional.softplus(
-            self.data[..., 1, :], beta=self.beta
+            self.data[..., 1, :], beta=self.beta, threshold=self.threshold
         )
 
     @property
@@ -193,7 +193,9 @@ class MinDeltaBoxTensor(BoxTensor):
             ),
         )
 
-        return cls(torch.stack((z, delta), -2))  # type:ignore
+        return cls(
+            torch.stack((z, delta), -2), beta=beta, threshold=threshold
+        )  # type:ignore
 
 
 BoxFactory.register_box_class("mindelta_from_zZ", "from_zZ")(MinDeltaBoxTensor)
