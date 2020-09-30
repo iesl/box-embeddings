@@ -100,7 +100,7 @@ class UniformBoxInitializer(BoxInitializer):
         self.delta_max = delta_max
         self.box_type_factory = box_type_factory
 
-    def __call__(self, t: BoxTensor) -> None:  # type:ignore
+    def __call__(self, t: torch.Tensor) -> None:  # type:ignore
         z, Z = uniform_boxes(
             self.dimensions,
             self.num_boxes,
@@ -110,5 +110,19 @@ class UniformBoxInitializer(BoxInitializer):
             self.delta_max,
         )
         with torch.no_grad():
-            W = self.box_type_factory.box_subclass.W(z, Z)  # type: ignore
-            t.reinit(W)
+            W = self.box_type_factory.box_subclass.W(z, Z, **self.box_type_factory.kwargs_dict)  # type: ignore
+
+            if W.shape == t.shape:
+                t.copy_(W)
+            else:
+                emb = self.box_type_factory.box_subclass.zZ_to_embedding(  # type:ignore
+                    z, Z, **self.box_type_factory.kwargs_dict
+                )
+
+                if emb.shape == t.shape:
+                    t.copy_(emb)
+                else:
+                    raise ValueError(
+                        f"Shape of weights {t.shape} is not suitable "
+                        "for assigning W or embedding"
+                    )
