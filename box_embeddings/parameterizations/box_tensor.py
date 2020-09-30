@@ -81,6 +81,11 @@ class BoxTensor(object):
         )
 
     def reinit(self, data: torch.Tensor) -> None:
+        if data.shape != self.data.shape:
+            raise ValueError(
+                f"Cannot reinitialize with different shape. New {data.shape}, old {self.data.shape}"
+            )
+
         if _box_shape_ok(data):
             self.data = data
         else:

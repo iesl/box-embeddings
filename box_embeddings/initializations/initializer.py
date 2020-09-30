@@ -10,3 +10,6 @@ class BoxInitializer(object):
 
     def __call__(self, t: BoxTensor, **kwargs: Any) -> None:
         pass
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__} with attributes self.__dict__"
