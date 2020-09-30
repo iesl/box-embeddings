@@ -40,6 +40,10 @@ class MinDeltaBoxTensor(BoxTensor):
         self.threshold = threshold
 
     @property
+    def attributes(self) -> Dict:
+        return {"beta": self.beta, "threshold": self.threshold}
+
+    @property
     def z(self) -> torch.Tensor:
         """Lower left coordinate as Tensor
 
@@ -72,8 +76,12 @@ class MinDeltaBoxTensor(BoxTensor):
         return (self.z + self.Z) / 2.0
 
     @classmethod
-    def W(
-        cls: Type[TBoxTensor], z: torch.Tensor, Z: torch.Tensor
+    def W(  # type:ignore
+        cls: Type[TBoxTensor],
+        z: torch.Tensor,
+        Z: torch.Tensor,
+        beta: float = 1.0,
+        threshold: float = 20.0,
     ) -> torch.Tensor:
         """Given (z,Z), it returns one set of valid box weights W, such that
         Box(W) = (z,Z).
@@ -88,6 +96,8 @@ class MinDeltaBoxTensor(BoxTensor):
         Args:
             z: Lower left coordinate of shape (..., hidden_dims)
             Z: Top right coordinate of shape (..., hidden_dims)
+            beta: TODO
+            threshold: TODO
 
         Returns:
             Tensor: Parameters of the box. In base class implementation, this
@@ -101,7 +111,9 @@ class MinDeltaBoxTensor(BoxTensor):
                 " It can produce high error when input Z-z is < 0."
             )
 
-        return torch.stack((z, softplus_inverse(Z - z)), -2)
+        return torch.stack(
+            (z, softplus_inverse(Z - z, beta=beta, threshold=threshold)), -2
+        )
 
     @classmethod
     def from_zZ(  # type:ignore

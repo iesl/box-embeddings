@@ -52,10 +52,8 @@ def test_UniformBoxInitializer(
     maximum = minimum + max_delta
     delta_max = delta_min + delta_max_delta
     box_type_factory = BoxFactory(box_type)
-    t = box_type_factory(
-        torch.rand(
-            (num_boxes, box_type_factory.box_subclass.w2z_ratio, dimensions,)
-        )
+    t = torch.rand(
+        (num_boxes, box_type_factory.box_subclass.w2z_ratio, dimensions,)
     )
     UniformBoxInitializer(
         dimensions,
@@ -66,5 +64,6 @@ def test_UniformBoxInitializer(
         delta_min=delta_min,
         delta_max=delta_max,
     )(t)
-    assert (t.Z <= maximum).all()
-    assert (t.z >= minimum).all()
+    b = box_type_factory(t)
+    assert (b.Z <= maximum).all()
+    assert (b.z >= minimum).all()

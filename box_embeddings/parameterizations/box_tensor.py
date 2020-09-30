@@ -54,7 +54,7 @@ class BoxTensor(object):
 
     w2z_ratio: int = 2  #: number of parameters required per dim
 
-    def __init__(self, data: Tensor) -> None:
+    def __init__(self, data: Tensor, *args: Any, **kwargs: Any) -> None:
         """
         Constructor.
 
@@ -62,6 +62,8 @@ class BoxTensor(object):
             data: Tensor of shape (..., zZ, num_dims). Here, zZ=2, where
                 the 0th dim is for bottom left corner and 1st dim is for
                 top right corner of the box
+            *args: TODO
+            **kwargs: TODO
 
         Raises:
             ValueError: If shape of `data` is not correct.
@@ -92,6 +94,16 @@ class BoxTensor(object):
             raise ValueError(
                 _shape_error_str("data", "(...,2,num_dims)", data.shape)
             )
+
+    @property
+    def attributes(self) -> Dict:
+        """Configuration attribute values
+
+        Returns:
+            Dict
+        """
+
+        return {}
 
     @property
     def z(self) -> Tensor:
@@ -151,7 +163,9 @@ class BoxTensor(object):
             )
 
     @classmethod
-    def W(cls: Type[TBoxTensor], z: Tensor, Z: Tensor) -> Tensor:
+    def W(
+        cls: Type[TBoxTensor], z: Tensor, Z: Tensor, *args: Any, **kwargs: Any
+    ) -> Tensor:
         """Given (z,Z), it returns one set of valid box weights W, such that
         Box(W) = (z,Z).
 
@@ -162,6 +176,8 @@ class BoxTensor(object):
         Args:
             z: Lower left coordinate of shape (..., hidden_dims)
             Z: Top right coordinate of shape (..., hidden_dims)
+            *args: TODO
+            **kwargs: TODO
 
         Returns:
             Tensor: Parameters of the box. In base class implementation, this
@@ -169,6 +185,14 @@ class BoxTensor(object):
         """
 
         return torch.stack((z, Z), -2)
+
+    @classmethod
+    def zZ_to_embedding(
+        cls, z: Tensor, Z: Tensor, *args: Any, **kwargs: Any
+    ) -> Tensor:
+        W = cls.W(z, Z, *args, **kwargs)
+
+        return W.reshape(*W.shape[:-2], -1)
 
     @classmethod
     def from_zZ(
@@ -252,7 +276,7 @@ class BoxFactory(Registrable):
 
     def __init__(self, name: str, kwargs_dict: Dict = None):
         self.name = str  #: Name of the registered BoxTensor class
-        self.kwargs_dict = kwargs_dict
+        self.kwargs_dict = kwargs_dict or {}
         try:
             self.box_subclass, box_constructor = self.box_registry[name]
         except KeyError as ke:
