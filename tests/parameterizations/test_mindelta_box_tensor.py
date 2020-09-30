@@ -3,6 +3,15 @@ import torch
 import numpy as np
 import pytest
 import warnings
+from hypothesis.extra.numpy import arrays
+import hypothesis
+from hypothesis.strategies import (
+    floats,
+    integers,
+    sampled_from,
+    fixed_dictionaries,
+    just,
+)
 
 
 def test_simple_creation() -> None:
@@ -36,13 +45,24 @@ def test_creation_from_zZ():
     assert box.data.shape == (3, 1, 2, 5)
 
 
-def test_creation_from_vector():
+@hypothesis.given(
+    beta=floats(1.0, 50.0), threshold=integers(20, 50),
+)
+def test_creation_from_vector(beta, threshold):
     shape = (3, 1, 5)
     z = torch.tensor(np.random.rand(*shape))
-    delta = torch.tensor(np.random.rand(*shape))
-    v = torch.cat((z, z + delta), dim=-1)
-    box = MinDeltaBoxTensor.from_vector(v)
+    w_delta = torch.tensor(np.random.rand(*shape))
+    v = torch.cat((z, w_delta), dim=-1)
+    box = MinDeltaBoxTensor.from_vector(v, beta=beta, threshold=threshold)
     assert box.data.shape == (3, 1, 2, 5)
+    assert torch.allclose(box.z, z)
+    assert torch.allclose(
+        box.Z,
+        z
+        + torch.nn.functional.softplus(
+            w_delta, beta=beta, threshold=threshold
+        ),
+    )
 
 
 # def test_warning_in_creation_from_zZ():
