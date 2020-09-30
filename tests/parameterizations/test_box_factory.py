@@ -1,5 +1,6 @@
 from box_embeddings.parameterizations.box_tensor import BoxFactory, BoxTensor
 from box_embeddings.common.testing.test_case import BaseTestCase
+from box_embeddings.common import ALLENNLP_PRESENT
 
 import hypothesis
 from hypothesis.extra.numpy import arrays
@@ -56,3 +57,17 @@ class TestBoxFactory(BaseTestCase):
         )
         assert list(box.data.shape) == [3, 5, 2, 10]
         assert type(box) is BoxTensor
+
+
+if ALLENNLP_PRESENT:
+    from allennlp.common.params import Params
+
+    def test_box_factory_creation_from_params():
+        params = Params(
+            {
+                "type": "box_factory",
+                "name": "mindelta",
+                "kwargs_dict": {"beta": 2.0},
+            }
+        )
+        bf = BoxFactory.from_params(params)

@@ -342,6 +342,8 @@ class BoxFactory(Registrable):
         return self.creator(*args, **kwargs)  # type:ignore
 
 
+BoxFactory.register("box_factory")(BoxFactory)  # register itself
+
 BoxFactory.register_box_class("boxtensor")(BoxTensor)
 BoxFactory.register_box_class("boxtensor_from_zZ", "from_zZ")(BoxTensor)
 BoxFactory.register_box_class("boxtensor_from_vector", "from_vector")(
