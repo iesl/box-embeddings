@@ -54,7 +54,7 @@ def uniform_boxes(
     )
 
     deltas = np.random.uniform(
-        delta_min, delta_max, size=(num_boxes, dimensions)
+        delta_min, delta_max - 1e-8, size=(num_boxes, dimensions)
     )
     z = centers - deltas / 2.0
     Z = centers + deltas / 2.0
