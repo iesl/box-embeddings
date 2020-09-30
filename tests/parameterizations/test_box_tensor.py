@@ -33,3 +33,12 @@ def test_creation_from_zZ():
     Z = z + torch.tensor(np.random.rand(*shape))
     box = BoxTensor.from_zZ(z, Z)
     assert box.data.shape == (3, 1, 2, 5)
+
+
+def test_creation_from_vector():
+    shape = (3, 1, 5)
+    z = torch.tensor(np.random.rand(*shape))
+    delta = torch.tensor(np.random.rand(*shape))
+    v = torch.cat((z, z + delta.abs()), dim=-1)
+    box = BoxTensor.from_vector(v)
+    assert box.data.shape == (3, 1, 2, 5)

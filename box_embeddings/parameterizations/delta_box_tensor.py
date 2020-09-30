@@ -131,7 +131,60 @@ class MinDeltaBoxTensor(BoxTensor):
         """
         cls.check_if_valid_zZ(z, Z)
 
-        return cls(cls.W(z, Z))
+        return cls(cls.W(z, Z), beta=beta, threshold=threshold)
+
+    @classmethod
+    def from_vector(  # type:ignore
+        cls, vector: torch.Tensor, beta: float = 1.0, threshold: float = 20
+    ) -> BoxTensor:
+        """Creates a box for a vector. In this base implementation the vector is split
+        into two pieces and these are used as z and delta.
+
+        Args:
+            vector: tensor
+            beta: beta parameter for softplus for delta. Depending on the
+                universe box and your inputs ranges, you might want to change this.
+                Higher values of beta will make softplus harder and bring it close to ReLU.
+            threshold: parameter for the softplus for delta
+
+
+        Returns:
+            A BoxTensor
+
+        Raises:
+            ValueError: if last dimension is not even
+        """
+        len_dim = vector.shape[-1]
+        dim = -1
+
+        if vector.shape[-1] % 2 != 0:
+            raise ValueError(
+                f"The last dimension of vector should be even but is {vector.shape[-1]}"
+            )
+
+        split_point = int(len_dim / 2)
+        z = vector.index_select(
+            dim,
+            torch.tensor(
+                list(range(split_point)),
+                dtype=torch.int64,
+                device=vector.device,
+            ),
+        )
+
+        delta = vector.index_select(
+            dim,
+            torch.tensor(
+                list(range(split_point, len_dim)),
+                dtype=torch.int64,
+                device=vector.device,
+            ),
+        )
+
+        return cls(torch.stack((z, delta), -2))  # type:ignore
 
 
 BoxFactory.register_box_class("mindelta_from_zZ", "from_zZ")(MinDeltaBoxTensor)
+BoxFactory.register_box_class("mindelta_from_vector", "from_vector")(
+    MinDeltaBoxTensor
+)

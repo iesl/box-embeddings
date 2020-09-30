@@ -186,7 +186,54 @@ class BoxTensor(object):
         """
         cls.check_if_valid_zZ(z, Z)
 
-        return cls(cls.W(z, Z))
+        return cls(cls.W(z, Z), *args, **kwargs)  # type: ignore
+
+    @classmethod
+    def from_vector(
+        cls, vector: Tensor, *args: Any, **kwargs: Any
+    ) -> TBoxTensor:
+        """Creates a box for a vector. In this base implementation the vector is split
+        into two pieces and these are used as z,Z.
+
+        Args:
+            vector: tensor
+            *args: extra arguments for child class
+            **kwargs: extra arguments for child class
+
+        Returns:
+            A BoxTensor
+
+        Raises:
+            ValueError: if last dimension is not even
+        """
+        len_dim = vector.shape[-1]
+        dim = -1
+
+        if vector.shape[-1] % 2 != 0:
+            raise ValueError(
+                f"The last dimension of vector should be even but is {vector.shape[-1]}"
+            )
+
+        split_point = int(len_dim / 2)
+        z = vector.index_select(
+            dim,
+            torch.tensor(
+                list(range(split_point)),
+                dtype=torch.int64,
+                device=vector.device,
+            ),
+        )
+
+        Z = vector.index_select(
+            dim,
+            torch.tensor(
+                list(range(split_point, len_dim)),
+                dtype=torch.int64,
+                device=vector.device,
+            ),
+        )
+
+        return cls.from_zZ(z, Z, *args, **kwargs)  # type:ignore
 
 
 R = TypeVar("R", bound="BoxTensor")
@@ -268,3 +315,6 @@ class BoxFactory(Registrable):
 
 BoxFactory.register_box_class("boxtensor")(BoxTensor)
 BoxFactory.register_box_class("boxtensor_from_zZ", "from_zZ")(BoxTensor)
+BoxFactory.register_box_class("boxtensor_from_vector", "from_vector")(
+    BoxTensor
+)
