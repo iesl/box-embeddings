@@ -34,7 +34,7 @@ def hard_intersection(left: TBoxTensor, right: TBoxTensor) -> TBoxTensor:
 class HardIntersection(Intersection):
     """Hard intersection operation as a Layer/Module"""
 
-    def forward(self, left: TBoxTensor, right: TBoxTensor) -> TBoxTensor:
+    def _forward(self, left: TBoxTensor, right: TBoxTensor) -> TBoxTensor:
         """ Gives intersection of self and other.
 
         Args:

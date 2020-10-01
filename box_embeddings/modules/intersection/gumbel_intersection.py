@@ -55,7 +55,7 @@ class GumbelIntersection(Intersection):
         """
         self.beta = beta
 
-    def forward(self, left: TBoxTensor, right: TBoxTensor) -> TBoxTensor:
+    def _forward(self, left: TBoxTensor, right: TBoxTensor) -> TBoxTensor:
         """ Gives intersection of self and other.
 
         Args:
