@@ -21,6 +21,7 @@ from typing import (
 )
 from box_embeddings.common.registrable import Registrable
 import logging
+from copy import deepcopy
 
 logger = logging.getLogger(__name__)
 
@@ -263,6 +264,105 @@ class BoxTensor(object):
         )
 
         return cls.from_zZ(z, Z, *args, **kwargs)  # type:ignore
+
+    @property
+    def box_shape(self) -> Tuple:
+        """Shape of z, Z and center.
+
+        Returns:
+            Shape of z, Z and center.
+
+        Note:
+            This is *not* the shape of the `data` attribute.
+        """
+        data_shape = list(self.data.shape)
+        _ = data_shape.pop(-2)
+
+        return tuple(data_shape)
+
+    def broadcast(self, target_shape: Tuple) -> None:
+        """ Broadcasts the internal data member such that z and Z
+        return tensors that can be automatically broadcasted to perform
+        arithmetic operations with shape `target_shape`.
+
+        Ex:
+            target_shape = (4,5,10)
+
+            1. self.box_shape = (10,) => (1,1,10)
+            2. self.box_shape = (3,) => ValueError
+            3. self.box_shape = (4,10) => (4,1,10)
+            4. self.box_shape = (4,2,10) =>  ValueError
+            5. self.box_shape = (5,10) => (1,5,10)
+
+        Note:
+            This operation will not result in self.z, self.Z and self.center returning
+            tensor of shape `target_shape` but it will result in return a tensor
+            which is arithmetic compatible with `target_shape`.
+
+        Args:
+            target_shape: Shape of the broadcast target. Usually will be the shape of
+                the tensor you wish to use z, Z with. For instance, if you wish to
+                add self box's center [shape=(batch, hidden_dim)] with other
+                box whose center's shape is (batch, extra_dim, hidden_dim), then
+                this function will reshape the data such that the resulting center
+                has shape (batch, 1, hidden_dim).
+
+        Raises:
+            ValueError: If bad target
+
+        """
+        self_box_shape = self.box_shape
+
+        if self_box_shape[-1] != target_shape[-1]:
+            raise ValueError(
+                f"Cannot broadcast box of box_shape {self_box_shape} to {target_shape}."
+                "Last dimensions should match."
+            )
+
+        if len(self_box_shape) > len(target_shape):
+            # see if we have 1s in the right places in the self.box_shape
+            raise ValueError(
+                f"Lenght of self.box_shape ({len(self_box_shape)})"
+                f" should be <= length of target_shape ({len(self_box_shape)})"
+            )
+
+        elif len(self_box_shape) == len(target_shape):
+            if self_box_shape != target_shape:
+                raise ValueError(
+                    f"Incompatible shapes {self_box_shape} and target {target_shape}"
+                )
+        else:  # <= target_shape
+            potential_final_shape = list(self_box_shape)
+            dim_to_unsqueeze = []
+
+            for dim in range(-2, -len(target_shape) - 1, -1):  # (-2, -3, ...)
+                if (
+                    dim + len(potential_final_shape) < 0
+                ):  # self has more dims left
+                    potential_final_shape.insert(dim + 1, 1)
+                    # +1 because
+                    # insert indexing in list
+                    # works differently than unsqueeze
+                    dim_to_unsqueeze.append(dim)
+
+                    continue
+
+                if potential_final_shape[dim] != target_shape[dim]:
+                    potential_final_shape.insert(dim + 1, 1)
+                    dim_to_unsqueeze.append(dim)
+
+            # final check
+            assert len(potential_final_shape) == len(target_shape)
+
+            for p_d, t_d in zip(potential_final_shape, target_shape):
+                if not ((p_d == 1) or (p_d == t_d)):
+                    raise ValueError(
+                        f"Cannot make box_shape {self_box_shape} compatible to {target_shape}"
+                    )
+
+            for d in dim_to_unsqueeze:
+                self.data.unsqueeze_(d - 1)  # -1 because of extra 2 at dim -2
+            assert self.box_shape == tuple(potential_final_shape)
 
 
 R = TypeVar("R", bound="BoxTensor")
