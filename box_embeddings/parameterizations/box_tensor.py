@@ -218,6 +218,26 @@ class BoxTensor(object):
 
         return cls(cls.W(z, Z), *args, **kwargs)  # type: ignore
 
+    def like_this_from_zZ(self, z: Tensor, Z: Tensor,) -> "BoxTensor":
+        """Creates a box for the given min-max coordinates (z,Z).
+        This is similar to the class method :method:`from_zZ`, but
+        uses the attributes on self and not external args, kwargs.
+
+        For the base class, since we do not have extra attributes,
+        we simply call from_zZ.
+
+
+        Args:
+            z: lower left
+            Z: top right
+
+        Returns:
+            A BoxTensor
+
+        """
+
+        return self.from_zZ(z, Z)
+
     @classmethod
     def from_vector(
         cls, vector: Tensor, *args: Any, **kwargs: Any
@@ -281,7 +301,7 @@ class BoxTensor(object):
         return tuple(data_shape)
 
     def broadcast(self, target_shape: Tuple) -> None:
-        """ Broadcasts the internal data member such that z and Z
+        """ Broadcasts the internal data member in-place such that z and Z
         return tensors that can be automatically broadcasted to perform
         arithmetic operations with shape `target_shape`.
 
@@ -310,6 +330,11 @@ class BoxTensor(object):
         Raises:
             ValueError: If bad target
 
+        ..todo::
+            Add an extra argument `repeat` which tell the
+            function to repeat values till target is satisfied.
+            This is needed for gumbel_intersection, where the broadcasted
+            tensors need to be stacked.
         """
         self_box_shape = self.box_shape
 
@@ -363,6 +388,43 @@ class BoxTensor(object):
             for d in dim_to_unsqueeze:
                 self.data.unsqueeze_(d - 1)  # -1 because of extra 2 at dim -2
             assert self.box_shape == tuple(potential_final_shape)
+
+    def box_reshape(self, target_shape: Tuple) -> "BoxTensor":
+        """Reshape the z,Z and center.
+
+        Ex:
+            1. self.box_shape = (5,10), target_shape = (-1,10), creates box_shape (5,10)
+            2. self.box_shape = (5,4,10), target_shape = (-1,10), creates box_shape (20,10)
+            4. self.box_shape = (20,10), target_shape = (10,2,10), creates box_shape (10,2,10)
+            3. self.box_shape = (5,), target_shape = (-1,10),  raises RuntimeError
+            5. self.box_shape = (5,10), target_shape = (2,10),  raises RuntimeError
+
+        Args:
+            target_shape: TODO
+
+        Returns:
+            TBoxTensor
+
+        Raises:
+            RuntimeError: If space dimensions, ie. the last dimensions do not match.
+            RuntimeError: If cannot reshape the extra dimensions and torch.reshape raises.
+        """
+
+        if self.box_shape[-1] != target_shape[-1]:
+            raise RuntimeError(
+                "Cannot do box reshape if space dimensions do not match."
+                f" Current space dim is {self.box_shape[-1]} and target is {target_shape[-1]}"
+            )
+        _target_shape = list(target_shape)
+        _target_shape.insert(-1, 2)  # insert the zZ
+        try:
+            self.data = self.data.reshape(*_target_shape).contiguous()
+        except RuntimeError as re:
+            raise RuntimeError(
+                f"Cannot reshape current box_shape {self.box_shape} to {target_shape}"
+            ) from re
+
+        return self
 
 
 R = TypeVar("R", bound="BoxTensor")
