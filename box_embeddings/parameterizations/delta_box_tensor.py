@@ -145,6 +145,24 @@ class MinDeltaBoxTensor(BoxTensor):
 
         return cls(cls.W(z, Z), beta=beta, threshold=threshold)
 
+    def like_this_from_zZ(
+        self, z: torch.Tensor, Z: torch.Tensor,
+    ) -> "BoxTensor":
+        """Creates a box for the given min-max coordinates (z,Z).
+        This is similar to the class method :method:`from_zZ`, but
+        uses the attributes on self and not external args, kwargs.
+
+        Args:
+            z: lower left
+            Z: top right
+
+        Returns:
+            A BoxTensor
+
+        """
+
+        return self.from_zZ(z, Z, beta=self.beta, threshold=self.threshold)
+
     @classmethod
     def from_vector(  # type:ignore
         cls, vector: torch.Tensor, beta: float = 1.0, threshold: float = 20

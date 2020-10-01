@@ -2,6 +2,8 @@ from box_embeddings.parameterizations.box_tensor import BoxTensor
 import torch
 import numpy as np
 import pytest
+import hypothesis
+from hypothesis.strategies import sampled_from
 
 
 def test_simple_creation() -> None:
@@ -112,3 +114,47 @@ def test_broadcasting7():
     assert box.box_shape == self_shape
     with pytest.raises(ValueError):
         box.broadcast(target_shape)
+
+
+def test_broadcasting8():
+    target_shape = (4, 5, 10)
+    # 3
+    input_data_shape, self_shape = (4, 2, 2, 2, 3), (4, 2, 2, 3,)
+    box = BoxTensor(torch.tensor(np.random.rand(*input_data_shape)))
+    assert box.box_shape == self_shape
+    with pytest.raises(ValueError):
+        box.broadcast(target_shape)
+
+
+# def test_reshape1():
+#    target_shape = (-1, 10)
+#    input_data_shape, self_shape = (5, 2, 10), (5, 10)
+#    box = BoxTensor(torch.tensor(np.random.rand(*input_data_shape)))
+#    assert box.box_shape == self_shape
+#    box.box_reshape(target_shape)
+#    assert box.box_shape == (5, 10)
+#
+
+
+@hypothesis.given(
+    sample=sampled_from(
+        [
+            ((-1, 10), (5, 2, 10), (5, 10), (5, 10)),
+            ((-1, 10), (5, 4, 2, 10), (5, 4, 10), (20, 10)),
+            ((10, 2, 10), (20, 2, 10), (20, 10), (10, 2, 10)),
+            ((-1, 10), (2, 5), (5,), RuntimeError),
+            ((2, 10), (5, 2, 10), (5, 10), RuntimeError),
+        ]
+    )
+)
+def test_reshape(sample):
+    target_shape, input_data_shape, self_shape, expected = sample
+    box = BoxTensor(torch.tensor(np.random.rand(*input_data_shape)))
+    assert box.box_shape == self_shape
+
+    if expected == RuntimeError:
+        with pytest.raises(expected):
+            box.box_reshape(target_shape)
+    else:
+        box.box_reshape(target_shape)
+        assert box.box_shape == expected
