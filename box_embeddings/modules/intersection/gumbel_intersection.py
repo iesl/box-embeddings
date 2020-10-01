@@ -53,6 +53,7 @@ class GumbelIntersection(Intersection):
             beta: Gumbel's beta parameter
 
         """
+        super().__init__()
         self.beta = beta
 
     def _forward(self, left: TBoxTensor, right: TBoxTensor) -> TBoxTensor:
