@@ -28,12 +28,12 @@ class TestBoxFactory(BaseTestCase):
         inp1[..., 1] += inp1[..., 0]  # make sure Z>z
         tensor = torch.tensor(inp1)
         box_tensor: BoxTensor = BoxFactory("boxtensor")(tensor)
-        assert (tensor.data.numpy() == box_tensor.data.numpy()).all()
+        assert (tensor.data.numpy() == box_tensor.data.numpy()).all()  # type: ignore
         assert isinstance(box_tensor, BoxTensor)
         inp2[..., 1] += inp2[..., 0]
         tensor = torch.tensor(inp2)
         box_tensor2: BoxTensor = BoxFactory("boxtensor")(tensor)
-        assert (tensor.data.numpy() == box_tensor2.data.numpy()).all()
+        assert (tensor.data.numpy() == box_tensor2.data.numpy()).all()  # type: ignore
         assert isinstance(box_tensor, BoxTensor)
 
     @hypothesis.given(
@@ -55,7 +55,7 @@ class TestBoxFactory(BaseTestCase):
         box: BoxTensor = BoxFactory("boxtensor_from_zZ")(
             torch.tensor(z), torch.tensor(z + Z)
         )
-        assert list(box.data.shape) == [3, 5, 2, 10]
+        assert list(box.z.shape) == [3, 5, 10]
         assert type(box) is BoxTensor
 
 
