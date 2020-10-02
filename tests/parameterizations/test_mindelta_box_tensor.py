@@ -17,11 +17,11 @@ from hypothesis.strategies import (
 def test_simple_creation() -> None:
     tensor = torch.tensor(np.random.rand(3, 2, 3))
     box_tensor = MinDeltaBoxTensor(tensor)
-    assert (tensor.data.numpy() == box_tensor.data.numpy()).all()
+    assert (tensor.data.numpy() == box_tensor.data.numpy()).all()  # type: ignore
     assert isinstance(box_tensor, BoxTensor)
     tensor = torch.tensor(np.random.rand(2, 10))
     box_tensor = MinDeltaBoxTensor(tensor)
-    assert (tensor.data.numpy() == box_tensor.data.numpy()).all()
+    assert (tensor.data.numpy() == box_tensor.data.numpy()).all()  # type: ignore
     assert isinstance(box_tensor, BoxTensor)
 
 
@@ -42,7 +42,7 @@ def test_creation_from_zZ():
     z = torch.tensor(np.random.rand(*shape))
     Z = z + torch.tensor(np.random.rand(*shape))
     box = MinDeltaBoxTensor.from_zZ(z, Z)
-    assert box.data.shape == (3, 1, 2, 5)
+    assert box.z.shape == (3, 1, 5)
 
 
 @hypothesis.given(
@@ -54,7 +54,7 @@ def test_creation_from_vector(beta, threshold):
     w_delta = torch.tensor(np.random.rand(*shape))
     v = torch.cat((z, w_delta), dim=-1)
     box = MinDeltaBoxTensor.from_vector(v, beta=beta, threshold=threshold)
-    assert box.data.shape == (3, 1, 2, 5)
+    assert box.Z.shape == (3, 1, 5)
     assert torch.allclose(box.z, z)
     assert torch.allclose(
         box.Z,

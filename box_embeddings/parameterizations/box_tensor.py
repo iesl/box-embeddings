@@ -55,7 +55,12 @@ class BoxTensor(object):
 
     w2z_ratio: int = 2  #: number of parameters required per dim
 
-    def __init__(self, data: Tensor, *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        data: Union[Tensor, Tuple[Tensor, Tensor]],
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
         """
         Constructor.
 
@@ -65,39 +70,61 @@ class BoxTensor(object):
                 top right corner of the box
             *args: TODO
             **kwargs: TODO
-
-        Raises:
-            ValueError: If shape of `data` is not correct.
         """
+        self.data: Optional[Tensor] = None
+        self._z: Optional[Tensor] = None
+        self._Z: Optional[Tensor] = None
 
-        if _box_shape_ok(data):
-            self.data = data
-        else:
-            raise ValueError(
-                _shape_error_str("data", "(...,2,num_dims)", data.shape)
-            )
+        self.reinit(data)
+
         super().__init__()
 
     def __repr__(self) -> str:
-        return (
-            f"{self.__class__.__name__}({self.data.__repr__()})"  # type:ignore
-        )
-
-    def reinit(self, data: torch.Tensor) -> None:
-        if data.shape != self.data.shape:
-            raise ValueError(
-                f"Cannot reinitialize with different shape. New {data.shape}, old {self.data.shape}"
+        if self.data is not None:
+            return (
+                f"{self.__class__.__name__}"
+                f"({self.data.__repr__()})"  # type:ignore
             )
-
-        if _box_shape_ok(data):
-            self.data = data
         else:
-            raise ValueError(
-                _shape_error_str("data", "(...,2,num_dims)", data.shape)
+            return (
+                f"{self.__class__.__name__}(z={self._z.__repr__()},"
+                f"\nZ={self._Z.__repr__()})"  # type:ignore
             )
+
+    def reinit(self, data: Union[Tensor, Tuple[Tensor, Tensor]]) -> None:
+        assert data is not None
+
+        if self.data is not None:
+            if isinstance(data, Tensor):
+                if data.shape != self.data.shape:
+                    raise ValueError(
+                        f"Cannot reinitialize with different shape. New {data.shape}, old {self.data.shape}"
+                    )
+
+        if self._z is not None:
+            if self._z.shape != data[0].shape:
+                raise ValueError(
+                    f"Cannot reinitialize with different shape. New z shape ={data[0].shape}, old ={self._z.shape}"
+                )
+
+        if self._Z is not None:
+            if self._Z.shape != data[1].shape:
+                raise ValueError(
+                    f"Cannot reinitialize with different shape. New Z shape ={data[1].shape}, old ={self._Z.shape}"
+                )
+
+        if isinstance(data, Tensor):
+            if _box_shape_ok(data):
+                self.data = data
+            else:
+                raise ValueError(
+                    _shape_error_str("data", "(...,2,num_dims)", data.shape)
+                )
+        else:
+            self._z, self._Z = data
 
     @property
-    def attributes(self) -> Dict:
+    def kwargs(self) -> Dict:
         """Configuration attribute values
 
         Returns:
@@ -107,6 +134,10 @@ class BoxTensor(object):
         return {}
 
     @property
+    def args(self) -> Tuple:
+        return tuple()
+
+    @property
     def z(self) -> Tensor:
         """Lower left coordinate as Tensor
 
@@ -114,7 +145,10 @@ class BoxTensor(object):
             Tensor: lower left corner
         """
 
-        return self.data[..., 0, :]
+        if self.data is not None:
+            return self.data[..., 0, :]
+        else:
+            return self._z  # type:ignore
 
     @property
     def Z(self) -> Tensor:
@@ -124,7 +158,10 @@ class BoxTensor(object):
             Tensor: top right corner
         """
 
-        return self.data[..., 1, :]
+        if self.data is not None:
+            return self.data[..., 1, :]
+        else:
+            return self._Z  # type:ignore
 
     @property
     def centre(self) -> Tensor:
@@ -184,6 +221,7 @@ class BoxTensor(object):
             Tensor: Parameters of the box. In base class implementation, this
                 will have shape (..., 2, hidden_dims).
         """
+        cls.check_if_valid_zZ(z, Z)
 
         return torch.stack((z, Z), -2)
 
@@ -192,6 +230,7 @@ class BoxTensor(object):
         cls, z: Tensor, Z: Tensor, *args: Any, **kwargs: Any
     ) -> Tensor:
         W = cls.W(z, Z, *args, **kwargs)
+        # collapse the last two dimensions
 
         return W.reshape(*W.shape[:-2], -1)
 
@@ -214,9 +253,9 @@ class BoxTensor(object):
             A BoxTensor
 
         """
-        cls.check_if_valid_zZ(z, Z)
+        assert z.shape == Z.shape, "z,Z shape not matching"
 
-        return cls(cls.W(z, Z), *args, **kwargs)  # type: ignore
+        return cls((z, Z), *args, **kwargs)
 
     def like_this_from_zZ(self, z: Tensor, Z: Tensor,) -> "BoxTensor":
         """Creates a box for the given min-max coordinates (z,Z).
@@ -236,7 +275,7 @@ class BoxTensor(object):
 
         """
 
-        return self.from_zZ(z, Z)
+        return self.from_zZ(z, Z, *self.args, *self.kwargs)
 
     @classmethod
     def from_vector(
@@ -295,10 +334,16 @@ class BoxTensor(object):
         Note:
             This is *not* the shape of the `data` attribute.
         """
-        data_shape = list(self.data.shape)
-        _ = data_shape.pop(-2)
 
-        return tuple(data_shape)
+        if self.data is not None:
+            data_shape = list(self.data.shape)
+            _ = data_shape.pop(-2)
+
+            return tuple(data_shape)
+        else:
+            assert self._z.shape == self._Z.shape  # type:ignore
+
+            return self._z.shape  # type: ignore
 
     def broadcast(self, target_shape: Tuple) -> None:
         """ Broadcasts the internal data member in-place such that z and Z
@@ -352,10 +397,14 @@ class BoxTensor(object):
             )
 
         elif len(self_box_shape) == len(target_shape):
-            if self_box_shape != target_shape:
-                raise ValueError(
-                    f"Incompatible shapes {self_box_shape} and target {target_shape}"
-                )
+            # they can be of the form (4,1,10) & (1,4,10)
+
+            for s_d, t_d in zip(self_box_shape[:-1], target_shape[:-1]):
+
+                if not ((s_d == t_d) or (s_d == 1) or (t_d == 1)):
+                    raise ValueError(
+                        f"Incompatible shapes {self_box_shape} and target {target_shape}"
+                    )
         else:  # <= target_shape
             potential_final_shape = list(self_box_shape)
             dim_to_unsqueeze = []
@@ -385,8 +434,15 @@ class BoxTensor(object):
                         f"Cannot make box_shape {self_box_shape} compatible to {target_shape}"
                     )
 
-            for d in dim_to_unsqueeze:
-                self.data.unsqueeze_(d - 1)  # -1 because of extra 2 at dim -2
+            if self.data is not None:
+                for d in dim_to_unsqueeze:
+                    self.data.unsqueeze_(
+                        d - 1
+                    )  # -1 because of extra 2 at dim -2
+            else:
+                for d in dim_to_unsqueeze:
+                    self._z.unsqueeze_(d)  # type:ignore
+                    self._Z.unsqueeze_(d)  # type: ignore
             assert self.box_shape == tuple(potential_final_shape)
 
     def box_reshape(self, target_shape: Tuple) -> "BoxTensor":
@@ -416,15 +472,34 @@ class BoxTensor(object):
                 f" Current space dim is {self.box_shape[-1]} and target is {target_shape[-1]}"
             )
         _target_shape = list(target_shape)
-        _target_shape.insert(-1, 2)  # insert the zZ
-        try:
-            self.data = self.data.reshape(*_target_shape).contiguous()
-        except RuntimeError as re:
-            raise RuntimeError(
-                f"Cannot reshape current box_shape {self.box_shape} to {target_shape}"
-            ) from re
+
+        if self.data is not None:
+            _target_shape.insert(-1, 2)  # insert the zZ
+            try:
+                self.data = self.data.reshape(*_target_shape).contiguous()
+            except RuntimeError as re:
+                raise RuntimeError(
+                    f"Cannot reshape current box_shape {self.box_shape} to {target_shape}"
+                ) from re
+        else:
+            try:
+                self._z = self._z.reshape(  # type:ignore
+                    *_target_shape
+                ).contiguous()
+                self._Z = self._Z.reshape(  # type:ignore
+                    *_target_shape
+                ).contiguous()
+            except RuntimeError as re:
+                raise RuntimeError(
+                    f"Cannot reshape current box_shape {self.box_shape} to {target_shape}"
+                ) from re
 
         return self
+
+    def __eq__(self, other: TBoxTensor) -> bool:  # type:ignore
+        return torch.allclose(self.z, other.z) and torch.allclose(
+            self.Z, other.Z
+        )
 
 
 R = TypeVar("R", bound="BoxTensor")

@@ -24,7 +24,10 @@ class MinDeltaBoxTensor(BoxTensor):
     """
 
     def __init__(
-        self, data: torch.Tensor, beta: float = 1.0, threshold: float = 20
+        self,
+        data: Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]],
+        beta: float = 1.0,
+        threshold: float = 20,
     ):
         """
 
@@ -40,18 +43,12 @@ class MinDeltaBoxTensor(BoxTensor):
         self.threshold = threshold
 
     @property
-    def attributes(self) -> Dict:
+    def kwargs(self) -> Dict:
         return {"beta": self.beta, "threshold": self.threshold}
 
     @property
-    def z(self) -> torch.Tensor:
-        """Lower left coordinate as Tensor
-
-        Returns:
-            torch.Tensor: lower left corner
-        """
-
-        return self.data[..., 0, :]
+    def args(self) -> Tuple:
+        return tuple()
 
     @property
     def Z(self) -> torch.Tensor:
@@ -61,19 +58,12 @@ class MinDeltaBoxTensor(BoxTensor):
             Tensor: top right corner
         """
 
-        return self.z + torch.nn.functional.softplus(
-            self.data[..., 1, :], beta=self.beta, threshold=self.threshold
-        )
-
-    @property
-    def centre(self) -> torch.Tensor:
-        """Centre coordinate as Tensor
-
-        Returns:
-            Tensor: Center
-        """
-
-        return (self.z + self.Z) / 2.0
+        if self.data is not None:
+            return self.z + torch.nn.functional.softplus(
+                self.data[..., 1, :], beta=self.beta, threshold=self.threshold
+            )
+        else:
+            return self._Z  # type:ignore
 
     @classmethod
     def W(  # type:ignore
@@ -115,53 +105,52 @@ class MinDeltaBoxTensor(BoxTensor):
             (z, softplus_inverse(Z - z, beta=beta, threshold=threshold)), -2
         )
 
-    @classmethod
-    def from_zZ(  # type:ignore
-        cls,
-        z: torch.Tensor,
-        Z: torch.Tensor,
-        beta: float = 1.0,
-        threshold: float = 20,
-    ) -> BoxTensor:
-        """Creates a box for the given min-max coordinates (z,Z).
+    #    @classmethod
+    #    def from_zZ(  # type:ignore
+    #        cls,
+    #        z: torch.Tensor,
+    #        Z: torch.Tensor,
+    #        beta: float = 1.0,
+    #        threshold: float = 20,
+    #    ) -> BoxTensor:
+    #        """Creates a box for the given min-max coordinates (z,Z).
+    #
+    #        In the this base implementation we do this by
+    #        stacking z and Z along -2 dim to form W.
+    #
+    #        Args:
+    #            z: lower left
+    #            Z: top right
+    #            beta: beta parameter for softplus for delta. Depending on the
+    #                universe box and your inputs ranges, you might want to change this.
+    #                Higher values of beta will make softplus harder and bring it close to ReLU.
+    #            threshold: parameter for the softplus for delta
+    #
+    #
+    #        Returns:
+    #            A BoxTensor
+    #
+    #        """
+    #
+    #        return cls((z, Z), beta=beta, threshold=threshold)
 
-        In the this base implementation we do this by
-        stacking z and Z along -2 dim to form W.
-
-        Args:
-            z: lower left
-            Z: top right
-            beta: beta parameter for softplus for delta. Depending on the
-                universe box and your inputs ranges, you might want to change this.
-                Higher values of beta will make softplus harder and bring it close to ReLU.
-            threshold: parameter for the softplus for delta
-
-
-        Returns:
-            A BoxTensor
-
-        """
-        cls.check_if_valid_zZ(z, Z)
-
-        return cls(cls.W(z, Z), beta=beta, threshold=threshold)
-
-    def like_this_from_zZ(
-        self, z: torch.Tensor, Z: torch.Tensor,
-    ) -> "BoxTensor":
-        """Creates a box for the given min-max coordinates (z,Z).
-        This is similar to the class method :method:`from_zZ`, but
-        uses the attributes on self and not external args, kwargs.
-
-        Args:
-            z: lower left
-            Z: top right
-
-        Returns:
-            A BoxTensor
-
-        """
-
-        return self.from_zZ(z, Z, beta=self.beta, threshold=self.threshold)
+    #    def like_this_from_zZ(
+    #        self, z: torch.Tensor, Z: torch.Tensor,
+    #    ) -> "BoxTensor":
+    #        """Creates a box for the given min-max coordinates (z,Z).
+    #        This is similar to the class method :method:`from_zZ`, but
+    #        uses the attributes on self and not external args, kwargs.
+    #
+    #        Args:
+    #            z: lower left
+    #            Z: top right
+    #
+    #        Returns:
+    #            A BoxTensor
+    #
+    #        """
+    #
+    #        return self.from_zZ(z, Z, beta=self.beta, threshold=self.threshold)
 
     @classmethod
     def from_vector(  # type:ignore
