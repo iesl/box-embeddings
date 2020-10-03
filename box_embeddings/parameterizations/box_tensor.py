@@ -476,25 +476,27 @@ class BoxTensor(object):
         if self.data is not None:
             _target_shape.insert(-1, 2)  # insert the zZ
             try:
-                self.data = self.data.reshape(*_target_shape).contiguous()
+                new_data = self.data.reshape(*_target_shape).contiguous()
             except RuntimeError as re:
                 raise RuntimeError(
                     f"Cannot reshape current box_shape {self.box_shape} to {target_shape}"
                 ) from re
+            reshaped_box = self.__class__(new_data, *self.args, **self.kwargs)
         else:
             try:
-                self._z = self._z.reshape(  # type:ignore
+                new_z = self._z.reshape(  # type:ignore
                     *_target_shape
                 ).contiguous()
-                self._Z = self._Z.reshape(  # type:ignore
+                new_Z = self._Z.reshape(  # type:ignore
                     *_target_shape
                 ).contiguous()
             except RuntimeError as re:
                 raise RuntimeError(
                     f"Cannot reshape current box_shape {self.box_shape} to {target_shape}"
                 ) from re
+            reshaped_box = self.like_this_from_zZ(new_z, new_Z)
 
-        return self
+        return reshaped_box
 
     def __eq__(self, other: TBoxTensor) -> bool:  # type:ignore
         return torch.allclose(self.z, other.z) and torch.allclose(

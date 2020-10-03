@@ -65,6 +65,30 @@ def test_creation_from_vector(beta, threshold):
     )
 
 
+@hypothesis.given(
+    sample=sampled_from(
+        [
+            ((-1, 10), (5, 2, 10), (5, 10), (5, 10)),
+            ((-1, 10), (5, 4, 2, 10), (5, 4, 10), (20, 10)),
+            ((10, 2, 10), (20, 2, 10), (20, 10), (10, 2, 10)),
+            ((-1, 10), (2, 5), (5,), RuntimeError),
+            ((2, 10), (5, 2, 10), (5, 10), RuntimeError),
+        ]
+    )
+)
+def test_reshape(sample):
+    target_shape, input_data_shape, self_shape, expected = sample
+    box = BoxTensor(torch.tensor(np.random.rand(*input_data_shape)))
+    assert box.box_shape == self_shape
+
+    if expected == RuntimeError:
+        with pytest.raises(expected):
+            box.box_reshape(target_shape)
+    else:
+        new = box.box_reshape(target_shape)
+        assert new.box_shape == expected
+
+
 # def test_warning_in_creation_from_zZ():
 #    shape = (3, 1, 5)
 #    z = torch.tensor(np.random.rand(*shape))
