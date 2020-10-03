@@ -105,5 +105,5 @@ def test_reshape(sample):
         with pytest.raises(expected):
             box.box_reshape(target_shape)
     else:
-        box.box_reshape(target_shape)
-        assert box.box_shape == expected
+        new = box.box_reshape(target_shape)
+        assert new.box_shape == expected
