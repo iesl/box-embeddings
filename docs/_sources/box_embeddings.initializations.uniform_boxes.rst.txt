@@ -1,0 +1,7 @@
+box\_embeddings.initializations.uniform\_boxes
+==============================================
+
+.. automodule:: box_embeddings.initializations.uniform_boxes
+   :members:
+   :undoc-members:
+   :show-inheritance:

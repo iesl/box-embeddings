@@ -90,6 +90,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="box_embeddings.html">box_embeddings</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="box_embeddings.common.html">box_embeddings.common</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.initializations.html">box_embeddings.initializations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="box_embeddings.modules.html">box_embeddings.modules</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="box_embeddings.parameterizations.html">box_embeddings.parameterizations</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">box_embeddings.parameterizations.box_tensor</a></li>
@@ -184,7 +185,7 @@
 <p>A factory class which will be subclassed(one for each box type).</p>
 <dl class="py attribute">
 <dt id="box_embeddings.parameterizations.box_tensor.BoxFactory.box_registry">
-<code class="sig-name descname">box_registry</code><em class="property">: Dict<span class="p">[</span>str<span class="p">, </span>Tuple<span class="p">[</span>Type<span class="p">[</span>R<span class="p">]</span><span class="p">, </span>str<span class="p">]</span><span class="p">]</span></em><em class="property"> = {'boxtensor': (&lt;class 'box_embeddings.parameterizations.box_tensor.BoxTensor'&gt;, None), 'boxtensor_from_zZ': (&lt;class 'box_embeddings.parameterizations.box_tensor.BoxTensor'&gt;, 'from_zZ'), 'mindelta': (&lt;class 'box_embeddings.parameterizations.delta_box_tensor.MinDeltaBoxTensor'&gt;, None), 'mindelta-boxtensor': (&lt;class 'box_embeddings.parameterizations.delta_box_tensor.MinDeltaBoxTensor'&gt;, None), 'mindelta-boxtensor_from_zZ': (&lt;class 'box_embeddings.parameterizations.delta_box_tensor.MinDeltaBoxTensor'&gt;, 'from_zZ')}</em><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxFactory.box_registry" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">box_registry</code><em class="property">: Dict<span class="p">[</span>str<span class="p">, </span>Tuple<span class="p">[</span>Type<span class="p">[</span>R<span class="p">]</span><span class="p">, </span>str<span class="p">]</span><span class="p">]</span></em><em class="property"> = {'boxtensor': (&lt;class 'box_embeddings.parameterizations.box_tensor.BoxTensor'&gt;, None), 'boxtensor_from_vector': (&lt;class 'box_embeddings.parameterizations.box_tensor.BoxTensor'&gt;, 'from_vector'), 'boxtensor_from_zZ': (&lt;class 'box_embeddings.parameterizations.box_tensor.BoxTensor'&gt;, 'from_zZ'), 'mindelta': (&lt;class 'box_embeddings.parameterizations.delta_box_tensor.MinDeltaBoxTensor'&gt;, None), 'mindelta_from_vector': (&lt;class 'box_embeddings.parameterizations.delta_box_tensor.MinDeltaBoxTensor'&gt;, 'from_vector'), 'mindelta_from_zZ': (&lt;class 'box_embeddings.parameterizations.delta_box_tensor.MinDeltaBoxTensor'&gt;, 'from_zZ')}</em><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxFactory.box_registry" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -219,23 +220,24 @@ is not subclasses but subclasses of BoxTensor</p>
 
 <dl class="py class">
 <dt id="box_embeddings.parameterizations.box_tensor.BoxTensor">
-<em class="property">class </em><code class="sig-prename descclassname">box_embeddings.parameterizations.box_tensor.</code><code class="sig-name descname">BoxTensor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">box_embeddings.parameterizations.box_tensor.</code><code class="sig-name descname">BoxTensor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>torch.Tensor<span class="p">, </span>Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base class defining the interface for BoxTensor.</p>
 <p>Constructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> – Tensor of shape (…, zZ, num_dims). Here, zZ=2, where
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Tensor of shape (…, zZ, num_dims). Here, zZ=2, where
 the 0th dim is for bottom left corner and 1st dim is for
-top right corner of the box</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If shape of <cite>data</cite> is not correct.</p>
+top right corner of the box</p></li>
+<li><p><strong>*args</strong> – TODO</p></li>
+<li><p><strong>**kwargs</strong> – TODO</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.W">
-<em class="property">classmethod </em><code class="sig-name descname">W</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">Z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.W" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">W</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">Z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.W" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given (z,Z), it returns one set of valid box weights W, such that
 Box(W) = (z,Z).</p>
 <p>For the base <cite>BoxTensor</cite> class, we just return z and Z stacked together.
@@ -246,6 +248,8 @@ need to override this method.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>z</strong> – Lower left coordinate of shape (…, hidden_dims)</p></li>
 <li><p><strong>Z</strong> – Top right coordinate of shape (…, hidden_dims)</p></li>
+<li><p><strong>*args</strong> – TODO</p></li>
+<li><p><strong>**kwargs</strong> – TODO</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -271,6 +275,101 @@ need to override this method.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.args">
+<em class="property">property </em><code class="sig-name descname">args</code><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.box_reshape">
+<code class="sig-name descname">box_reshape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target_shape</span><span class="p">:</span> <span class="n">Tuple</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#box_embeddings.parameterizations.box_tensor.BoxTensor" title="box_embeddings.parameterizations.box_tensor.BoxTensor">box_embeddings.parameterizations.box_tensor.BoxTensor</a><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.box_reshape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reshape the z,Z and center.</p>
+<dl>
+<dt>Ex:</dt><dd><ol class="arabic simple">
+<li><p>self.box_shape = (5,10), target_shape = (-1,10), creates box_shape (5,10)</p></li>
+</ol>
+<p>2. self.box_shape = (5,4,10), target_shape = (-1,10), creates box_shape (20,10)
+4. self.box_shape = (20,10), target_shape = (10,2,10), creates box_shape (10,2,10)
+3. self.box_shape = (5,), target_shape = (-1,10),  raises RuntimeError
+5. self.box_shape = (5,10), target_shape = (2,10),  raises RuntimeError</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>target_shape</strong> – TODO</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>TBoxTensor</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>RuntimeError</strong> – If space dimensions, ie. the last dimensions do not match.</p></li>
+<li><p><strong>RuntimeError</strong> – If cannot reshape the extra dimensions and torch.reshape raises.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.box_shape">
+<em class="property">property </em><code class="sig-name descname">box_shape</code><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.box_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shape of z, Z and center.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Shape of z, Z and center.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is <em>not</em> the shape of the <cite>data</cite> attribute.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.broadcast">
+<code class="sig-name descname">broadcast</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target_shape</span><span class="p">:</span> <span class="n">Tuple</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.broadcast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Broadcasts the internal data member in-place such that z and Z
+return tensors that can be automatically broadcasted to perform
+arithmetic operations with shape <cite>target_shape</cite>.</p>
+<dl class="simple">
+<dt>Ex:</dt><dd><p>target_shape = (4,5,10)</p>
+<ol class="arabic simple">
+<li><p>self.box_shape = (10,) =&gt; (1,1,10)</p></li>
+<li><p>self.box_shape = (3,) =&gt; ValueError</p></li>
+<li><p>self.box_shape = (4,10) =&gt; (4,1,10)</p></li>
+<li><p>self.box_shape = (4,2,10) =&gt;  ValueError</p></li>
+<li><p>self.box_shape = (5,10) =&gt; (1,5,10)</p></li>
+</ol>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This operation will not result in self.z, self.Z and self.center returning
+tensor of shape <cite>target_shape</cite> but it will result in return a tensor
+which is arithmetic compatible with <cite>target_shape</cite>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>target_shape</strong> – Shape of the broadcast target. Usually will be the shape of
+the tensor you wish to use z, Z with. For instance, if you wish to
+add self box’s center [shape=(batch, hidden_dim)] with other
+box whose center’s shape is (batch, extra_dim, hidden_dim), then
+this function will reshape the data such that the resulting center
+has shape (batch, 1, hidden_dim).</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If bad target</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>..todo::</dt><dd><p>Add an extra argument <cite>repeat</cite> which tell the
+function to repeat values till target is satisfied.
+This is needed for gumbel_intersection, where the broadcasted
+tensors need to be stacked.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -312,11 +411,67 @@ box then this is the right place to check that.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.from_vector">
+<em class="property">classmethod </em><code class="sig-name descname">from_vector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vector</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; TBoxTensor<a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.from_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a box for a vector. In this base implementation the vector is split
+into two pieces and these are used as z,Z.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector</strong> – tensor</p></li>
+<li><p><strong>*args</strong> – extra arguments for child class</p></li>
+<li><p><strong>**kwargs</strong> – extra arguments for child class</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A BoxTensor</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if last dimension is not even</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.from_zZ">
 <em class="property">classmethod </em><code class="sig-name descname">from_zZ</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">Z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; TBoxTensor<a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.from_zZ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a box for the given min-max coordinates (z,Z).</p>
 <p>In the this base implementation we do this by
 stacking z and Z along -2 dim to form W.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>z</strong> – lower left</p></li>
+<li><p><strong>Z</strong> – top right</p></li>
+<li><p><strong>*args</strong> – extra arguments for child class</p></li>
+<li><p><strong>**kwargs</strong> – extra arguments for child class</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A BoxTensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.kwargs">
+<em class="property">property </em><code class="sig-name descname">kwargs</code><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configuration attribute values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.like_this_from_zZ">
+<code class="sig-name descname">like_this_from_zZ</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">Z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#box_embeddings.parameterizations.box_tensor.BoxTensor" title="box_embeddings.parameterizations.box_tensor.BoxTensor">box_embeddings.parameterizations.box_tensor.BoxTensor</a><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.like_this_from_zZ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a box for the given min-max coordinates (z,Z).
+This is similar to the class method <a href="#id1"><span class="problematic" id="id2">:method:`from_zZ`</span></a>, but
+uses the attributes on self and not external args, kwargs.</p>
+<p>For the base class, since we do not have extra attributes,
+we simply call from_zZ.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -328,6 +483,17 @@ stacking z and Z along -2 dim to form W.</p>
 <dd class="field-even"><p>A BoxTensor</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.reinit">
+<code class="sig-name descname">reinit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>torch.Tensor<span class="p">, </span>Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.reinit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.w2z_ratio">
+<code class="sig-name descname">w2z_ratio</code><em class="property">: int</em><em class="property"> = 2</em><a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.w2z_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of parameters required per dim</p>
 </dd></dl>
 
 <dl class="py method">
@@ -343,6 +509,11 @@ stacking z and Z along -2 dim to form W.</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt id="box_embeddings.parameterizations.box_tensor.BoxTensor.zZ_to_embedding">
+<em class="property">classmethod </em><code class="sig-name descname">zZ_to_embedding</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">Z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#box_embeddings.parameterizations.box_tensor.BoxTensor.zZ_to_embedding" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

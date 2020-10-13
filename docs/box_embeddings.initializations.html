@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>box_embeddings.common.registrable &mdash; Box Embeddings  documentation</title>
+  <title>box_embeddings.initializations &mdash; Box Embeddings  documentation</title>
 
 
 
@@ -37,8 +37,8 @@
 
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="box_embeddings.common.utils" href="box_embeddings.common.utils.html" />
-    <link rel="prev" title="box_embeddings.common" href="box_embeddings.common.html" />
+    <link rel="next" title="box_embeddings.initializations.initializer" href="box_embeddings.initializations.initializer.html" />
+    <link rel="prev" title="box_embeddings.common.utils" href="box_embeddings.common.utils.html" />
 </head>
 
 <body class="wy-body-for-nav">
@@ -89,12 +89,12 @@
               <p class="caption"><span class="caption-text">Code Tree</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="box_embeddings.html">box_embeddings</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="box_embeddings.common.html">box_embeddings.common</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">box_embeddings.common.registrable</a></li>
-<li class="toctree-l3"><a class="reference internal" href="box_embeddings.common.utils.html">box_embeddings.common.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.common.html">box_embeddings.common</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">box_embeddings.initializations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings.initializations.initializer.html">box_embeddings.initializations.initializer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings.initializations.uniform_boxes.html">box_embeddings.initializations.uniform_boxes</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="box_embeddings.initializations.html">box_embeddings.initializations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="box_embeddings.modules.html">box_embeddings.modules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="box_embeddings.parameterizations.html">box_embeddings.parameterizations</a></li>
 </ul>
@@ -147,15 +147,13 @@
 
           <li><a href="box_embeddings.html">box_embeddings</a> &raquo;</li>
 
-          <li><a href="box_embeddings.common.html">box_embeddings.common</a> &raquo;</li>
-
-      <li>box_embeddings.common.registrable</li>
+      <li>box_embeddings.initializations</li>
 
 
       <li class="wy-breadcrumbs-aside">
 
 
-            <a href="_sources/box_embeddings.common.registrable.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/box_embeddings.initializations.rst.txt" rel="nofollow"> View page source</a>
 
 
       </li>
@@ -168,34 +166,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
 
-  <div class="section" id="module-box_embeddings.common.registrable">
-<span id="box-embeddings-common-registrable"></span><h1>box_embeddings.common.registrable<a class="headerlink" href="#module-box_embeddings.common.registrable" title="Permalink to this headline">¶</a></h1>
-<p>Ability to register classes. If AllenNLP is not available, then currently registering won’t work.</p>
-<dl class="py class">
-<dt id="box_embeddings.common.registrable.DummyRegistrable">
-<em class="property">class </em><code class="sig-prename descclassname">box_embeddings.common.registrable.</code><code class="sig-name descname">DummyRegistrable</code><a class="headerlink" href="#box_embeddings.common.registrable.DummyRegistrable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Dummy class which implements ‘registrable’ method which does nothing.</p>
-<dl class="py method">
-<dt id="box_embeddings.common.registrable.DummyRegistrable.register">
-<em class="property">classmethod </em><code class="sig-name descname">register</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">constructor</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exist_ok</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Callable<span class="p">[</span><span class="p">[</span>Type<span class="p">[</span>T<span class="p">]</span><span class="p">]</span><span class="p">, </span>Type<span class="p">[</span>T<span class="p">]</span><span class="p">]</span><a class="headerlink" href="#box_embeddings.common.registrable.DummyRegistrable.register" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transparent method</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – TODO</p></li>
-<li><p><strong>constructor</strong> – TODO</p></li>
-<li><p><strong>exist_ok</strong> – TODO</p></li>
+  <div class="section" id="box-embeddings-initializations">
+<h1>box_embeddings.initializations<a class="headerlink" href="#box-embeddings-initializations" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="box_embeddings.initializations.initializer.html">box_embeddings.initializations.initializer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_embeddings.initializations.uniform_boxes.html">box_embeddings.initializations.uniform_boxes</a></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a wrapped callable</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+</div>
 </div>
 
 
@@ -206,10 +184,10 @@
 
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
 
-        <a href="box_embeddings.common.utils.html" class="btn btn-neutral float-right" title="box_embeddings.common.utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="box_embeddings.initializations.initializer.html" class="btn btn-neutral float-right" title="box_embeddings.initializations.initializer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
-        <a href="box_embeddings.common.html" class="btn btn-neutral float-left" title="box_embeddings.common" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="box_embeddings.common.utils.html" class="btn btn-neutral float-left" title="box_embeddings.common.utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
 
     </div>
 
