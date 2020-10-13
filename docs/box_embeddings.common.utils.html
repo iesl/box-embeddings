@@ -37,7 +37,7 @@
 
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="box_embeddings.modules" href="box_embeddings.modules.html" />
+    <link rel="next" title="box_embeddings.initializations" href="box_embeddings.initializations.html" />
     <link rel="prev" title="box_embeddings.common.registrable" href="box_embeddings.common.registrable.html" />
 </head>
 
@@ -94,6 +94,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">box_embeddings.common.utils</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.initializations.html">box_embeddings.initializations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="box_embeddings.modules.html">box_embeddings.modules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="box_embeddings.parameterizations.html">box_embeddings.parameterizations</a></li>
 </ul>
@@ -180,6 +181,21 @@ or
 <p>For details, see</p>
 <p><a class="reference external" href="https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf">https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf</a></p>
 <p><a class="reference external" href="https://github.com/visinf/n3net/commit/31968bd49c7d638cef5f5656eb62793c46b41d76">https://github.com/visinf/n3net/commit/31968bd49c7d638cef5f5656eb62793c46b41d76</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – input tensor</p></li>
+<li><p><strong>split_point</strong> – Should be kept to the default of log(0.5)</p></li>
+<li><p><strong>exp_zero_eps</strong> – Default 1e-7</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Elementwise log1mexp(x) = log(1-exp(x))</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -188,6 +204,17 @@ or
 <dd><p>Computes log(1+exp(x))</p>
 <p>see: Page 7, eqn 10 of <a class="reference external" href="https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf">https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf</a>
 also see: <a class="reference external" href="https://github.com/SurajGupta/r-source/blob/master/src/nmath/plogis.c">https://github.com/SurajGupta/r-source/blob/master/src/nmath/plogis.c</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – Tensor</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Elementwise log1pexp(x) = log(1+exp(x))</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -229,7 +256,7 @@ Only supports floating point dtypes.</p>
 
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
 
-        <a href="box_embeddings.modules.html" class="btn btn-neutral float-right" title="box_embeddings.modules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="box_embeddings.initializations.html" class="btn btn-neutral float-right" title="box_embeddings.initializations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
         <a href="box_embeddings.common.registrable.html" class="btn btn-neutral float-left" title="box_embeddings.common.registrable" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

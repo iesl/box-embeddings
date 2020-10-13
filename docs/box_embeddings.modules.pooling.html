@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>box_embeddings.modules &mdash; Box Embeddings  documentation</title>
+  <title>box_embeddings.modules.pooling &mdash; Box Embeddings  documentation</title>
 
 
 
@@ -37,8 +37,8 @@
 
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="box_embeddings.modules.intersection" href="box_embeddings.modules.intersection.html" />
-    <link rel="prev" title="box_embeddings.initializations.uniform_boxes" href="box_embeddings.initializations.uniform_boxes.html" />
+    <link rel="next" title="box_embeddings.modules.pooling.bag_of_boxes" href="box_embeddings.modules.pooling.bag_of_boxes.html" />
+    <link rel="prev" title="box_embeddings.modules.intersection.intersection" href="box_embeddings.modules.intersection.intersection.html" />
 </head>
 
 <body class="wy-body-for-nav">
@@ -91,9 +91,14 @@
 <li class="toctree-l1 current"><a class="reference internal" href="box_embeddings.html">box_embeddings</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="box_embeddings.common.html">box_embeddings.common</a></li>
 <li class="toctree-l2"><a class="reference internal" href="box_embeddings.initializations.html">box_embeddings.initializations</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">box_embeddings.modules</a><ul>
+<li class="toctree-l2 current"><a class="reference internal" href="box_embeddings.modules.html">box_embeddings.modules</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="box_embeddings.modules.intersection.html">box_embeddings.modules.intersection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="box_embeddings.modules.pooling.html">box_embeddings.modules.pooling</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">box_embeddings.modules.pooling</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="box_embeddings.modules.pooling.bag_of_boxes.html">box_embeddings.modules.pooling.bag_of_boxes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="box_embeddings.modules.pooling.intersection.html">box_embeddings.modules.pooling.intersection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="box_embeddings.modules.pooling.pooling.html">box_embeddings.modules.pooling.pooling</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="box_embeddings.modules.regularization.html">box_embeddings.modules.regularization</a></li>
 <li class="toctree-l3"><a class="reference internal" href="box_embeddings.modules.volume.html">box_embeddings.modules.volume</a></li>
 <li class="toctree-l3"><a class="reference internal" href="box_embeddings.modules.box_module.html">box_embeddings.modules.box_module</a></li>
@@ -151,13 +156,15 @@
 
           <li><a href="box_embeddings.html">box_embeddings</a> &raquo;</li>
 
-      <li>box_embeddings.modules</li>
+          <li><a href="box_embeddings.modules.html">box_embeddings.modules</a> &raquo;</li>
+
+      <li>box_embeddings.modules.pooling</li>
 
 
       <li class="wy-breadcrumbs-aside">
 
 
-            <a href="_sources/box_embeddings.modules.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/box_embeddings.modules.pooling.rst.txt" rel="nofollow"> View page source</a>
 
 
       </li>
@@ -170,35 +177,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
 
-  <div class="section" id="box-embeddings-modules">
-<h1>box_embeddings.modules<a class="headerlink" href="#box-embeddings-modules" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="box-embeddings-modules-pooling">
+<h1>box_embeddings.modules.pooling<a class="headerlink" href="#box-embeddings-modules-pooling" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="box_embeddings.modules.intersection.html">box_embeddings.modules.intersection</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="box_embeddings.modules.intersection.gumbel_intersection.html">box_embeddings.modules.intersection.gumbel_intersection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="box_embeddings.modules.intersection.hard_intersection.html">box_embeddings.modules.intersection.hard_intersection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="box_embeddings.modules.intersection.intersection.html">box_embeddings.modules.intersection.intersection</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="box_embeddings.modules.pooling.html">box_embeddings.modules.pooling</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="box_embeddings.modules.pooling.bag_of_boxes.html">box_embeddings.modules.pooling.bag_of_boxes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="box_embeddings.modules.pooling.intersection.html">box_embeddings.modules.pooling.intersection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="box_embeddings.modules.pooling.pooling.html">box_embeddings.modules.pooling.pooling</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="box_embeddings.modules.regularization.html">box_embeddings.modules.regularization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="box_embeddings.modules.volume.html">box_embeddings.modules.volume</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="box_embeddings.modules.volume.bessel_volume.html">box_embeddings.modules.volume.bessel_volume</a></li>
-<li class="toctree-l2"><a class="reference internal" href="box_embeddings.modules.volume.soft_volume.html">box_embeddings.modules.volume.soft_volume</a></li>
-<li class="toctree-l2"><a class="reference internal" href="box_embeddings.modules.volume.volume.html">box_embeddings.modules.volume.volume</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="box_embeddings.modules.box_module.html">box_embeddings.modules.box_module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="box_embeddings.modules.embedding.html">box_embeddings.modules.embedding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_embeddings.modules.pooling.bag_of_boxes.html">box_embeddings.modules.pooling.bag_of_boxes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_embeddings.modules.pooling.intersection.html">box_embeddings.modules.pooling.intersection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_embeddings.modules.pooling.pooling.html">box_embeddings.modules.pooling.pooling</a></li>
 </ul>
 </div>
 </div>
@@ -211,10 +196,10 @@
 
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
 
-        <a href="box_embeddings.modules.intersection.html" class="btn btn-neutral float-right" title="box_embeddings.modules.intersection" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="box_embeddings.modules.pooling.bag_of_boxes.html" class="btn btn-neutral float-right" title="box_embeddings.modules.pooling.bag_of_boxes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
-        <a href="box_embeddings.initializations.uniform_boxes.html" class="btn btn-neutral float-left" title="box_embeddings.initializations.uniform_boxes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="box_embeddings.modules.intersection.intersection.html" class="btn btn-neutral float-left" title="box_embeddings.modules.intersection.intersection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
 
     </div>
 
