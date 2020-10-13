@@ -1,0 +1,7 @@
+box\_embeddings.modules.pooling.pooling
+=======================================
+
+.. automodule:: box_embeddings.modules.pooling.pooling
+   :members:
+   :undoc-members:
+   :show-inheritance:

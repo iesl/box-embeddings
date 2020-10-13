@@ -37,7 +37,7 @@
 
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="box_embeddings.modules.regularization" href="box_embeddings.modules.regularization.html" />
+    <link rel="next" title="box_embeddings.modules.pooling" href="box_embeddings.modules.pooling.html" />
     <link rel="prev" title="box_embeddings.modules.intersection.hard_intersection" href="box_embeddings.modules.intersection.hard_intersection.html" />
 </head>
 
@@ -90,6 +90,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="box_embeddings.html">box_embeddings</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="box_embeddings.common.html">box_embeddings.common</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.initializations.html">box_embeddings.initializations</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="box_embeddings.modules.html">box_embeddings.modules</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="box_embeddings.modules.intersection.html">box_embeddings.modules.intersection</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="box_embeddings.modules.intersection.gumbel_intersection.html">box_embeddings.modules.intersection.gumbel_intersection</a></li>
@@ -97,6 +98,7 @@
 <li class="toctree-l4 current"><a class="current reference internal" href="#">box_embeddings.modules.intersection.intersection</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings.modules.pooling.html">box_embeddings.modules.pooling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="box_embeddings.modules.regularization.html">box_embeddings.modules.regularization</a></li>
 <li class="toctree-l3"><a class="reference internal" href="box_embeddings.modules.volume.html">box_embeddings.modules.volume</a></li>
 <li class="toctree-l3"><a class="reference internal" href="box_embeddings.modules.box_module.html">box_embeddings.modules.box_module</a></li>
@@ -187,7 +189,7 @@
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
 <dt id="box_embeddings.modules.intersection.intersection.Intersection.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">left</span><span class="p">:</span> <span class="n">TBoxTensor</span></em>, <em class="sig-param"><span class="n">right</span><span class="p">:</span> <span class="n">TBoxTensor</span></em><span class="sig-paren">)</span> &#x2192; TBoxTensor<a class="headerlink" href="#box_embeddings.modules.intersection.intersection.Intersection.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">left</span><span class="p">:</span> <span class="n"><a class="reference internal" href="box_embeddings.parameterizations.box_tensor.html#box_embeddings.parameterizations.box_tensor.BoxTensor" title="box_embeddings.parameterizations.box_tensor.BoxTensor">box_embeddings.parameterizations.box_tensor.BoxTensor</a></span></em>, <em class="sig-param"><span class="n">right</span><span class="p">:</span> <span class="n"><a class="reference internal" href="box_embeddings.parameterizations.box_tensor.html#box_embeddings.parameterizations.box_tensor.BoxTensor" title="box_embeddings.parameterizations.box_tensor.BoxTensor">box_embeddings.parameterizations.box_tensor.BoxTensor</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="box_embeddings.parameterizations.box_tensor.html#box_embeddings.parameterizations.box_tensor.BoxTensor" title="box_embeddings.parameterizations.box_tensor.BoxTensor">box_embeddings.parameterizations.box_tensor.BoxTensor</a><a class="headerlink" href="#box_embeddings.modules.intersection.intersection.Intersection.forward" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -207,7 +209,7 @@
 
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
 
-        <a href="box_embeddings.modules.regularization.html" class="btn btn-neutral float-right" title="box_embeddings.modules.regularization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="box_embeddings.modules.pooling.html" class="btn btn-neutral float-right" title="box_embeddings.modules.pooling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
         <a href="box_embeddings.modules.intersection.hard_intersection.html" class="btn btn-neutral float-left" title="box_embeddings.modules.intersection.hard_intersection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

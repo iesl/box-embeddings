@@ -6,5 +6,6 @@ box\_embeddings
    :maxdepth: 4
 
    box_embeddings.common
+   box_embeddings.initializations
    box_embeddings.modules
    box_embeddings.parameterizations

@@ -6,6 +6,7 @@ box\_embeddings.modules
    :maxdepth: 4
 
    box_embeddings.modules.intersection
+   box_embeddings.modules.pooling
    box_embeddings.modules.regularization
    box_embeddings.modules.volume
 

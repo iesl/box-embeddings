@@ -90,6 +90,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="box_embeddings.html">box_embeddings</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="box_embeddings.common.html">box_embeddings.common</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings.initializations.html">box_embeddings.initializations</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="box_embeddings.modules.html">box_embeddings.modules</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="box_embeddings.modules.intersection.html">box_embeddings.modules.intersection</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="box_embeddings.modules.intersection.gumbel_intersection.html">box_embeddings.modules.intersection.gumbel_intersection</a></li>
@@ -97,6 +98,7 @@
 <li class="toctree-l4"><a class="reference internal" href="box_embeddings.modules.intersection.intersection.html">box_embeddings.modules.intersection.intersection</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings.modules.pooling.html">box_embeddings.modules.pooling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="box_embeddings.modules.regularization.html">box_embeddings.modules.regularization</a></li>
 <li class="toctree-l3"><a class="reference internal" href="box_embeddings.modules.volume.html">box_embeddings.modules.volume</a></li>
 <li class="toctree-l3"><a class="reference internal" href="box_embeddings.modules.box_module.html">box_embeddings.modules.box_module</a></li>
@@ -185,27 +187,6 @@
 <dd><p>Bases: <a class="reference internal" href="box_embeddings.modules.intersection.intersection.html#box_embeddings.modules.intersection.intersection.Intersection" title="box_embeddings.modules.intersection.intersection.Intersection"><code class="xref py py-class docutils literal notranslate"><span class="pre">box_embeddings.modules.intersection.intersection.Intersection</span></code></a></p>
 <p>Hard intersection operation as a Layer/Module</p>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
-<dl class="py method">
-<dt id="box_embeddings.modules.intersection.hard_intersection.HardIntersection.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">left</span><span class="p">:</span> <span class="n">TBoxTensor</span></em>, <em class="sig-param"><span class="n">right</span><span class="p">:</span> <span class="n">TBoxTensor</span></em><span class="sig-paren">)</span> &#x2192; TBoxTensor<a class="headerlink" href="#box_embeddings.modules.intersection.hard_intersection.HardIntersection.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gives intersection of self and other.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>left</strong> – First operand for intersection</p></li>
-<li><p><strong>right</strong> – Second operand</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Intersection box</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This function can give fipped boxes, i.e. where z[i] &gt; Z[i]</p>
-</div>
-</dd></dl>
-
 <dl class="py attribute">
 <dt id="box_embeddings.modules.intersection.hard_intersection.HardIntersection.training">
 <code class="sig-name descname">training</code><a class="headerlink" href="#box_embeddings.modules.intersection.hard_intersection.HardIntersection.training" title="Permalink to this definition">¶</a></dt>

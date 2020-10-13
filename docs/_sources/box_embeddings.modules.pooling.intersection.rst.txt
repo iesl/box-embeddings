@@ -1,0 +1,7 @@
+box\_embeddings.modules.pooling.intersection
+============================================
+
+.. automodule:: box_embeddings.modules.pooling.intersection
+   :members:
+   :undoc-members:
+   :show-inheritance:

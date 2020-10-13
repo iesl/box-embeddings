@@ -1,0 +1,7 @@
+box\_embeddings.modules.pooling.bag\_of\_boxes
+==============================================
+
+.. automodule:: box_embeddings.modules.pooling.bag_of_boxes
+   :members:
+   :undoc-members:
+   :show-inheritance:
