@@ -10,11 +10,14 @@ import numpy as np
 eps = tiny_value_of_dtype(torch.float)
 euler_gamma = 0.57721566490153286060
 
+
 def bessel_volume_approx(
-    box_tensor: BoxTensor, beta: float = 1.0, gumbel_beta: float = 1.0,
-    scale: float = 1.0
+    box_tensor: BoxTensor,
+    beta: float = 1.0,
+    gumbel_beta: float = 1.0,
+    scale: float = 1.0,
 ) -> torch.Tensor:
-    """ Volume of boxes. Uses the Softplus as an approximation of 
+    """ Volume of boxes. Uses the Softplus as an approximation of
         Bessel funtion.
 
         Args:
@@ -35,16 +38,24 @@ def bessel_volume_approx(
         raise ValueError(f"scale should be in (0,1] but is {scale}")
 
     return (
-        torch.prod(softplus(box_tensor.Z - box_tensor.z - 2 * euler_gamma * gumbel_beta, beta=beta), dim=-1)
+        torch.prod(
+            softplus(
+                box_tensor.Z - box_tensor.z - 2 * euler_gamma * gumbel_beta,
+                beta=beta,
+            ),
+            dim=-1,
+        )
         * scale
     )
 
 
 def log_bessel_volume_approx(
-    box_tensor: BoxTensor, beta: float = 1.0, gumbel_beta: float = 1.0,
-    scale: float = 1.0
+    box_tensor: BoxTensor,
+    beta: float = 1.0,
+    gumbel_beta: float = 1.0,
+    scale: float = 1.0,
 ) -> torch.Tensor:
-    """ Volume of boxes. Uses the Softplus as an approximation of 
+    """ Volume of boxes. Uses the Softplus as an approximation of
         Bessel funtion.
 
         Args:
@@ -66,7 +77,10 @@ def log_bessel_volume_approx(
 
     return torch.sum(
         torch.log(
-            softplus(box_tensor.Z - box_tensor.z - 2 * euler_gamma * gumbel_beta, beta=beta).clamp_min(eps)
+            softplus(
+                box_tensor.Z - box_tensor.z - 2 * euler_gamma * gumbel_beta,
+                beta=beta,
+            ).clamp_min(eps)
         ),
         dim=-1,
     ) + float(
@@ -76,9 +90,16 @@ def log_bessel_volume_approx(
 
 @Volume.register("bessel-approx")
 class BesselApproxVolume(Volume):
-    """ Softplus based volume."""
+    """ Uses the Softplus as an approximation of
+        Bessel function.
+    """
 
-    def __init__(self, log_scale: bool = True, beta: float = 1.0, gumbel_beta: float = 1.0) -> None:
+    def __init__(
+        self,
+        log_scale: bool = True,
+        beta: float = 1.0,
+        gumbel_beta: float = 1.0,
+    ) -> None:
         """
 
         Args:
@@ -101,6 +122,10 @@ class BesselApproxVolume(Volume):
         """
 
         if self.log_scale:
-            return log_bessel_volume_approx(box_tensor, beta=self.beta, gumbel_beta=self.gumbel_beta)
+            return log_bessel_volume_approx(
+                box_tensor, beta=self.beta, gumbel_beta=self.gumbel_beta
+            )
         else:
-            return bessel_volume_approx(box_tensor, beta=self.beta, gumbel_beta=self.gumbel_beta)
+            return bessel_volume_approx(
+                box_tensor, beta=self.beta, gumbel_beta=self.gumbel_beta
+            )
