@@ -83,7 +83,7 @@ def log1mexp(
 
 
 def log1pexp(x: torch.Tensor) -> torch.Tensor:
-    """ Computes log(1+exp(x))
+    """Computes log(1+exp(x))
 
     see: Page 7, eqn 10 of https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf
     also see: https://github.com/SurajGupta/r-source/blob/master/src/nmath/plogis.c
