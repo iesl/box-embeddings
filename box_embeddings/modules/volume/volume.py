@@ -38,12 +38,12 @@ class Volume(torch.nn.Module, Registrable):
 def hard_volume(box_tensor: BoxTensor) -> torch.Tensor:
     """Volume of boxes. Returns 0 where boxes are flipped.
 
-    Args:
-        box_tensor: input
+        Args:
+            box_tensor: input
 
-    Returns:
-        Tensor of shape (..., ) when self has shape (..., 2, num_dims)
-    """
+        Returns:
+            Tensor of shape (..., ) when self has shape (..., 2, num_dims)
+        """
 
     return torch.prod((box_tensor.Z - box_tensor.z).clamp_min(0), dim=-1)
 

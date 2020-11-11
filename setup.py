@@ -6,8 +6,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 
-def load_requirements(path_dir=PATH_ROOT, comment_char="#"):
-    with open(os.path.join(path_dir, "core_requirements.txt"), "r") as file:
+def load_requirements(path_dir=PATH_ROOT, comment_char='#'):
+    with open(os.path.join(path_dir, 'core_requirements.txt'), 'r') as file:
         lines = [ln.strip() for ln in file.readlines()]
     reqs = []
 
@@ -26,30 +26,30 @@ def load_requirements(path_dir=PATH_ROOT, comment_char="#"):
 install_requires = load_requirements()
 
 setup(
-    name="box_embeddings",
-    version="0.0.1",
+    name='box_embeddings',
+    version='0.0.1',
     author="Dhruvesh Patel",
     author_email="1793dnp@gmail.com",
-    description="Pytorch implemention of box embedding models",
+    description='Pytorch implemention of box embedding models',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="http://www.iesl.cs.umass.edu/box-embeddings/",
     project_urls={
-        "Documentation": "http://www.iesl.cs.umass.edu/box-embeddings",
-        "Source Code": "https://github.com/iesl/box-embeddings",
+        'Documentation': 'http://www.iesl.cs.umass.edu/box-embeddings',
+        'Source Code': 'https://github.com/iesl/box-embeddings',
     },
     packages=find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests", "examples"]
     ),
-    package_data={"box_embeddings": ["py.typed"]},
+    package_data={'box_embeddings': ['py.typed']},
     install_requires=install_requires,
-    keywords=["pytorch", "AI", "ML", "Machine Learning", "Deep Learning"],
+    keywords=['pytorch', 'AI', 'ML', 'Machine Learning', 'Deep Learning'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-        "Development Status :: 3 - Alpha" "Intended Audience :: Developers",
-        "Topic :: Scientific/Engineering :: Artificial Intelligence",
+        'Development Status :: 3 - Alpha' 'Intended Audience :: Developers',
+        'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ],
-    python_requires=">=3.5",
+    python_requires='>=3.5',
 )

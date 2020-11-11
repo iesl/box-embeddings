@@ -50,7 +50,8 @@ TBoxTensor = TypeVar("TBoxTensor", bound="BoxTensor")
 
 
 class BoxTensor(object):
-    """Base class defining the interface for BoxTensor."""
+    """Base class defining the interface for BoxTensor.
+    """
 
     w2z_ratio: int = 2  #: number of parameters required per dim
 
@@ -256,11 +257,7 @@ class BoxTensor(object):
 
         return cls((z, Z), *args, **kwargs)
 
-    def like_this_from_zZ(
-        self,
-        z: Tensor,
-        Z: Tensor,
-    ) -> "BoxTensor":
+    def like_this_from_zZ(self, z: Tensor, Z: Tensor,) -> "BoxTensor":
         """Creates a box for the given min-max coordinates (z,Z).
         This is similar to the class method :method:`from_zZ`, but
         uses the attributes on self and not external args, kwargs.
@@ -349,7 +346,7 @@ class BoxTensor(object):
             return self._z.shape  # type: ignore
 
     def broadcast(self, target_shape: Tuple) -> None:
-        """Broadcasts the internal data member in-place such that z and Z
+        """ Broadcasts the internal data member in-place such that z and Z
         return tensors that can be automatically broadcasted to perform
         arithmetic operations with shape `target_shape`.
 
@@ -540,10 +537,7 @@ class BoxFactory(Registrable):
 
     @classmethod
     def register_box_class(
-        cls,
-        name: str,
-        constructor: str = None,
-        exist_ok: bool = False,
+        cls, name: str, constructor: str = None, exist_ok: bool = False,
     ) -> Callable[[Type[BoxTensor]], Type[BoxTensor]]:
         """This is different from allennlp registrable because what this class registers
         is not subclasses but subclasses of BoxTensor

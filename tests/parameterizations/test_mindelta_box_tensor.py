@@ -46,8 +46,7 @@ def test_creation_from_zZ():
 
 
 @hypothesis.given(
-    beta=floats(1.0, 50.0),
-    threshold=integers(20, 50),
+    beta=floats(1.0, 50.0), threshold=integers(20, 50),
 )
 def test_creation_from_vector(beta, threshold):
     shape = (3, 1, 5)
