@@ -7,8 +7,7 @@ from box_embeddings.common.utils import tiny_value_of_dtype
 from torch.nn.functional import softplus
 import numpy as np
 
-# eps = tiny_value_of_dtype(torch.float)
-eps = 1e-42
+eps = tiny_value_of_dtype(torch.float)
 euler_gamma = 0.57721566490153286060
 
 
@@ -18,22 +17,22 @@ def bessel_volume_approx(
     gumbel_beta: float = 1.0,
     scale: float = 1.0,
 ) -> torch.Tensor:
-    """Volume of boxes. Uses the Softplus as an approximation of
-    Bessel funtion.
+    """ Volume of boxes. Uses the Softplus as an approximation of
+        Bessel funtion.
 
-    Args:
-        box_tensor: input
-        beta: the beta parameter for the softplus.
-        gumbel_beta: the gumbel_beta parameter (same value used in intersection).
-        scale: scale parameter. Should be left as 1.0 (default)
-            in most cases.
+        Args:
+            box_tensor: input
+            beta: the beta parameter for the softplus.
+            gumbel_beta: the gumbel_beta parameter (same value used in intersection).
+            scale: scale parameter. Should be left as 1.0 (default)
+                in most cases.
 
-    Returns:
-        Tensor of shape (..., ) when self has shape (..., 2, num_dims)
+        Returns:
+            Tensor of shape (..., ) when self has shape (..., 2, num_dims)
 
-    Raises:
-        ValueError: if scale not in (0,1]
-    """
+        Raises:
+            ValueError: if scale not in (0,1]
+        """
 
     if not (0.0 < scale <= 1.0):
         raise ValueError(f"scale should be in (0,1] but is {scale}")
@@ -56,22 +55,22 @@ def log_bessel_volume_approx(
     gumbel_beta: float = 1.0,
     scale: float = 1.0,
 ) -> torch.Tensor:
-    """Volume of boxes. Uses the Softplus as an approximation of
-    Bessel funtion.
+    """ Volume of boxes. Uses the Softplus as an approximation of
+        Bessel funtion.
 
-    Args:
-        box_tensor: input.
-        beta: the beta parameter for the softplus.
-        gumbel_beta: the gumbel_beta parameter (same value used in intersection).
-        scale: scale parameter. Should be left as 1.0 (default)
-            in most cases.
+        Args:
+            box_tensor: input.
+            beta: the beta parameter for the softplus.
+            gumbel_beta: the gumbel_beta parameter (same value used in intersection).
+            scale: scale parameter. Should be left as 1.0 (default)
+                in most cases.
 
-    Returns:
-        Tensor of shape (..., ) when self has shape (..., 2, num_dims)
+        Returns:
+            Tensor of shape (..., ) when self has shape (..., 2, num_dims)
 
-    Raises:
-        ValueError: if scale not in (0,1]
-    """
+        Raises:
+            ValueError: if scale not in (0,1]
+        """
 
     if not (0.0 < scale <= 1.0):
         raise ValueError(f"scale should be in (0,1] but is {scale}")
@@ -81,8 +80,7 @@ def log_bessel_volume_approx(
             softplus(
                 box_tensor.Z - box_tensor.z - 2 * euler_gamma * gumbel_beta,
                 beta=beta,
-            )
-            + eps
+            ).clamp_min(eps)
         ),
         dim=-1,
     ) + float(
@@ -92,8 +90,8 @@ def log_bessel_volume_approx(
 
 @Volume.register("bessel-approx")
 class BesselApproxVolume(Volume):
-    """Uses the Softplus as an approximation of
-    Bessel function.
+    """ Uses the Softplus as an approximation of
+        Bessel function.
     """
 
     def __init__(
@@ -114,7 +112,7 @@ class BesselApproxVolume(Volume):
         self.gumbel_beta = gumbel_beta
 
     def forward(self, box_tensor: BoxTensor) -> torch.Tensor:
-        """Soft softplus base (instead of ReLU) volume.
+        """ Soft softplus base (instead of ReLU) volume.
 
         Args:
             box_tensor: TODO

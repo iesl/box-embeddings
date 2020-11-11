@@ -1,6 +1,5 @@
 import torch
 import math
-import warnings
 
 
 def tiny_value_of_dtype(dtype: torch.dtype) -> float:
@@ -83,7 +82,7 @@ def log1mexp(
 
 
 def log1pexp(x: torch.Tensor) -> torch.Tensor:
-    """Computes log(1+exp(x))
+    """ Computes log(1+exp(x))
 
     see: Page 7, eqn 10 of https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf
     also see: https://github.com/SurajGupta/r-source/blob/master/src/nmath/plogis.c
@@ -119,33 +118,3 @@ def softplus_inverse(
     )
 
     return res
-
-
-lse_eps = 1e-38
-log_lse_eps = math.log(lse_eps)
-
-
-def logsumexp2(t1: torch.Tensor, t2: torch.Tensor) -> torch.Tensor:
-    """Performs element-wise logsumexp of two tensors in a numerically stable manner. This can also
-    be thought as a soft/differentiable version of the max operator.
-
-    Specifically, it computes log(exp(t1) + exp(t2)).
-
-    Args:
-        t1: First tensor (left operand)
-        t2: Second tensor (right operand)
-
-    Returns:
-        logsumexp
-    """
-    m = torch.max(t1, t2)
-    a1 = t1 - m
-    a2 = t2 - m
-    # with torch.no_grad():
-    #    if torch.any(a1 < log_lse_eps) or torch.any(a2 < log_lse_eps):
-    #        warnings.warn("Value of -|t1 - t2| < log_lse_eps. logsumexp2 will give inaccurate values.")
-
-    # lse = m + torch.log(torch.exp(t1-m) + torch.exp(t2-m) + lse_eps)
-    lse = m + torch.log(torch.exp(a1) + torch.exp(a2))
-
-    return lse
