@@ -129,7 +129,8 @@ def test_intersection_with_broadcasting(
     box_type=sampled_from([MinDeltaBoxTensor, BoxTensor]),
 )
 @hypothesis.settings(
-    print_blob=True, max_examples=1000,
+    print_blob=True,
+    max_examples=1000,
 )
 def test_intersection_all_input_ranges_grad_computation(
     inp1, inp2, gumbel_beta, beta, expected_probs, approximation_mode, box_type
@@ -185,7 +186,8 @@ def test_intersection_all_input_ranges_grad_computation(
     approximation_mode=sampled_from(["clipping", "nextafter"]),
 )
 @hypothesis.settings(
-    print_blob=True, max_examples=1000,
+    print_blob=True,
+    max_examples=1000,
 )
 def test_intersection_all_input_ranges_grad_value(
     inp1, inp2, gumbel_beta, beta, box_type, approximation_mode
