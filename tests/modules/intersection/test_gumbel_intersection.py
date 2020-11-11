@@ -49,7 +49,7 @@ def test_intersection_with_fixed_input() -> None:
         elements=hypothesis.strategies.floats(-100, 100),
     ),
     beta=floats(1e-5, 1.0),
-    approximation_mode=sampled_from(["clipping", "nextafter"]),
+    approximation_mode=sampled_from(["clipping", "clipping_forward"]),
     box_type=sampled_from([MinDeltaBoxTensor, BoxTensor]),
 )
 @hypothesis.settings(print_blob=True, max_examples=1000)
@@ -81,7 +81,7 @@ def test_intersection_all_input_ranges(
         elements=hypothesis.strategies.floats(-100, 100),
     ),  # box_shape (1,4,10)
     beta=floats(1e-5, 1.0),
-    approximation_mode=sampled_from(["clipping", "nextafter"]),
+    approximation_mode=sampled_from(["clipping", "clipping_forward"]),
     box_type=sampled_from([MinDeltaBoxTensor, BoxTensor]),
 )
 @hypothesis.settings(
@@ -125,7 +125,7 @@ def test_intersection_with_broadcasting(
         dtype=np.float,
         elements=hypothesis.strategies.integers(0, 1),
     ),
-    approximation_mode=sampled_from([None, "clipping", "nextafter"]),
+    approximation_mode=sampled_from([None, "clipping", "clipping_forward"]),
     box_type=sampled_from([MinDeltaBoxTensor, BoxTensor]),
 )
 @hypothesis.settings(
@@ -183,7 +183,7 @@ def test_intersection_all_input_ranges_grad_computation(
     gumbel_beta=floats(1e-5, 1.0),
     beta=floats(1.0, 50.0),
     box_type=sampled_from([MinDeltaBoxTensor, BoxTensor]),
-    approximation_mode=sampled_from(["clipping", "nextafter"]),
+    approximation_mode=sampled_from(["clipping", "clipping_forward"]),
 )
 @hypothesis.settings(
     print_blob=True,

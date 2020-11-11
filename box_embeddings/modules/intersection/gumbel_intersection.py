@@ -7,34 +7,32 @@ from box_embeddings.common.utils import logsumexp2
 from box_embeddings import box_debug_level
 
 
+def _compute_logaddexp_with_clipping_and_separate_forward(
+    t1: TBoxTensor, t2: TBoxTensor, gumbel_beta: float
+) -> Tuple[torch.Tensor, torch.Tensor]:
+    lse_z = torch.logaddexp(t1.z / gumbel_beta, t2.z / gumbel_beta)
+    z = gumbel_beta * (lse_z)
+    z_value = torch.max(z, torch.max(t1.z, t2.z))  # type: ignore
+    z_final = (z - z.detach()) + z_value.detach()
+    lse_Z = torch.logaddexp(-t1.Z / gumbel_beta, -t2.Z / gumbel_beta)
+    Z = -gumbel_beta * (lse_Z)
+    Z_value = torch.min(Z, torch.min(t1.Z, t2.Z))
+    Z_final = (Z - Z.detach()) + Z_value.detach()
+
+    return z_final, Z_final
+
+
 def _compute_logaddexp_with_clipping(
     t1: TBoxTensor, t2: TBoxTensor, gumbel_beta: float
 ) -> Tuple[torch.Tensor, torch.Tensor]:
     lse_z = torch.logaddexp(t1.z / gumbel_beta, t2.z / gumbel_beta)
     z = gumbel_beta * (lse_z)
-    z = torch.max(z, torch.max(t1.z, t2.z))  # type: ignore
+    z_value = torch.max(z, torch.max(t1.z, t2.z))  # type: ignore
     lse_Z = torch.logaddexp(-t1.Z / gumbel_beta, -t2.Z / gumbel_beta)
     Z = -gumbel_beta * (lse_Z)
-    Z = torch.min(Z, torch.min(t1.Z, t2.Z))
+    Z_value = torch.min(Z, torch.min(t1.Z, t2.Z))
 
-    return z, Z
-
-
-def _compute_logaddexp_with_nextafter(
-    t1: TBoxTensor, t2: TBoxTensor, gumbel_beta: float
-) -> Tuple[torch.Tensor, torch.Tensor]:
-    # Need to perform nextafter to ensure that the necessary inequlity (state below)
-    # holds. We need it for conditional probability computations.
-    # Note: torch.nextafter does not have gradient so we
-    # will use it to produce the value but not use it during backward
-    lse_z = torch.logaddexp(t1.z / gumbel_beta, t2.z / gumbel_beta)
-    lse_z_value = torch.nextafter(lse_z, lse_z + 1)
-    z = gumbel_beta * (lse_z_value.detach() + (lse_z - lse_z.detach()))
-    lse_Z = torch.logaddexp(-t1.Z / gumbel_beta, -t2.Z / gumbel_beta)
-    lse_Z_value = torch.nextafter(lse_Z, lse_Z + 1)
-    Z = -gumbel_beta * (lse_Z_value.detach() + (lse_Z - lse_Z.detach()))
-
-    return z, Z
+    return z_value, Z_value
 
 
 def _compute_logaddexp(
@@ -66,8 +64,9 @@ def gumbel_intersection(
         left: BoxTensor which is the left operand
         right: BoxTensor which is the right operand
         gumbel_beta: Beta parameter
-        approximation_mode: Use hard clipping ('clipping') or nextafter trick ('nextafter')
-            to satisfy the required inequalities. (default: None)
+        approximation_mode: Use hard clipping ('clipping') or hard clipping with separeate value
+            for forward and backward passes  ('clipping_forward') to satisfy the required inequalities.
+            Set `None` to not use any approximation. (default: `None`)
 
     Returns:
          The resulting BoxTensor obtained by interection.
@@ -83,8 +82,10 @@ def gumbel_intersection(
         z, Z = _compute_logaddexp(t1, t2, gumbel_beta)
     elif approximation_mode == "clipping":
         z, Z = _compute_logaddexp_with_clipping(t1, t2, gumbel_beta)
-    elif approximation_mode == "nextafter":
-        z, Z = _compute_logaddexp_with_nextafter(t1, t2, gumbel_beta)
+    elif approximation_mode == "clipping_forward":
+        z, Z = _compute_logaddexp_with_clipping_and_separate_forward(
+            t1, t2, gumbel_beta
+        )
     else:
         raise ValueError(
             f"{approximation_mode} is not a valid approximation_mode."
