@@ -8,7 +8,7 @@ from torch.nn.functional import softplus
 import numpy as np
 
 # eps = tiny_value_of_dtype(torch.float)
-eps = 1e-42
+eps = 1e-23
 euler_gamma = 0.57721566490153286060
 
 

@@ -183,12 +183,21 @@
 <span id="box-embeddings-modules-intersection-gumbel-intersection"></span><h1>box_embeddings.modules.intersection.gumbel_intersection<a class="headerlink" href="#module-box_embeddings.modules.intersection.gumbel_intersection" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="box_embeddings.modules.intersection.gumbel_intersection.GumbelIntersection">
-<em class="property">class </em><code class="sig-prename descclassname">box_embeddings.modules.intersection.gumbel_intersection.</code><code class="sig-name descname">GumbelIntersection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#box_embeddings.modules.intersection.gumbel_intersection.GumbelIntersection" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">box_embeddings.modules.intersection.gumbel_intersection.</code><code class="sig-name descname">GumbelIntersection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">approximation_mode</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#box_embeddings.modules.intersection.gumbel_intersection.GumbelIntersection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="box_embeddings.modules.intersection.intersection.html#box_embeddings.modules.intersection.intersection.Intersection" title="box_embeddings.modules.intersection.intersection.Intersection"><code class="xref py py-class docutils literal notranslate"><span class="pre">box_embeddings.modules.intersection.intersection.Intersection</span></code></a></p>
 <p>Gumbel intersection operation as a Layer/Module</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>beta</strong> – Gumbel’s beta parameter</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beta</strong> – Gumbel’s beta parameter</p></li>
+<li><p><strong>approximation_mode</strong> – Use hard clipping (‘clipping’) or nextafter trick (‘nextafter’)
+to satisfy the required inequalities. (default: None)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>note: Both the approximation_modes can produce inaccurate gradients in extreme cases. Hence,</dt><dd><p>if you are not using the result of the intersection box to compute a conditional probability
+value, it is recommended to leave the <cite>approximation_mode</cite> as <cite>None</cite>.</p>
 </dd>
 </dl>
 <dl class="py attribute">
@@ -200,7 +209,7 @@
 
 <dl class="py function">
 <dt id="box_embeddings.modules.intersection.gumbel_intersection.gumbel_intersection">
-<code class="sig-prename descclassname">box_embeddings.modules.intersection.gumbel_intersection.</code><code class="sig-name descname">gumbel_intersection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">left</span><span class="p">:</span> <span class="n">TBoxTensor</span></em>, <em class="sig-param"><span class="n">right</span><span class="p">:</span> <span class="n">TBoxTensor</span></em>, <em class="sig-param"><span class="n">gumbel_beta</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span> &#x2192; TBoxTensor<a class="headerlink" href="#box_embeddings.modules.intersection.gumbel_intersection.gumbel_intersection" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">box_embeddings.modules.intersection.gumbel_intersection.</code><code class="sig-name descname">gumbel_intersection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">left</span><span class="p">:</span> <span class="n">TBoxTensor</span></em>, <em class="sig-param"><span class="n">right</span><span class="p">:</span> <span class="n">TBoxTensor</span></em>, <em class="sig-param"><span class="n">gumbel_beta</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">approximation_mode</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; TBoxTensor<a class="headerlink" href="#box_embeddings.modules.intersection.gumbel_intersection.gumbel_intersection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hard Intersection operation as a function.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -212,11 +221,16 @@
 <li><p><strong>left</strong> – BoxTensor which is the left operand</p></li>
 <li><p><strong>right</strong> – BoxTensor which is the right operand</p></li>
 <li><p><strong>gumbel_beta</strong> – Beta parameter</p></li>
+<li><p><strong>approximation_mode</strong> – Use hard clipping (‘clipping’) or nextafter trick (‘nextafter’)
+to satisfy the required inequalities. (default: None)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The resulting BoxTensor obtained by interection.
 It has the same concrete type as the <cite>self</cite> (left operand).</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – When approximation_mode is not in [None, ‘clipping’, ‘nextafter’]</p>
 </dd>
 </dl>
 </dd></dl>
