@@ -13,7 +13,7 @@ def uniform_boxes(
     delta_min: float = 0.01,
     delta_max: float = 0.5,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
-    """ Creates uniform boxes such that each box is inside the
+    """Creates uniform boxes such that each box is inside the
     bounding box defined by (minimum,maximum) in each dimension.
 
     Args:

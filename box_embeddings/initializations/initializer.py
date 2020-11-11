@@ -5,8 +5,7 @@ from box_embeddings.parameterizations.box_tensor import BoxTensor
 
 class BoxInitializer(object):
 
-    """A base class interface which will initialize a :class:`torch.Tensor` or :class:`torch.nn.Parameter`
-    """
+    """A base class interface which will initialize a :class:`torch.Tensor` or :class:`torch.nn.Parameter`"""
 
     def __call__(self, t: torch.Tensor, **kwargs: Any) -> None:
         pass
