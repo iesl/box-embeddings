@@ -190,16 +190,18 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>beta</strong> – Gumbel’s beta parameter</p></li>
-<li><p><strong>approximation_mode</strong> – Use hard clipping (‘clipping’) or nextafter trick (‘nextafter’)
-to satisfy the required inequalities. (default: None)</p></li>
+<li><p><strong>approximation_mode</strong> – Use hard clipping (‘clipping’) or hard clipping with separeate value</p></li>
+<li><p><strong>forward and backward passes</strong> (<em>for</em>) – </p></li>
+<li><p><strong>None to not use any approximation.</strong><strong> (</strong><strong>default</strong> (<em>Set</em>) – <cite>None</cite>)</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="simple">
-<dt>note: Both the approximation_modes can produce inaccurate gradients in extreme cases. Hence,</dt><dd><p>if you are not using the result of the intersection box to compute a conditional probability
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Both the approximation_modes can produce inaccurate gradients in extreme cases. Hence,
+if you are not using the result of the intersection box to compute a conditional probability
 value, it is recommended to leave the <cite>approximation_mode</cite> as <cite>None</cite>.</p>
-</dd>
-</dl>
+</div>
 <dl class="py attribute">
 <dt id="box_embeddings.modules.intersection.gumbel_intersection.GumbelIntersection.training">
 <code class="sig-name descname">training</code><a class="headerlink" href="#box_embeddings.modules.intersection.gumbel_intersection.GumbelIntersection.training" title="Permalink to this definition">¶</a></dt>
@@ -221,8 +223,9 @@ value, it is recommended to leave the <cite>approximation_mode</cite> as <cite>N
 <li><p><strong>left</strong> – BoxTensor which is the left operand</p></li>
 <li><p><strong>right</strong> – BoxTensor which is the right operand</p></li>
 <li><p><strong>gumbel_beta</strong> – Beta parameter</p></li>
-<li><p><strong>approximation_mode</strong> – Use hard clipping (‘clipping’) or nextafter trick (‘nextafter’)
-to satisfy the required inequalities. (default: None)</p></li>
+<li><p><strong>approximation_mode</strong> – Use hard clipping (‘clipping’) or hard clipping with separeate value
+for forward and backward passes  (‘clipping_forward’) to satisfy the required inequalities.
+Set <cite>None</cite> to not use any approximation. (default: <cite>None</cite>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -230,7 +233,7 @@ to satisfy the required inequalities. (default: None)</p></li>
 It has the same concrete type as the <cite>self</cite> (left operand).</p>
 </dd>
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><strong>ValueError</strong> – When approximation_mode is not in [None, ‘clipping’, ‘nextafter’]</p>
+<dd class="field-odd"><p><strong>ValueError</strong> – When approximation_mode is not in [None, ‘clipping’, ‘clipping_forward’]</p>
 </dd>
 </dl>
 </dd></dl>

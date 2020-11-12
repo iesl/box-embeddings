@@ -73,7 +73,7 @@ def gumbel_intersection(
          It has the same concrete type as the `self` (left operand).
 
     Raises:
-        ValueError: When approximation_mode is not in [None, 'clipping', 'nextafter']
+        ValueError: When approximation_mode is not in [None, 'clipping', 'clipping_forward']
     """
     t1 = left
     t2 = right
@@ -105,19 +105,23 @@ def gumbel_intersection(
 
 @Intersection.register("gumbel")
 class GumbelIntersection(Intersection):
-    """Gumbel intersection operation as a Layer/Module"""
+    """Gumbel intersection operation as a Layer/Module.
+
+    Performs the intersection operation as described in `Improving Local Identifiability in Probabilistic Box Embeddings <https://arxiv.org/abs/2010.04831>`_ .
+    """
 
     def __init__(
         self, beta: float = 1.0, approximation_mode: Optional[str] = None
     ) -> None:
         """
-
         Args:
             beta: Gumbel's beta parameter
-            approximation_mode: Use hard clipping ('clipping') or nextafter trick ('nextafter')
-                to satisfy the required inequalities. (default: None)
+            approximation_mode: Use hard clipping ('clipping') or hard clipping with separeate value
+                for forward and backward passes  ('clipping_forward') to satisfy the required inequalities.
+                Set `None` to not use any approximation. (default: `None`)
 
-        note: Both the approximation_modes can produce inaccurate gradients in extreme cases. Hence,
+        note:
+            Both the approximation_modes can produce inaccurate gradients in extreme cases. Hence,
             if you are not using the result of the intersection box to compute a conditional probability
             value, it is recommended to leave the `approximation_mode` as `None`.
 
