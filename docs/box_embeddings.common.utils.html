@@ -218,6 +218,25 @@ also see: <a class="reference external" href="https://github.com/SurajGupta/r-so
 </dd></dl>
 
 <dl class="py function">
+<dt id="box_embeddings.common.utils.logsumexp2">
+<code class="sig-prename descclassname">box_embeddings.common.utils.</code><code class="sig-name descname">logsumexp2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t1</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">t2</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#box_embeddings.common.utils.logsumexp2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs element-wise logsumexp of two tensors in a numerically stable manner. This can also
+be thought as a soft/differentiable version of the max operator.</p>
+<p>Specifically, it computes log(exp(t1) + exp(t2)).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t1</strong> – First tensor (left operand)</p></li>
+<li><p><strong>t2</strong> – Second tensor (right operand)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>logsumexp</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="box_embeddings.common.utils.softplus_inverse">
 <code class="sig-prename descclassname">box_embeddings.common.utils.</code><code class="sig-name descname">softplus_inverse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">beta</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">20</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#box_embeddings.common.utils.softplus_inverse" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>

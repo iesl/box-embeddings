@@ -7,7 +7,8 @@ from box_embeddings.common.utils import tiny_value_of_dtype
 from torch.nn.functional import softplus
 import numpy as np
 
-eps = tiny_value_of_dtype(torch.float)
+# eps = tiny_value_of_dtype(torch.float)
+eps = 1e-23
 euler_gamma = 0.57721566490153286060
 
 
@@ -80,7 +81,8 @@ def log_bessel_volume_approx(
             softplus(
                 box_tensor.Z - box_tensor.z - 2 * euler_gamma * gumbel_beta,
                 beta=beta,
-            ).clamp_min(eps)
+            )
+            + eps
         ),
         dim=-1,
     ) + float(
