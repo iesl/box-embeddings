@@ -7,7 +7,9 @@ from box_embeddings.common.utils import tiny_value_of_dtype
 from torch.nn.functional import softplus
 import numpy as np
 
-eps = tiny_value_of_dtype(torch.float)
+# eps = tiny_value_of_dtype(torch.float)
+
+eps = 1e-23
 
 
 def soft_volume(
@@ -59,9 +61,7 @@ def log_soft_volume(
         raise ValueError(f"scale should be in (0,1] but is {scale}")
 
     return torch.sum(
-        torch.log(
-            softplus(box_tensor.Z - box_tensor.z, beta=beta).clamp_min(eps)
-        ),
+        torch.log(softplus(box_tensor.Z - box_tensor.z, beta=beta) + eps),
         dim=-1,
     ) + float(
         np.log(scale)
