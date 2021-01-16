@@ -20,8 +20,8 @@ def bag_of_boxes_pooler(
     if mask is not None:
         weights = weights * mask
     denominator = torch.sum(weights, dim=dim, keepdim=keepdim)
-    z = torch.sum(box_z * weights, dim=dim, keepdim=keepdim) / denominator
-    Z = torch.sum(box_Z * weights, dim=dim, keepdim=keepdim) / denominator
+    z = torch.sum(box_z * weights, dim=dim, keepdim=keepdim) / (denominator + 1e-14)
+    Z = torch.sum(box_Z * weights, dim=dim, keepdim=keepdim) / (denominator + 1e-14)
 
     return boxes.like_this_from_zZ(z, Z)
 
