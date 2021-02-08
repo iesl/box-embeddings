@@ -1,5 +1,5 @@
 default_language_version:
-  python: python3.7
+  python: python3
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -24,14 +24,15 @@ repos:
         language: system
         types: [python]
 
-      - id: mypy
+      - id: mypy # default config comes from setup.cfg
         name: mypy
         entry: python -m mypy
         language: system
         types: [python]
+        exclude: "test_.*" # exclude all test files form type checking
 
 
   - repo: https://github.com/terrencepreilly/darglint
     rev: master
     hooks:
-    - id: darglint
+    - id: darglint # default config comes from tox.ini
