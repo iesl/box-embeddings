@@ -5,9 +5,9 @@ name: Typing/Doc/Style
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main, dev/main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main, dev/main ]
 
 jobs:
   build:

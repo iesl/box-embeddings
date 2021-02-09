@@ -5,9 +5,11 @@ name: Tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main, dev/main ]
+    paths-ignore: ['docs/**'] # don't run when only docs are changed
   pull_request:
-    branches: [ master ]
+    branches: [ main, dev/main ]
+    paths-ignore: ['docs/**']
 
 jobs:
   build:
@@ -49,3 +51,11 @@ jobs:
         echo "Running tests"
         python -m coverage run --source box_embeddings -m py.test tests -v --flake8
         python -m coverage report -m
+        python -m coverage xml -o coverage.xml
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@1
+        with:
+          file: coverage.xml
+          fail_ci_if_error: true
+          verbose: true
+          flags: cpu,pytest

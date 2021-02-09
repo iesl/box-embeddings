@@ -13,6 +13,7 @@ extensions = [
     "sphinx.ext.graphviz",
     "sphinx.ext.inheritance_diagram",
     "sphinx.ext.githubpages",
+    "sphinx.ext.coverage",
     "m2r",
 ]
 source_suffix = [".rst", ".md"]
@@ -29,3 +30,4 @@ html_logo = "images/UMass_IESL.png"
 
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#confval-autoclass_content
 autoclass_content = "both"
+#autodoc_default_options = {'undoc-members': True}
