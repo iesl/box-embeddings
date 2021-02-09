@@ -30,4 +30,4 @@ html_logo = "images/UMass_IESL.png"
 
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#confval-autoclass_content
 autoclass_content = "both"
-#autodoc_default_options = {'undoc-members': True}
+# autodoc_default_options = {'undoc-members': True}
