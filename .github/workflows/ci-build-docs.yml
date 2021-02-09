@@ -52,7 +52,7 @@ jobs:
         git add docs
         git commit -m "Update Documentation" -a || true
     - name: Upload html doc as Artifact
-    - uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v1
       with:
         name: DocumentationHTML
         path: docs/

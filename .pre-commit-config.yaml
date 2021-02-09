@@ -35,4 +35,3 @@ repos:
     rev: master
     hooks:
     - id: darglint # default config comes from tox.ini
-
