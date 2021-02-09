@@ -1,0 +1,6 @@
+:mod:`box_embeddings.modules.embedding`
+=======================================
+
+.. py:module:: box_embeddings.modules.embedding
+
+

@@ -1,0 +1,16 @@
+:mod:`box_embeddings.parameterizations`
+=======================================
+
+.. py:module:: box_embeddings.parameterizations
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   box_tensor/index.rst
+   delta_box_tensor/index.rst
+
+
