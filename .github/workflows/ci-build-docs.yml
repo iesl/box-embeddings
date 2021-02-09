@@ -59,7 +59,7 @@ jobs:
     - name: Push new docs
       uses: ad-m/github-push-action@master
       with:
-        branch: ${{env.branch}}
+        branch: ${{github.head_ref}}
         github_token: ${{ secrets.GITHUB_TOKEN }}
     # Sphinx coverage report
     - name: Read sphinx coverage report
