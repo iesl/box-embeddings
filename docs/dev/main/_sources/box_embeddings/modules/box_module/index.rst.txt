@@ -1,6 +1,0 @@
-:mod:`box_embeddings.modules.box_module`
-========================================
-
-.. py:module:: box_embeddings.modules.box_module
-
-
