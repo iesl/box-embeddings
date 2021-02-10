@@ -45,7 +45,7 @@ jobs:
       id: docstr_coverage
       uses: juliangruber/read-file-action@v1
       with:
-        path: ./docstr-coverage.txt
+        path: ./docstring-coverage.txt
     - name: Create comment on PR for docstr coverage
       uses: peter-evans/create-or-update-comment@v1
       if : ${{github.event_name == 'pull_request'}}
