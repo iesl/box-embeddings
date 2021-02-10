@@ -16,7 +16,11 @@ jobs:
     # we will need the complete history.
     # checkout@v2 will fetch only last commit
     # So we fetch all
+    # checkout@v2 will leave git in a detached head state
+    # Hence, we need to temporarily create a branch.
+    # NOTE: we cannot push this brach
     - run: |
+          git switch -c "temp-branch-for-docs"
           git fetch --prune --unshallow --tags
     - name: Set up Python
       uses: actions/setup-python@v1
@@ -38,6 +42,8 @@ jobs:
       run: |
         pip install -r test_requirements.txt
         pip install -r doc_requirements.txt
+
+    - run:
     - name: Build Docs
       shell: bash -l {0}
       working-directory: docs_source
