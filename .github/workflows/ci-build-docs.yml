@@ -39,9 +39,11 @@ jobs:
         pip install -r test_requirements.txt
         pip install -r doc_requirements.txt
     - name: Build Docs
-      shell: bash
+      shell: bash -l {0}
       working-directory: docs_source
       run: |
+        echo "See all fetched branches"
+        git branch
         echo "Building Docs"
         python make.py
         #    - name: Get current branch

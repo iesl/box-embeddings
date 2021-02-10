@@ -59,7 +59,7 @@ autoapi_keep_files = True
 # multiversion
 # Multiversioning
 smv_tag_whitelist = r"^v\d+\.\d+\.\d+b?\d*$"
-smv_branch_whitelist = "(.*main.*)"
+smv_branch_whitelist = ".*main.*"
 templates_path = [
     "templates",
 ]

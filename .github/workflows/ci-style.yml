@@ -51,4 +51,7 @@ jobs:
       if : ${{github.event_name == 'pull_request'}}
       with:
         issue-number: ${{ github.event.pull_request.number }}
-        body: ${{ steps.docstr_coverage.outputs.content }}
+        body: |
+          Docstrings Coverage Report
+          ==========================
+          ${{ steps.docstr_coverage.outputs.content }}
