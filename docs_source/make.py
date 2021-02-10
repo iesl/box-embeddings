@@ -32,14 +32,17 @@ if __name__ == "__main__":
             ]
     subprocess.run(subprocess_args)
     print("Writing root index.html in the docs/")
+    redirect_url = (
+        "main" if not args.local else args.smv_branch_whitelist
+    ) + "/index.html"
     main_index = f"""
     <!DOCTYPE html>
     <html>
       <head>
-        <meta http-equiv="Refresh" content="0; url="{'main' if not args.local else args.smv_branch_whitelist}/index.html" />
+        <meta http-equiv="Refresh" content="0; url={redirect_url}" />
       </head>
       <body>
-        <p>See the latest documentation <a href="{'main' if not args.local else args.smv_branch_whitelist}/index.html">here</a>.</p>
+        <p>See the latest documentation <a href="{redirect_url}">here</a>.</p>
       </body>
     </html>
     """
