@@ -3,3 +3,5 @@ __pycache__
 *.pyc
 !docs_source/index.rst
 docs_source/*.rst
+.coverage
+.hypothesis/*
