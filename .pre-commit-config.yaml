@@ -30,8 +30,18 @@ repos:
         types: [python]
         exclude: "test_.*" # exclude all test files form type checking
 
+      - id: docstr-coverage
+        name: docstr-coverage
+        entry: docstr-coverage
+        types: [python]
+        exclude: "test_.*"
+        language: system
+        args: [--fail-under, '0'] # fail if less than 50 of code has docstrings
+        log_file: docstring-coverage.txt
+
 
   - repo: https://github.com/terrencepreilly/darglint
     rev: master
     hooks:
     - id: darglint # default config comes from tox.ini
+      args: [-v, '2']

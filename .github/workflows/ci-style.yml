@@ -41,3 +41,14 @@ jobs:
       run: |
         echo "Running style, typing and doc checks"
         pre-commit run --all-files -v
+    - name: Read docstr coverage report
+      id: docstr_coverage
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: ./docstr-coverage.txt
+    - name: Create comment on PR for docstr coverage
+      uses: peter-evans/create-or-update-comment@v1
+      if : ${{github.event_name == 'pull_request'}}
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body: ${{ steps.docstr_coverage.outputs.content }}
