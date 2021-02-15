@@ -7,7 +7,7 @@ from box_embeddings.parameterizations.box_tensor import (
     BoxFactory,
     TBoxTensor,
 )
-from box_embeddings.common.utils import softplus_inverse, inv_sigmoid
+import box_embeddings.common.constant as constant
 import torch
 import warnings
 
@@ -80,13 +80,41 @@ class TanhActivatedBoxTensor(BoxTensor):
         """
         cls.check_if_valid_zZ(z, Z)
 
-        tanh_eps = 1e-20
+        tanh_eps = constant.TANH_EPS
         z_ = z.clamp(0.0, 1.0 - tanh_eps / 2.0)
         Z_ = Z.clamp(tanh_eps / 2.0, 1.0)
         w1 = 2 * z_ - 1
         w2 = 2 * (Z_ - z_) / (1.0 - z_) - 1
 
         return torch.stack((w1, w2), -2)
+
+    @classmethod
+    def from_zZ(  # type:ignore
+        cls: Type[TBoxTensor],
+        z: torch.Tensor,
+        Z: torch.Tensor,
+        *args: Any,
+        **kwargs: Any,
+    ) -> BoxTensor:
+        """
+        Creates a box for the given min-max coordinates (z,Z).
+
+        In the this base implementation we do this by
+        stacking z and Z along -2 dim to form W.
+
+        Args:
+            z: lower left
+            Z: top right
+            *args: extra arguments for child class
+            **kwargs: extra arguments for child class
+
+        Returns:
+            A BoxTensor
+
+        """
+
+        W = cls.W(z, Z)
+        return cls(W, args, kwargs)
 
     @classmethod
     def from_vector(  # type:ignore
@@ -114,7 +142,7 @@ class TanhActivatedBoxTensor(BoxTensor):
                 f"The last dimension of vector should be even but is {vector.shape[-1]}"
             )
 
-        tanh_eps = 1e-20  # where to initiate this?
+        tanh_eps = constant.TANH_EPS
         split_point = int(len_dim / 2)
         w1 = vector.index_select(
             dim,

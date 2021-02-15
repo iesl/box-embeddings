@@ -5,3 +5,4 @@ __pycache__
 docs_source/*.rst
 .coverage
 .hypothesis/*
+.idea/*
