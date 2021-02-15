@@ -86,34 +86,6 @@ class SigmoidBoxTensor(BoxTensor):
         return torch.stack((w1, w2), -2)
 
     @classmethod
-    def from_zZ(  # type:ignore
-        cls: Type[TBoxTensor],
-        z: torch.Tensor,
-        Z: torch.Tensor,
-        *args: Any,
-        **kwargs: Any,
-    ) -> BoxTensor:
-        """
-        Creates a box for the given min-max coordinates (z,Z).
-
-        In the this base implementation we do this by
-        stacking z and Z along -2 dim to form W.
-
-        Args:
-            z: lower left
-            Z: top right
-            *args: extra arguments for child class
-            **kwargs: extra arguments for child class
-
-        Returns:
-            A BoxTensor
-
-        """
-
-        W = cls.W(z, Z)
-        return cls(W, args, kwargs)
-
-    @classmethod
     def from_vector(  # type:ignore
         cls: Type[TBoxTensor], vector: torch.Tensor, *args: Any, **kwargs: Any
     ) -> BoxTensor:
@@ -163,7 +135,7 @@ class SigmoidBoxTensor(BoxTensor):
         return cls(W)
 
 
-# BoxFactory.register_box_class("mindelta_from_zZ", "from_zZ")(MinDeltaBoxTensor)
+BoxFactory.register_box_class("sigmoid_from_zZ", "from_zZ")(SigmoidBoxTensor)
 BoxFactory.register_box_class("sigmoid_from_vector", "from_vector")(
     SigmoidBoxTensor
 )
