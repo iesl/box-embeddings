@@ -50,11 +50,6 @@ jobs:
         git branch
         echo "Building Docs"
         python make.py
-        #    - name: Get current branch
-        #      shell: bash
-        #      run: |
-        #        echo "running on branch ${GITHUB_REF##*/}"
-        #        echo "branch=${GITHUB_REF##*/}" >> $GITHUB_ENV
     - name: Upload html doc as Artifact
       uses: actions/upload-artifact@v1
       with:
@@ -65,6 +60,7 @@ jobs:
       if: ${{github.event_name == 'push'}}
       uses: peaceiris/actions-gh-pages@v3.7.3
       with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./docs
         keep_files: false
         cname: iesl.cs.umass.edu
