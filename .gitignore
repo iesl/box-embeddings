@@ -2,4 +2,9 @@ __pycache__
 .venv*
 *.pyc
 !docs_source/index.rst
-docs_source/*.rst
+docs_source/*.rst*
+docs
+**.DS_Store
+**.coverage
+**.hypothesis
+coverage.xml

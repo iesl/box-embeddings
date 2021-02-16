@@ -1,7 +1,0 @@
-box\_embeddings.modules.volume.bessel\_volume
-=============================================
-
-.. automodule:: box_embeddings.modules.volume.bessel_volume
-   :members:
-   :undoc-members:
-   :show-inheritance:

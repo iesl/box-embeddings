@@ -1,0 +1,88 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+name: Build Docs
+
+on:
+  push:
+    branches: [ main, dev/main ]
+  pull_request:
+    branches: [ main, dev/main ]
+
+jobs:
+  build_docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # we will need the complete history.
+    # checkout@v2 will fetch only last commit
+    # So we fetch all
+    # checkout@v2 will leave git in a detached head state
+    # Hence, we need to temporarily create a branch.
+    # NOTE: we cannot push this brach
+    - run: |
+          git switch -c "temp-branch-for-docs"
+          git fetch --prune --unshallow --tags
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.8'
+    - name: Cache pip
+      id: cache
+      uses: actions/cache@v1
+      with:
+        path: ~/.cache/pip # This path is specific to Ubuntu
+        # Look to see if there is a cache hit for the corresponding requirements file
+        key: ${{ runner.os }}-pip-${{ hashFiles('*_requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          ${{ runner.os }}-
+        #    - name: Install box_embeddings as a package
+        #      run: pip install .
+    - name: Install test and doc requirements
+      run: |
+        pip install -r test_requirements.txt
+        pip install -r doc_requirements.txt
+    - name: Build Docs
+      shell: bash -l {0}
+      working-directory: docs_source
+      run: |
+        echo "See all fetched branches"
+        git branch
+        echo "Building Docs"
+        python make.py
+        #    - name: Get current branch
+        #      shell: bash
+        #      run: |
+        #        echo "running on branch ${GITHUB_REF##*/}"
+        #        echo "branch=${GITHUB_REF##*/}" >> $GITHUB_ENV
+    - name: Upload html doc as Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: DocumentationHTML
+        path: docs/
+    - name: Deploy Docs
+      # deploy only after merge
+      if: ${{github.event_name == 'push'}}
+      uses: peaceiris/actions-gh-pages@v3.7.3
+      with:
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        publish_dir: ./docs
+        keep_files: false
+        cname: iesl.cs.umass.edu
+        enable_jekyll: false
+        force_orphan: true
+        publish_branch: gh-pages
+            #    - name: Commit new Docs
+            #      shell: bash
+            #      run: |
+            #        git config --local user.email "action@github.com"
+            #        git config --local user.name "Github Action"
+            #        git add docs
+            #        git commit -m "Update Documentation" -a || true
+
+          #    - name: Push new docs
+          #      uses: ad-m/github-push-action@master
+          #      with:
+          #        branch: ${{github.head_ref}}
+          #        github_token: ${{ secrets.GITHUB_TOKEN }}
+          #    # Sphinx coverage report
