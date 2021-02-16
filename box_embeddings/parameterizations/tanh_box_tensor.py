@@ -1,5 +1,5 @@
 """
-    Implementation of sigmoid box parameterization.
+    Implementation of Tanh box parameterization.
 """
 from typing import List, Tuple, Union, Dict, Any, Optional, Type
 from box_embeddings.parameterizations.box_tensor import (
@@ -12,8 +12,8 @@ import torch
 import warnings
 
 
-@BoxFactory.register_box_class("tanh_activated")
-class TanhActivatedBoxTensor(BoxTensor):
+@BoxFactory.register_box_class("tanh")
+class TanhBoxTensor(BoxTensor):
 
     """
     Tanh Activated Box Tensor
@@ -28,7 +28,6 @@ class TanhActivatedBoxTensor(BoxTensor):
             data: The weights for the box
         """
         super().__init__(data)
-        self.tanh_eps = 1e-20
 
     @property
     def z(self) -> torch.Tensor:
@@ -139,9 +138,5 @@ class TanhActivatedBoxTensor(BoxTensor):
         return cls(W)
 
 
-BoxFactory.register_box_class("tanh_activated_from_zZ", "from_zZ")(
-    TanhActivatedBoxTensor
-)
-BoxFactory.register_box_class("tanh_activated_from_vector", "from_vector")(
-    TanhActivatedBoxTensor
-)
+BoxFactory.register_box_class("tanh_from_zZ", "from_zZ")(TanhBoxTensor)
+BoxFactory.register_box_class("tanh_from_vector", "from_vector")(TanhBoxTensor)
