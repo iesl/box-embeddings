@@ -1,7 +1,0 @@
-box\_embeddings.modules.intersection.gumbel\_intersection
-=========================================================
-
-.. automodule:: box_embeddings.modules.intersection.gumbel_intersection
-   :members:
-   :undoc-members:
-   :show-inheritance:

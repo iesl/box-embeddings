@@ -1,7 +1,0 @@
-box\_embeddings.modules.volume.soft\_volume
-===========================================
-
-.. automodule:: box_embeddings.modules.volume.soft_volume
-   :members:
-   :undoc-members:
-   :show-inheritance:
