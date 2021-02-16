@@ -65,24 +65,9 @@ jobs:
       if: ${{github.event_name == 'push'}}
       uses: peaceiris/actions-gh-pages@v3.7.3
       with:
-        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         publish_dir: ./docs
         keep_files: false
         cname: iesl.cs.umass.edu
         enable_jekyll: false
         force_orphan: true
         publish_branch: gh-pages
-            #    - name: Commit new Docs
-            #      shell: bash
-            #      run: |
-            #        git config --local user.email "action@github.com"
-            #        git config --local user.name "Github Action"
-            #        git add docs
-            #        git commit -m "Update Documentation" -a || true
-
-          #    - name: Push new docs
-          #      uses: ad-m/github-push-action@master
-          #      with:
-          #        branch: ${{github.head_ref}}
-          #        github_token: ${{ secrets.GITHUB_TOKEN }}
-          #    # Sphinx coverage report
