@@ -149,3 +149,8 @@ def logsumexp2(t1: torch.Tensor, t2: torch.Tensor) -> torch.Tensor:
     lse = m + torch.log(torch.exp(a1) + torch.exp(a2))
 
     return lse
+
+
+def inv_sigmoid(t1: torch.Tensor) -> torch.Tensor:
+    res = torch.log(t1 / (1.0 - t1))
+    return res
