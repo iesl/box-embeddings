@@ -439,7 +439,7 @@ class TFBoxTensor(object):
                 print("BEFORE", str(self.data.shape))
                 new_data = tf.reshape(self.data, _target_shape)
                 print("AFTER", str(new_data.shape))
-            except RuntimeError as re:
+            except Exception:
                 raise RuntimeError(
                     f"Cannot reshape current box_shape {self.box_shape} to {target_shape}"
                 )
@@ -448,10 +448,10 @@ class TFBoxTensor(object):
             try:
                 new_z = tf.reshape(self._z, _target_shape)  # type:ignore
                 new_Z = tf.reshape(self._Z, _target_shape)  # type:ignore
-            except RuntimeError as re:
+            except Exception:
                 raise RuntimeError(
                     f"Cannot reshape current box_shape {self.box_shape} to {target_shape}"
-                ) from re
+                )
             reshaped_box = self.like_this_from_zZ(new_z, new_Z)
 
         return reshaped_box
