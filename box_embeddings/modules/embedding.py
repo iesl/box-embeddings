@@ -9,6 +9,7 @@ class BoxEmbedding(torch.nn.Embedding):
 
     def __init__(
         self,
+        num_embeddings: int,
         embedding_dim: int,
         box_factory: BoxFactory = None,
         box_initializer: BoxInitializer = None,
@@ -16,13 +17,11 @@ class BoxEmbedding(torch.nn.Embedding):
     ) -> None:
         box_factory = box_factory or BoxFactory("mindelta_from_vector")
         super().__init__(
-            embedding_dim * box_factory.box_subclass.w2z_ratio, **kwargs
-        )  # here dim should be (space dim x ratio).
-        # we will rename the weight parameter in the parent Embedding
-        # class in order to save it from any kind of automatic initializations
-        # meant for normal embedding matrix. We have special initialization for
-        # box weights.
-        # self._parameters["boxweight"] = self._parameters.pop("weight")
+            num_embeddings,
+            embedding_dim * box_factory.box_subclass.w2z_ratio,
+            **kwargs,
+        )
+
         self.box_factory = box_factory
 
         if box_initializer is None:
