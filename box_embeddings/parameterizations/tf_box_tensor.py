@@ -197,6 +197,35 @@ class TFBoxTensor(object):
 
         return (self.z + self.Z) / 2
 
+    @classmethod
+    def check_if_valid_zZ(
+        cls: Type[TFTBoxTensor], z: tf.Tensor, Z: tf.Tensor
+    ) -> None:
+        """Check of (z,Z) form a valid box.
+
+        If your child class parameterization bounds the boxes to some universe
+        box then this is the right place to check that.
+
+        Args:
+            z: Lower left coordinate of shape (..., hidden_dims)
+            Z: Top right coordinate of shape (..., hidden_dims)
+
+        Raises:
+            ValueError: If `z` and `Z` do not have the same shape
+            ValueError: If `Z` < `z`
+
+        """
+
+        if not (Z >= z).numpy().all().item():  # type: ignore
+            raise ValueError(f"Invalid box: Z < z where\nZ = {Z}\nz={z}")
+
+        if z.shape != Z.shape:
+            raise ValueError(
+                "Shape of z and Z should be same but is {} and {}".format(
+                    z.shape, Z.shape
+                )
+            )
+
     @property
     def box_shape(self) -> Tuple:
         """Shape of z, Z and center.
