@@ -1,3 +1,4 @@
+from typing import List, Tuple, Union, Dict, Any, Optional
 import torch
 from box_embeddings.parameterizations.box_tensor import BoxFactory, BoxTensor
 from box_embeddings.initializations.initializer import BoxInitializer
@@ -13,7 +14,7 @@ class BoxEmbedding(torch.nn.Embedding):
         embedding_dim: int,
         box_factory: BoxFactory = None,
         box_initializer: BoxInitializer = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         box_factory = box_factory or BoxFactory("mindelta_from_vector")
         super().__init__(
