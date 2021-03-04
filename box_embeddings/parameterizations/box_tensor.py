@@ -506,7 +506,7 @@ class BoxTensor(object):
             self.Z, other.Z
         )
 
-    def __getitem__(self, indx):
+    def __getitem__(self, indx: Any) -> "BoxTensor":
         """Creates a TBoxTensor for the min-max coordinates at the given indexes
 
         Args:
