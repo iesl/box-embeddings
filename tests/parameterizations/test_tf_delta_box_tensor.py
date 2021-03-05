@@ -80,11 +80,3 @@ def test_reshape(sample):
     else:
         new = box.box_reshape(target_shape)
         assert new.box_shape == expected
-
-
-# def test_warning_in_creation_from_zZ():
-#    shape = (3, 1, 5)
-#    z = torch.tensor(np.random.rand(*shape))
-#    Z = z + torch.tensor(np.random.rand(*shape))
-#    with pytest.warns(UserWarning):
-#        box = MinDeltaBoxTensor.from_zZ(z, Z)

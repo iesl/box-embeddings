@@ -169,53 +169,6 @@ class TFMinDeltaBoxTensor(TFBoxTensor):
             (z, softplus_inverse(Z - z, beta=beta, threshold=threshold)), -2
         )
 
-    #    @classmethod
-    #    def from_zZ(  # type:ignore
-    #        cls,
-    #        z: torch.Tensor,
-    #        Z: torch.Tensor,
-    #        beta: float = 1.0,
-    #        threshold: float = 20,
-    #    ) -> BoxTensor:
-    #        """Creates a box for the given min-max coordinates (z,Z).
-    #
-    #        In the this base implementation we do this by
-    #        stacking z and Z along -2 dim to form W.
-    #
-    #        Args:
-    #            z: lower left
-    #            Z: top right
-    #            beta: beta parameter for softplus for delta. Depending on the
-    #                universe box and your inputs ranges, you might want to change this.
-    #                Higher values of beta will make softplus harder and bring it close to ReLU.
-    #            threshold: parameter for the softplus for delta
-    #
-    #
-    #        Returns:
-    #            A BoxTensor
-    #
-    #        """
-    #
-    #        return cls((z, Z), beta=beta, threshold=threshold)
-
-    #    def like_this_from_zZ(
-    #        self, z: torch.Tensor, Z: torch.Tensor,
-    #    ) -> "BoxTensor":
-    #        """Creates a box for the given min-max coordinates (z,Z).
-    #        This is similar to the class method :method:`from_zZ`, but
-    #        uses the attributes on self and not external args, kwargs.
-    #
-    #        Args:
-    #            z: lower left
-    #            Z: top right
-    #
-    #        Returns:
-    #            A BoxTensor
-    #
-    #        """
-    #
-    #        return self.from_zZ(z, Z, beta=self.beta, threshold=self.threshold)
-
     @classmethod
     def from_vector(  # type:ignore
         cls, vector: tf.Tensor, beta: float = 1.0, threshold: float = 20

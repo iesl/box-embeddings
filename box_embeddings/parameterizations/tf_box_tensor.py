@@ -338,12 +338,10 @@ class TFBoxTensor(object):
 
             if self.data is not None:
                 for d in dim_to_unsqueeze:
-                    print("BEFORE", str(self.data.shape))
                     self.data = tf.expand_dims(
                         self.data, d - 1
                     )  # -1 because of extra 2 at dim -2
-                    print("AFTER", str(self.data.shape))
-
+                    
             else:
                 for d in dim_to_unsqueeze:
                     self._z = tf.expand_dims(self._z, d)  # type:ignore
@@ -465,9 +463,7 @@ class TFBoxTensor(object):
         if self.data is not None:
             _target_shape.insert(-1, 2)  # insert the zZ
             try:
-                print("BEFORE", str(self.data.shape))
                 new_data = tf.reshape(self.data, _target_shape)
-                print("AFTER", str(new_data.shape))
             except Exception:
                 raise RuntimeError(
                     f"Cannot reshape current box_shape {self.box_shape} to {target_shape}"
