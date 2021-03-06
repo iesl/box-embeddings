@@ -341,7 +341,7 @@ class TFBoxTensor(object):
                     self.data = tf.expand_dims(
                         self.data, d - 1
                     )  # -1 because of extra 2 at dim -2
-                    
+
             else:
                 for d in dim_to_unsqueeze:
                     self._z = tf.expand_dims(self._z, d)  # type:ignore
