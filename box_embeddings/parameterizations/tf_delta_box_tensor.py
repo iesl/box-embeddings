@@ -70,7 +70,7 @@ def softplus_inverse(
     return res
 
 
-@TFBoxFactory.register_box_class("tfmindelta")
+@TFBoxFactory.register_box_class("mindelta")
 class TFMinDeltaBoxTensor(TFBoxTensor):
 
     """Unconstrained min-delta box tensor.
