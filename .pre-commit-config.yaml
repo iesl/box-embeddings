@@ -8,6 +8,11 @@ repos:
       - id: trailing-whitespace
       - id: check-yaml
       - id: end-of-file-fixer
+  - repo: https://github.com/terrencepreilly/darglint
+    rev: master
+    hooks:
+    - id: darglint # default config comes from tox.ini
+      args: [-v, '2']
   - repo: local
     hooks:
       - id: black
@@ -38,10 +43,3 @@ repos:
         language: system
         args: [--fail-under, '0'] # fail if less than 50 of code has docstrings
         log_file: docstring-coverage.txt
-
-
-  - repo: https://github.com/terrencepreilly/darglint
-    rev: master
-    hooks:
-    - id: darglint # default config comes from tox.ini
-      args: [-v, '2']
