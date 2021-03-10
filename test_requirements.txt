@@ -10,3 +10,5 @@ flake8-black
 pre-commit
 darglint
 coverage
+torch >= 1.6.0
+tensorflow >= 2.4.0
