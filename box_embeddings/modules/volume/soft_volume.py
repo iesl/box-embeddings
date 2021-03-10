@@ -35,7 +35,8 @@ def soft_volume(
         >>> Z = [0.0]*100
         >>> input = [z, Z]
         >>> box1 = BoxTensor(torch.tensor(input))
-        >>> soft_volume(box1)
+        >>> print(soft_volume(box1)) # doctest: +NORMALIZE_WHITESPACE
+        tensor(5.9605e+32)
     """
 
     if not (0.0 < scale <= 1.0):
@@ -70,7 +71,8 @@ def log_soft_volume(
         >>> Z = [0.0]*100
         >>> input = [z, Z]
         >>> box1 = BoxTensor(torch.tensor(input))
-        >>> log_soft_volume(box1)
+        >>> log_soft_volume(box1) # doctest: +NORMALIZE_WHITESPACE
+        tensor(75.4679)
     """
 
     if not (0.0 < scale <= 1.0):
