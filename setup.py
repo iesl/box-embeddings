@@ -1,3 +1,4 @@
+from typing import List
 from setuptools import setup, find_packages
 import os
 
@@ -6,7 +7,9 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 
-def load_requirements(path_dir=PATH_ROOT, comment_char="#"):
+def load_requirements(
+    path_dir: str = PATH_ROOT, comment_char: str = "#"
+) -> List:
     with open(os.path.join(path_dir, "core_requirements.txt"), "r") as file:
         lines = [ln.strip() for ln in file.readlines()]
     reqs = []

@@ -533,15 +533,26 @@ class BoxTensor(object):
             self.Z, other.Z
         )
 
+    def __getitem__(self, indx: Any) -> "BoxTensor":
+        """Creates a TBoxTensor for the min-max coordinates at the given indexes
 
-R = TypeVar("R", bound="BoxTensor")
+        Args:
+            indx: Indexes of the required boxes
+
+        Returns:
+            TBoxTensor
+        """
+        z_ = self.z[indx]
+        Z_ = self.Z[indx]
+
+        return self.from_zZ(z_, Z_)
 
 
 class BoxFactory(Registrable):
 
     """A factory class which will be subclassed(one for each box type)."""
 
-    box_registry: Dict[str, Tuple[Type[R], str]] = {}  # type:ignore
+    box_registry: Dict[str, Tuple[Type[BoxTensor], Optional[str]]] = {}
 
     def __init__(self, name: str, kwargs_dict: Dict = None):
         self.name = name  #: Name of the registered BoxTensor class
@@ -554,7 +565,7 @@ class BoxFactory(Registrable):
             )
 
         if not box_constructor:
-            self.creator: Type[TBoxTensor] = self.box_subclass  # type: ignore
+            self.creator: Type[BoxTensor] = self.box_subclass
         else:
             try:
                 self.creator = getattr(self.box_subclass, box_constructor)
@@ -588,22 +599,22 @@ class BoxFactory(Registrable):
 
         """
 
-        def add_box_class(subclass: Type[TBoxTensor]) -> Type[TBoxTensor]:
+        def add_box_class(subclass: Type[BoxTensor]) -> Type[BoxTensor]:
             if name in cls.box_registry:
                 if exist_ok:
                     message = (
-                        f"{name} has already been registered as a "  # type:ignore
+                        f"{name} has already been registered as a "
                         f"box class {cls.box_registry[name][0].__name__}"
                         f", but exist_ok=True, so overriting with {subclass.__name__}"
                     )
                     logger.warning(message)
                 else:
                     message = (
-                        f"Cannot register {name} as box class"  # type:ignore
+                        f"Cannot register {name} as box class"
                         f"name already in use for {cls.box_registry[name][0].__name__}"
                     )
                     raise RuntimeError(message)
-            cls.box_registry[name] = (subclass, constructor)  # type: ignore
+            cls.box_registry[name] = (subclass, constructor)
 
             return subclass
 
@@ -611,7 +622,7 @@ class BoxFactory(Registrable):
 
     def __call__(self, *args: Any, **kwargs: Any) -> BoxTensor:
 
-        return self.creator(*args, **kwargs, **self.kwargs_dict)  # type:ignore
+        return self.creator(*args, **kwargs, **self.kwargs_dict)  # type: ignore
 
 
 BoxFactory.register("box_factory")(BoxFactory)  # register itself

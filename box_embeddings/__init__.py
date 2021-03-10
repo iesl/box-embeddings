@@ -10,9 +10,9 @@ _torch_available = importlib.util.find_spec("torch") is not None
 _tensorflow_available = importlib.util.find_spec("tensorflow") is not None
 
 
-def torch_is_available():
+def torch_is_available() -> bool:
     return _torch_available
 
 
-def tensorflow_is_available():
+def tensorflow_is_available() -> bool:
     return _tensorflow_available
