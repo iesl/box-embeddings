@@ -4,3 +4,5 @@ git+https://github.com/miyakogi/m2r.git
 docstr-coverage
 sphinx-autoapi
 sphinx-multiversion
+torch >= 1.6.0
+tensorflow >= 2.4.0

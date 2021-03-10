@@ -9,3 +9,4 @@ docs
 **.hypothesis
 coverage.xml
 **.idea
+docstring-coverage.txt
