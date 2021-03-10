@@ -28,6 +28,14 @@ def soft_volume(
 
     Raises:
         ValueError: if scale not in (0,1]
+
+    Example:
+        >>> from box_embeddings.parameterizations.box_tensor import BoxTensor
+        >>> z = [-2.0]*100
+        >>> Z = [0.0]*100
+        >>> input = [z, Z]
+        >>> box1 = BoxTensor(torch.tensor(input))
+        >>> soft_volume(box1)
     """
 
     if not (0.0 < scale <= 1.0):
@@ -55,6 +63,14 @@ def log_soft_volume(
 
     Raises:
         ValueError: if scale not in (0,1]
+
+    Examples:
+        >>> from box_embeddings.parameterizations.box_tensor import BoxTensor
+        >>> z = [-2.0]*100
+        >>> Z = [0.0]*100
+        >>> input = [z, Z]
+        >>> box1 = BoxTensor(torch.tensor(input))
+        >>> log_soft_volume(box1)
     """
 
     if not (0.0 < scale <= 1.0):
