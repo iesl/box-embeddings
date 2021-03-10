@@ -102,7 +102,7 @@ class TFSigmoidBoxTensor(TFBoxTensor):
         """
         cls.check_if_valid_zZ(z, Z)
 
-        eps = 1e-07
+        eps = 2.2250738585072014e-308
         w1 = inv_sigmoid(
             tf.clip_by_value(z, clip_value_min=eps, clip_value_max=1.0 - eps)
         )
@@ -113,7 +113,6 @@ class TFSigmoidBoxTensor(TFBoxTensor):
                 clip_value_max=1.0 - eps,
             )
         )
-
         return tf.stack((w1, w2), -2)
 
     @classmethod

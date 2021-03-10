@@ -43,20 +43,19 @@ def test_W_from_zZ():
     z = tf.constant(np.random.rand(*shape))
     Z = z + tf.constant(np.random.rand(*shape))
     box_W = TFSigmoidBoxTensor.W(z, Z)
-    eps = 1e-07
-    tf.clip_by_valu
+    eps = 2.2250738585072014e-308
 
     w1 = inv_sigmoid(
-        tf.clip_by_value(z, clip_value_min=eps, clip_value_max=eps)
+        tf.clip_by_value(z, clip_value_min=eps, clip_value_max=1.0 - eps)
     )
     w2 = inv_sigmoid(
         tf.clip_by_value(
-            ((Z - z) / (1.0 - z)), clip_value_min=eps, clip_value_max=eps
+            ((Z - z) / (1.0 - z)), clip_value_min=eps, clip_value_max=1.0 - eps
         )
     )
 
     W = tf.stack((w1, w2), -2)
-    assert tf.debugging.assert_near(box_W, W, rtol=1e-05, atol=1e-08)
+    assert np.allclose(box_W, W)
 
 
 def test_creation_from_zZ():
@@ -71,16 +70,12 @@ def test_creation_from_vector():
     shape = (3, 1, 5)
     w1 = tf.constant(np.random.rand(*shape))
     w2 = tf.constant(np.random.rand(*shape))
-    v = tf.concat((w1, w2), dim=-1)
+    v = tf.concat((w1, w2), axis=-1)
     box = TFSigmoidBoxTensor.from_vector(v)
     assert box.Z.shape == (3, 1, 5)
-    assert tf.debugging.assert_near(
-        box.z, tf.math.sigmoid(w1), rtol=1e-05, atol=1e-08
-    )
-    assert tf.debugging.assert_near(
+    assert np.allclose(box.z, tf.math.sigmoid(w1))
+    assert np.allclose(
         box.Z,
         tf.math.sigmoid(w1)
         + tf.math.sigmoid(w2) * (1.0 - tf.math.sigmoid(w1)),
-        rtol=1e-05,
-        atol=1e-08,
     )

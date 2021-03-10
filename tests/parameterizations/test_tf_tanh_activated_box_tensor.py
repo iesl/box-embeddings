@@ -54,7 +54,7 @@ def test_W_from_zZ():
     w1 = 2 * z_ - 1
     w2 = 2 * (Z_ - z_) / (1.0 - z_) - 1
     W = tf.stack((w1, w2), -2)
-    assert tf.debugging.assert_near(box_W, W, rtol=1e-05, atol=1e-08)
+    assert np.allclose(box_W, W)
 
 
 def test_creation_from_zZ():
@@ -70,7 +70,7 @@ def test_creation_from_vector():
     tanh_eps = constant.TANH_EPS
     w1 = tf.constant(np.random.rand(*shape))
     w2 = tf.constant(np.random.rand(*shape))
-    v = tf.concat((w1, w2), dim=-1)
+    v = tf.concat((w1, w2), axis=-1)
     box = TFTanhBoxTensor.from_vector(v)
 
     z = (
@@ -90,8 +90,8 @@ def test_creation_from_vector():
     )
 
     assert box.Z.shape == (3, 1, 5)
-    assert tf.debugging.assert_near(box.z, z, rtol=1e-05, atol=1e-08)
-    assert tf.debugging.assert_near(box.Z, Z, rtol=1e-05, atol=1e-08)
+    assert np.allclose(box.z, z)
+    assert np.allclose(box.Z, Z)
 
 
 # def test_warning_in_creation_from_zZ():

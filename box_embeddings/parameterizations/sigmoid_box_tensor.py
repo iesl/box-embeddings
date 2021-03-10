@@ -82,7 +82,6 @@ class SigmoidBoxTensor(BoxTensor):
         eps = torch.finfo(z.dtype).tiny
         w1 = inv_sigmoid(z.clamp(eps, 1.0 - eps))
         w2 = inv_sigmoid(((Z - z) / (1.0 - z)).clamp(eps, 1.0 - eps))
-
         return torch.stack((w1, w2), -2)
 
     @classmethod
