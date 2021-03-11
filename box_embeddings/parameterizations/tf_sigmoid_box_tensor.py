@@ -12,7 +12,9 @@ import tensorflow as tf
 import warnings
 
 
-def tf_index_select(input_, dim, indices):
+def tf_index_select(
+    input_: tf.Tensor, dim: int, indices: List[int]
+) -> tf.Tensor:
     """
     Args:
         input_(tensor): input tensor
