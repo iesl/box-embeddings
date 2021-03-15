@@ -3,7 +3,7 @@
 """
 from typing import List, Tuple, Union, Dict, Any, Optional, Type
 
-# from box_embeddings.common.utils import softplus_inverse
+from box_embeddings.common.tf_utils import softplus_inverse
 from box_embeddings.parameterizations.tf_box_tensor import (
     TFBoxTensor,
     TFBoxFactory,
@@ -48,6 +48,8 @@ def _box_shape_ok(t: tf.Tensor) -> bool:
         return True
 
 
+'''
+
 def softplus_inverse(
     t: tf.Tensor, beta: float = 1.0, threshold: float = 20
 ) -> tf.Tensor:
@@ -68,6 +70,7 @@ def softplus_inverse(
     )
 
     return res
+'''
 
 
 @TFBoxFactory.register_box_class("mindelta")
@@ -159,7 +162,7 @@ class TFMinDeltaBoxTensor(TFBoxTensor):
         """
         cls.check_if_valid_zZ(z, Z)
 
-        if ((Z - z) < 0).any():
+        if tf.reduce_any((Z - z) < 0):
             warnings.warn(
                 "W() method for TFMinDeltaBoxTensor is numerically unstable."
                 " It can produce high error when input Z-z is < 0."

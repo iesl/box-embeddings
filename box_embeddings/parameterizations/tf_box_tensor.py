@@ -489,7 +489,7 @@ class TFBoxFactory(Registrable):
 
     """A factory class which will be subclassed(one for each box type)."""
 
-    box_registry: Dict[str, Tuple[Type[R], str]] = {}  # type:ignore
+    box_registry: Dict[str, Tuple[Type[TFBoxTensor], str]] = {}  # type:ignore
 
     def __init__(self, name: str, kwargs_dict: Dict = None):
         self.name = name  #: Name of the registered BoxTensor class
