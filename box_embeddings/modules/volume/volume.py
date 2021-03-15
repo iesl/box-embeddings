@@ -1,6 +1,6 @@
-from typing import List, Tuple, Union, Dict, Any, Optional
-from box_embeddings.common.registrable import Registrable
+from typing import Any
 import torch
+from box_embeddings.common.registrable import Registrable
 from box_embeddings.parameterizations.box_tensor import BoxTensor
 from box_embeddings.common.utils import tiny_value_of_dtype
 
@@ -43,12 +43,41 @@ def hard_volume(box_tensor: BoxTensor) -> torch.Tensor:
 
     Returns:
         Tensor of shape (..., ) when self has shape (..., 2, num_dims)
+
+    Examples:
+        >>> from box_embeddings.parameterizations.box_tensor import BoxTensor
+        >>> from box_embeddings.modules.volume import hard_volume
+        >>> z = [-2.0]*100
+        >>> Z = [0.0]*100
+        >>> input = [z, Z]
+        >>> box1 = BoxTensor(torch.tensor(input))
+        >>> hard_volume(box1) # doctest: +NORMALIZE_WHITESPACE
+        tensor(1.2677e+30)
     """
 
     return torch.prod((box_tensor.Z - box_tensor.z).clamp_min(0), dim=-1)
 
 
 def log_hard_volume(box_tensor: BoxTensor) -> torch.Tensor:
+    """
+    Logged hard volume of box.
+
+    Args:
+        box_tensor: input
+
+    Returns:
+        Tensor of shape (..., ) when self has shape (..., 2, num_dims)
+
+    Examples:
+        >>> from box_embeddings.parameterizations.box_tensor import BoxTensor
+        >>> from box_embeddings.modules.volume import hard_volume
+        >>> z = [-2.0]*100
+        >>> Z = [0.0]*100
+        >>> input = [z, Z]
+        >>> box1 = BoxTensor(torch.tensor(input))
+        >>> log_hard_volume(box1) # doctest: +NORMALIZE_WHITESPACE
+        tensor(69.3147)
+    """
     res = torch.sum(
         torch.log((box_tensor.Z - box_tensor.z).clamp_min(eps)), dim=-1
     )
@@ -65,7 +94,7 @@ class HardVolume(Volume):
         """Hard ReLU base volume.
 
         Args:
-            box_tensor: TODO
+            box_tensor: input
 
         Returns:
             torch.Tensor
@@ -74,5 +103,4 @@ class HardVolume(Volume):
 
         if self.log_scale:
             return log_hard_volume(box_tensor)
-        else:
-            return hard_volume(box_tensor)
+        return hard_volume(box_tensor)
