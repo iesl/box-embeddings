@@ -13,6 +13,17 @@ import tensorflow as tf
 import warnings
 
 
+def tf_softplus(
+    t: tf.Tensor, beta: float = 1.0, threshold: float = 20.0
+) -> tf.Tensor:
+    below_thresh = beta * t < threshold
+    res_n = t.numpy()
+    res_n[below_thresh.numpy()] = (
+        tf.math.log(1 + tf.math.exp(beta * t[below_thresh])) / beta
+    )
+    return tf.constant(res_n)
+
+
 def tf_index_select(input_: tf.Tensor, dim: int, indices: List) -> tf.Tensor:
     """
     Args:
@@ -120,15 +131,9 @@ class TFMinDeltaBoxTensor(TFBoxTensor):
         """
 
         if self.data is not None:
-            return (
-                self.z
-                + tf.math.softplus(self.data[..., 1, :] * self.beta)
-                / self.beta
+            return self.z + tf_softplus(
+                self.data[..., 1, :], beta=self.beta, threshold=self.threshold
             )
-
-            # return self.z + torch.nn.functional.softplus(
-            #    self.data[..., 1, :], beta=self.beta, threshold=self.threshold
-            # )
         else:
             return self._Z  # type:ignore
 
