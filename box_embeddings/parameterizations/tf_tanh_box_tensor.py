@@ -8,35 +8,9 @@ from box_embeddings.parameterizations.tf_box_tensor import (
     TFTBoxTensor,
 )
 import box_embeddings.common.constant as constant
+from box_embeddings.common.tf_utils import tf_index_select
 import tensorflow as tf
 import warnings
-
-
-def tf_index_select(
-    input_: tf.Tensor, dim: int, indices: List[int]
-) -> tf.Tensor:
-    """
-    Args:
-        input_(tensor): input tensor
-        dim(int): dimension
-        indices(list): selected indices list
-
-    Returns:
-        Tensor
-    """
-    shape = input_.get_shape().as_list()
-    if dim == -1:
-        dim = len(shape) - 1
-    shape[dim] = 1
-
-    tmp = []
-    for idx in indices:
-        begin = [0] * len(shape)
-        begin[dim] = idx
-        tmp.append(tf.slice(input_, begin, shape))
-    res = tf.concat(tmp, axis=dim)
-
-    return res
 
 
 @TFBoxFactory.register_box_class("tftanh")

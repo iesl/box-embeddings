@@ -11,63 +11,11 @@ from box_embeddings.parameterizations.tf_box_tensor import (
 )
 import tensorflow as tf
 import warnings
-
-
-def tf_index_select(input_: tf.Tensor, dim: int, indices: List) -> tf.Tensor:
-    """
-    Args:
-        input_(tensor): input tensor
-        dim(int): dimension
-        indices(List): selected indices list
-
-    Returns:
-        Tensor
-    """
-    shape = input_.get_shape().as_list()
-    if dim == -1:
-        dim = len(shape) - 1
-    shape[dim] = 1
-
-    tmp = []
-    for idx in indices:
-        begin = [0] * len(shape)
-        begin[dim] = idx
-        tmp.append(tf.slice(input_, begin, shape))
-    res = tf.concat(tmp, axis=dim)
-
-    return res
-
-
-def _box_shape_ok(t: tf.Tensor) -> bool:
-    if len(t.shape) < 2:
-        return False
-    else:
-        if t.shape[-2] != 2:
-            return False
-
-        return True
-
-
-def softplus_inverse(
-    t: tf.Tensor, beta: float = 1.0, threshold: float = 20
-) -> tf.Tensor:
-    below_thresh = beta * t < threshold
-    res = t
-    # res[below_thresh] = (
-    # torch.log(torch.exp(beta * t[below_thresh]) - 1.0) / beta
-    # )
-    res[below_thresh] = (
-        tf.math.log(
-            tf.clip_by_value(
-                tf.math.expm1(beta * t[below_thresh]),
-                clip_value_min=1e-323,
-                clip_value_max=float('inf'),
-            )
-        )
-        / beta
-    )
-
-    return res
+from box_embeddings.common.tf_utils import (
+    tf_index_select,
+    _box_shape_ok,
+    softplus_inverse,
+)
 
 
 @TFBoxFactory.register_box_class("mindelta")
