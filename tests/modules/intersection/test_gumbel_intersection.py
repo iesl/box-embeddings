@@ -14,7 +14,7 @@ from box_embeddings.modules.intersection.hard_intersection import (
 )
 import hypothesis
 from box_embeddings.modules.volume.bessel_volume import (
-    log_bessel_volume_approx,
+    bessel_volume_approx,
 )
 from hypothesis.extra.numpy import arrays
 from hypothesis.strategies import floats, booleans, sampled_from
@@ -48,18 +48,21 @@ def test_intersection_with_fixed_input() -> None:
         dtype=np.float,
         elements=hypothesis.strategies.floats(-100, 100),
     ),
-    beta=floats(1e-5, 1.0),
+    intersection_temperature=floats(1e-5, 1.0),
     approximation_mode=sampled_from(["clipping", "clipping_forward"]),
     box_type=sampled_from([MinDeltaBoxTensor, BoxTensor]),
 )
 @hypothesis.settings(print_blob=True, max_examples=1000)
 def test_intersection_all_input_ranges(
-    inp1, inp2, beta, approximation_mode, box_type
+    inp1, inp2, intersection_temperature, approximation_mode, box_type
 ) -> None:
     box1 = box_type(torch.tensor(inp1).float())
     box2 = box_type(torch.tensor(inp2).float())
     res = gumbel_intersection(
-        box1, box2, gumbel_beta=beta, approximation_mode=approximation_mode
+        box1,
+        box2,
+        intersection_temperature=intersection_temperature,
+        approximation_mode=approximation_mode,
     )
     assert torch.isfinite(res.z).all()
     assert torch.isfinite(res.Z).all()
@@ -80,7 +83,7 @@ def test_intersection_all_input_ranges(
         dtype=np.float,
         elements=hypothesis.strategies.floats(-100, 100),
     ),  # box_shape (1,4,10)
-    beta=floats(1e-5, 1.0),
+    intersection_temperature=floats(1e-5, 1.0),
     approximation_mode=sampled_from(["clipping", "clipping_forward"]),
     box_type=sampled_from([MinDeltaBoxTensor, BoxTensor]),
 )
@@ -90,16 +93,22 @@ def test_intersection_all_input_ranges(
     # verbosity=hypothesis.Verbosity.verbose
 )
 def test_intersection_with_broadcasting(
-    inp1, inp2, beta, approximation_mode, box_type
+    inp1, inp2, intersection_temperature, approximation_mode, box_type
 ) -> None:
     box1 = box_type(torch.tensor(inp1))
     box2 = box_type(torch.tensor(inp2))
     hard_res = hard_intersection(box1, box2)
     g1 = gumbel_intersection(
-        box1, box2, gumbel_beta=beta, approximation_mode=approximation_mode
+        box1,
+        box2,
+        intersection_temperature=intersection_temperature,
+        approximation_mode=approximation_mode,
     )
     g2 = gumbel_intersection(
-        box2, box1, gumbel_beta=beta, approximation_mode=approximation_mode
+        box2,
+        box1,
+        intersection_temperature=intersection_temperature,
+        approximation_mode=approximation_mode,
     )
     assert (hard_res.z <= g1.z).all()
     assert (hard_res.z <= g2.z).all()
@@ -118,8 +127,8 @@ def test_intersection_with_broadcasting(
         dtype=np.float,
         elements=hypothesis.strategies.floats(-100, 100),
     ),
-    gumbel_beta=floats(1e-5, 1.0),
-    beta=floats(1.0, 50.0),
+    intersection_temperature=floats(1e-5, 1.0),
+    volume_temperature=floats(1.0, 50.0),
     expected_probs=arrays(
         shape=(3,),
         dtype=np.float,
@@ -133,7 +142,13 @@ def test_intersection_with_broadcasting(
     max_examples=1000,
 )
 def test_intersection_all_input_ranges_grad_computation(
-    inp1, inp2, gumbel_beta, beta, expected_probs, approximation_mode, box_type
+    inp1,
+    inp2,
+    intersection_temperature,
+    volume_temperature,
+    expected_probs,
+    approximation_mode,
+    box_type,
 ) -> None:
     t1 = torch.tensor(inp1, dtype=torch.float, requires_grad=True)
     t2 = torch.tensor(inp2, dtype=torch.float, requires_grad=True)
@@ -142,7 +157,7 @@ def test_intersection_all_input_ranges_grad_computation(
     res = gumbel_intersection(
         box1,
         box2,
-        gumbel_beta=gumbel_beta,
+        intersection_temperature=intersection_temperature,
         approximation_mode=approximation_mode,
     )
     assert torch.isfinite(res.z).all()
@@ -152,12 +167,24 @@ def test_intersection_all_input_ranges_grad_computation(
     if approximation_mode is not None:
         assert (res.z >= hard_res.z).all()
         assert (res.Z <= hard_res.Z).all()
-    cp_1 = log_bessel_volume_approx(
-        res, beta=beta, gumbel_beta=gumbel_beta
-    ) - log_bessel_volume_approx(box1, beta=beta, gumbel_beta=gumbel_beta)
-    cp_2 = log_bessel_volume_approx(
-        res, beta=beta, gumbel_beta=gumbel_beta
-    ) - log_bessel_volume_approx(box2, beta=beta, gumbel_beta=gumbel_beta)
+    cp_1 = bessel_volume_approx(
+        res,
+        volume_temperature=volume_temperature,
+        intersection_temperature=intersection_temperature,
+    ) - bessel_volume_approx(
+        box1,
+        volume_temperature=volume_temperature,
+        intersection_temperature=intersection_temperature,
+    )
+    cp_2 = bessel_volume_approx(
+        res,
+        volume_temperature=volume_temperature,
+        intersection_temperature=intersection_temperature,
+    ) - bessel_volume_approx(
+        box2,
+        volume_temperature=volume_temperature,
+        intersection_temperature=intersection_temperature,
+    )
     expected_probs = torch.tensor(expected_probs).long()
     loss1 = torch.nn.NLLLoss()(
         torch.cat((cp_1.unsqueeze(-1), log1mexp(cp_1.unsqueeze(-1))), dim=-1),
@@ -180,8 +207,8 @@ def test_intersection_all_input_ranges_grad_computation(
         dtype=np.float,
         elements=hypothesis.strategies.floats(-100, 100),
     ),
-    gumbel_beta=floats(1e-5, 1.0),
-    beta=floats(1.0, 50.0),
+    intersection_temperature=floats(1e-5, 1.0),
+    volume_temperature=floats(1.0, 50.0),
     box_type=sampled_from([MinDeltaBoxTensor, BoxTensor]),
     approximation_mode=sampled_from(["clipping", "clipping_forward"]),
 )
@@ -190,17 +217,29 @@ def test_intersection_all_input_ranges_grad_computation(
     max_examples=1000,
 )
 def test_intersection_all_input_ranges_grad_value(
-    inp1, inp2, gumbel_beta, beta, box_type, approximation_mode
+    inp1,
+    inp2,
+    intersection_temperature,
+    volume_temperature,
+    box_type,
+    approximation_mode,
 ) -> None:
     t1 = torch.tensor(inp1, dtype=torch.float, requires_grad=True)
     t2 = torch.tensor(inp2, dtype=torch.float, requires_grad=True)
     box1 = box_type(t1)
     box2 = box_type(t2)
     res1 = gumbel_intersection(
-        box1, box2, gumbel_beta=gumbel_beta, approximation_mode=None
+        box1,
+        box2,
+        intersection_temperature=intersection_temperature,
+        approximation_mode=None,
     )
     l1 = torch.mean(
-        log_bessel_volume_approx(res1, beta=beta, gumbel_beta=gumbel_beta)
+        bessel_volume_approx(
+            res1,
+            volume_temperature=volume_temperature,
+            intersection_temperature=intersection_temperature,
+        )
     )
     t1_ = torch.tensor(inp1, dtype=torch.float, requires_grad=True)
     t2_ = torch.tensor(inp2, dtype=torch.float, requires_grad=True)
@@ -209,11 +248,15 @@ def test_intersection_all_input_ranges_grad_value(
     res1_ = gumbel_intersection(
         box1_,
         box2_,
-        gumbel_beta=gumbel_beta,
+        intersection_temperature=intersection_temperature,
         approximation_mode=approximation_mode,
     )
     l1_ = torch.mean(
-        log_bessel_volume_approx(res1_, beta=beta, gumbel_beta=gumbel_beta)
+        bessel_volume_approx(
+            res1_,
+            volume_temperature=volume_temperature,
+            intersection_temperature=intersection_temperature,
+        )
     )
     l1_.backward()
     l1.backward()
@@ -232,12 +275,16 @@ def test_intersection_all_input_ranges_grad_value(
         dtype=np.float,
         elements=hypothesis.strategies.floats(-100, 100),
     ),
-    beta=floats(1e-5, 1.0),
+    intersection_temperature=floats(1e-5, 1.0),
 )
-def test_intersection_module(inp1, inp2, beta) -> None:
+def test_intersection_module(inp1, inp2, intersection_temperature) -> None:
     box1 = BoxTensor(torch.tensor(inp1))
     box2 = BoxTensor(torch.tensor(inp2))
-    g1 = GumbelIntersection(beta=beta)(box1, box2)
-    g2 = gumbel_intersection(box1, box2, gumbel_beta=beta)
+    g1 = GumbelIntersection(intersection_temperature=intersection_temperature)(
+        box1, box2
+    )
+    g2 = gumbel_intersection(
+        box1, box2, intersection_temperature=intersection_temperature
+    )
     assert torch.allclose(g1.z, g2.z)
     # assert torch.allclose(g1.Z, g2.Z)

@@ -1,5 +1,5 @@
 import torch
-from box_embeddings.modules.volume.volume import HardVolume
+from box_embeddings.modules.volume.hard_volume import HardVolume
 from box_embeddings.parameterizations.box_tensor import BoxTensor
 
 
