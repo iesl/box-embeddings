@@ -19,6 +19,11 @@ from typing import (
     Callable,
 )
 from box_embeddings.common.registrable import Registrable
+from box_embeddings.common.tf_utils import (
+    tf_index_select,
+    _box_shape_ok,
+    _shape_error_str,
+)
 import logging
 from copy import deepcopy
 
@@ -27,49 +32,6 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 TFTBoxTensor = TypeVar("TFTBoxTensor", bound="TFBoxTensor")
-
-
-def tf_index_select(input_: tf.Tensor, dim: int, indices: List) -> tf.Tensor:
-    """
-    Args:
-        input_(tensor): input tensor
-        dim(int): dimension
-        indices(List): selected indices list
-
-    Returns:
-        Tensor
-    """
-    shape = input_.get_shape().as_list()
-    if dim == -1:
-        dim = len(shape) - 1
-    shape[dim] = 1
-
-    tmp = []
-    for idx in indices:
-        begin = [0] * len(shape)
-        begin[dim] = idx
-        tmp.append(tf.slice(input_, begin, shape))
-    res = tf.concat(tmp, axis=dim)
-
-    return res
-
-
-def _box_shape_ok(t: tf.Tensor) -> bool:
-    if len(t.shape) < 2:
-        return False
-    else:
-        if t.shape[-2] != 2:
-            return False
-
-        return True
-
-
-def _shape_error_str(
-    tensor_name: str, expected_shape: Any, actual_shape: Tuple
-) -> str:
-    return "Shape of {} has to be {} but is {}".format(
-        tensor_name, expected_shape, tuple(actual_shape)
-    )
 
 
 class TFBoxTensor(object):
