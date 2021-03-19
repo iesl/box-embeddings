@@ -41,17 +41,6 @@ class Intersection(_Intersection):
         self.intersection_temperature = intersection_temperature
         self.approximation_mode = approximation_mode
 
-    def forward(self, left: BoxTensor, right: BoxTensor) -> BoxTensor:
-        # broadcast if necessary
-        # let the = case also be processed
-
-        if len(left.box_shape) >= len(right.box_shape):
-            right.broadcast(left.box_shape)
-        else:
-            left.broadcast(right.box_shape)
-
-        return self._forward(left, right)
-
     def _forward(self, left: BoxTensor, right: BoxTensor) -> BoxTensor:
         """Gives intersection of self and other.
 

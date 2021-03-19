@@ -16,25 +16,17 @@ import numpy as np
         dtype=np.float,
         elements=hypothesis.strategies.floats(-100, 100),
     ),
-    inp2=arrays(
-        shape=(2, 10),
-        dtype=np.float,
-        elements=hypothesis.strategies.floats(-100, 100),
-    ),
     volume_temperature=floats(1.0, 50.0),
     log_scale=booleans(),
 )
 @hypothesis.settings(max_examples=100, verbosity=hypothesis.Verbosity.verbose)
 def test_volume(
     inp1: np.ndarray,
-    inp2: np.ndarray,
     volume_temperature: float,
     log_scale: bool,
 ) -> None:
     inp1[..., 1] = np.absolute(inp1[..., 1]) + inp1[..., 0]  # make sure Z >z
-    inp2[..., 1] = np.absolute(inp2[..., 1]) + inp2[..., 0]  # make sure Z >z
     box1 = BoxTensor(torch.tensor(inp1))
-    box2 = BoxTensor(torch.tensor(inp2))
     soft_volume1 = SoftVolume(
         log_scale=log_scale, volume_temperature=volume_temperature
     )(box1)
