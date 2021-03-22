@@ -119,7 +119,7 @@ class TFBoxTensor(object):
         assert data is not None
 
         if self.data is not None:
-            if isinstance(data, tf.Tensor):
+            if isinstance(data, (tf.Tensor, tf.Variable)):
                 if data.shape != self.data.shape:
                     raise ValueError(
                         f"Cannot reinitialize with different shape. New {data.shape}, old {self.data.shape}"
@@ -137,7 +137,7 @@ class TFBoxTensor(object):
                     f"Cannot reinitialize with different shape. New Z shape ={data[1].shape}, old ={self._Z.shape}"
                 )
 
-        if isinstance(data, tf.Tensor):
+        if isinstance(data, (tf.Tensor, tf.Variable)):
             if _box_shape_ok(data):
                 self.data = data
             else:

@@ -64,7 +64,7 @@ def tf_uniform_boxes(
     assert tf.math.reduce_all(z >= minimum)
     assert tf.math.reduce_all(Z <= maximum)
 
-    return tf.constant(z), tf.constant(Z)
+    return tf.Variable(z), tf.Variable(Z)
 
 
 class TFUniformBoxInitializer(TFBoxInitializer):
@@ -113,16 +113,15 @@ class TFUniformBoxInitializer(TFBoxInitializer):
             self.delta_max,
         )
         W = self.box_type_factory.box_subclass.W(z, Z, **self.box_type_factory.kwargs_dict)  # type: ignore
-
         if W.shape == t.shape:
-            t = tf.identity(W)
+            t.assign(W)
         else:
             emb = self.box_type_factory.box_subclass.zZ_to_embedding(  # type:ignore
                 z, Z, **self.box_type_factory.kwargs_dict
             )
 
             if emb.shape == t.shape:
-                t = tf.identity(emb)
+                t.assign(emb)
             else:
                 raise ValueError(
                     f"Shape of weights {t.shape} is not suitable "

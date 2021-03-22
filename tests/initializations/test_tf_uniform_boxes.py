@@ -52,12 +52,10 @@ def test_UniformBoxInitializer(
     maximum = minimum + max_delta
     delta_max = delta_min + delta_max_delta
     box_type_factory = TFBoxFactory(box_type)
-    t = tf.random.uniform(
-        shape=[
-            num_boxes,
-            box_type_factory.box_subclass.w2z_ratio,
-            dimensions,
-        ]
+    t = tf.Variable(
+        np.random.rand(
+            num_boxes, box_type_factory.box_subclass.w2z_ratio, dimensions
+        )
     )
     TFUniformBoxInitializer(
         dimensions,
