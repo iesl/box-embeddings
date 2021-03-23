@@ -12,6 +12,7 @@ from box_embeddings.common.tf_utils import tf_index_select
 import tensorflow as tf
 import warnings
 
+
 @TFBoxFactory.register_box_class("tftanh")
 class TFTanhBoxTensor(TFBoxTensor):
 

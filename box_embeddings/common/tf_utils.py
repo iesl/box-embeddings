@@ -176,6 +176,7 @@ def inv_sigmoid(t1: tf.Tensor) -> tf.Tensor:
     res = tf.math.log(t1 / (1.0 - t1))
     return res
 
+
 def tf_index_select(input_: tf.Tensor, dim: int, indices: List) -> tf.Tensor:
     """
     Args:

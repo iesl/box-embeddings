@@ -2,8 +2,6 @@
     Implementation of min-delta box parameterization.
 """
 from typing import List, Tuple, Union, Dict, Any, Optional, Type
-
-from box_embeddings.common.tf_utils import softplus_inverse
 from box_embeddings.parameterizations.tf_box_tensor import (
     TFBoxTensor,
     TFBoxFactory,
@@ -65,8 +63,10 @@ class TFMinDeltaBoxTensor(TFBoxTensor):
         """
 
         if self.data is not None:
-            return self.z + tf_softplus(
-                self.data[..., 1, :], beta=self.beta, threshold=self.threshold
+            return (
+                self.z
+                + tf.math.softplus(self.data[..., 1, :] * self.beta)
+                / self.beta
             )
         else:
             return self._Z  # type:ignore
