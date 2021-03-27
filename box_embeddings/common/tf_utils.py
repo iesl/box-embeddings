@@ -139,7 +139,7 @@ def softplus_inverse(
         / beta
     )
 
-    return tf.constant(res_n)
+    return tf.Variable(res_n)
 
 
 lse_eps = 1e-38
