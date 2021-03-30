@@ -1,27 +1,26 @@
 """
-    Implementation of sigmoid box parameterization.
+    Implementation of Tanh box parameterization.
 """
 from typing import List, Tuple, Union, Dict, Any, Optional, Type
-from box_embeddings.parameterizations.box_tensor import (
-    BoxTensor,
-    BoxFactory,
-    TBoxTensor,
+from box_embeddings.parameterizations.tf_box_tensor import (
+    TFBoxTensor,
+    TFBoxFactory,
+    TFTBoxTensor,
 )
-from box_embeddings.common.utils import softplus_inverse, inv_sigmoid
-import torch
+import box_embeddings.common.constant as constant
+from box_embeddings.common.tf_utils import tf_index_select
+import tensorflow as tf
 import warnings
 
 
-@BoxFactory.register_box_class("sigmoid")
-class SigmoidBoxTensor(BoxTensor):
+@TFBoxFactory.register_box_class("tftanh")
+class TFTanhBoxTensor(TFBoxTensor):
 
     """
-    Sigmoid Box Tensor
+    Tanh Activated Box Tensor
     """
 
-    def __init__(
-        self, data: Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]
-    ):
+    def __init__(self, data: Union[tf.Tensor, Tuple[tf.Tensor, tf.Tensor]]):
         """
 
         Args:
@@ -30,7 +29,7 @@ class SigmoidBoxTensor(BoxTensor):
         super().__init__(data)
 
     @property
-    def z(self) -> torch.Tensor:
+    def z(self) -> tf.Tensor:
         """Lower left coordinate as Tensor
 
         Returns:
@@ -38,12 +37,12 @@ class SigmoidBoxTensor(BoxTensor):
         """
 
         if self.data is not None:
-            return torch.sigmoid(self.data[..., 0, :])
+            return (self.data[..., 0, :] + 1) / 2
         else:
             return self._z  # type:ignore
 
     @property
-    def Z(self) -> torch.Tensor:
+    def Z(self) -> tf.Tensor:
         """Top right coordinate as Tensor
 
         Returns:
@@ -52,18 +51,18 @@ class SigmoidBoxTensor(BoxTensor):
 
         if self.data is not None:
             z = self.z
-            return z + torch.sigmoid(self.data[..., 1, :]) * (1.0 - z)  # type: ignore
+            return z + (self.data[..., 1, :] + 1) * (1.0 - z) / 2  # type: ignore
         else:
             return self._Z  # type:ignore
 
     @classmethod
     def W(  # type:ignore
-        cls: Type[TBoxTensor],
-        z: torch.Tensor,
-        Z: torch.Tensor,
+        cls: Type[TFTBoxTensor],
+        z: tf.Tensor,
+        Z: tf.Tensor,
         *args: Any,
         **kwargs: Any,
-    ) -> torch.Tensor:
+    ) -> tf.Tensor:
         """Given (z,Z), it returns one set of valid box weights W, such that
         Box(W) = (z,Z).
 
@@ -79,15 +78,22 @@ class SigmoidBoxTensor(BoxTensor):
         """
         cls.check_if_valid_zZ(z, Z)
 
-        eps = torch.finfo(z.dtype).tiny
-        w1 = inv_sigmoid(z.clamp(eps, 1.0 - eps))
-        w2 = inv_sigmoid(((Z - z) / (1.0 - z)).clamp(eps, 1.0 - eps))
-        return torch.stack((w1, w2), -2)
+        tanh_eps = constant.TANH_EPS
+        z_ = tf.clip_by_value(
+            z, clip_value_min=0.0, clip_value_max=1.0 - tanh_eps / 2.0
+        )
+        Z_ = tf.clip_by_value(
+            Z, clip_value_min=tanh_eps / 2.0, clip_value_max=1.0
+        )
+        w1 = 2 * z_ - 1
+        w2 = 2 * (Z_ - z_) / (1.0 - z_) - 1
+
+        return tf.stack((w1, w2), -2)
 
     @classmethod
     def from_vector(  # type:ignore
-        cls: Type[TBoxTensor], vector: torch.Tensor, *args: Any, **kwargs: Any
-    ) -> BoxTensor:
+        cls: Type[TFTBoxTensor], vector: tf.Tensor, *args: Any, **kwargs: Any
+    ) -> TFBoxTensor:
         """Creates a box for a vector. In this base implementation the vector is split
         into two pieces and these are used as box weights.
 
@@ -110,31 +116,26 @@ class SigmoidBoxTensor(BoxTensor):
                 f"The last dimension of vector should be even but is {vector.shape[-1]}"
             )
 
+        tanh_eps = constant.TANH_EPS
         split_point = int(len_dim / 2)
-        w1 = vector.index_select(
-            dim,
-            torch.tensor(
-                list(range(split_point)),
-                dtype=torch.int64,
-                device=vector.device,
-            ),
+
+        w1 = tf.clip_by_value(
+            tf_index_select(vector, dim, list(range(split_point))),
+            clip_value_min=-1,
+            clip_value_max=1.0 - tanh_eps,
+        )
+        w2 = tf.clip_by_value(
+            tf_index_select(vector, dim, list(range(split_point, len_dim))),
+            clip_value_min=-1.0 + tanh_eps,
+            clip_value_max=1.0,
         )
 
-        w2 = vector.index_select(
-            dim,
-            torch.tensor(
-                list(range(split_point, len_dim)),
-                dtype=torch.int64,
-                device=vector.device,
-            ),
-        )
-
-        W: torch.Tensor = torch.stack((w1, w2), -2)
+        W: tf.Tensor = tf.stack((w1, w2), -2)
 
         return cls(W)
 
 
-BoxFactory.register_box_class("sigmoid_from_zZ", "from_zZ")(SigmoidBoxTensor)
-BoxFactory.register_box_class("sigmoid_from_vector", "from_vector")(
-    SigmoidBoxTensor
+TFBoxFactory.register_box_class("tanh_from_zZ", "from_zZ")(TFTanhBoxTensor)
+TFBoxFactory.register_box_class("tanh_from_vector", "from_vector")(
+    TFTanhBoxTensor
 )
