@@ -1,7 +1,7 @@
 from typing import List, Tuple, Union, Dict, Any, Optional
 import torch
 from torch import Tensor
-from box_embeddings.modules.intersection import Intersection
+from box_embeddings.modules.intersection._intersection import _Intersection
 from box_embeddings.parameterizations import TBoxTensor
 
 
@@ -45,8 +45,8 @@ def hard_intersection(left: TBoxTensor, right: TBoxTensor) -> TBoxTensor:
     return left.from_zZ(z, Z)
 
 
-@Intersection.register("hard")
-class HardIntersection(Intersection):
+@_Intersection.register("hard")
+class HardIntersection(_Intersection):
     """Hard intersection operation as a Layer/Module"""
 
     def _forward(self, left: TBoxTensor, right: TBoxTensor) -> TBoxTensor:
