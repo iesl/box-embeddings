@@ -1,4 +1,5 @@
 import torch
+
 from box_embeddings.modules.volume._volume import _Volume
 from box_embeddings.parameterizations.box_tensor import BoxTensor
 from box_embeddings.common.utils import tiny_value_of_dtype
@@ -17,7 +18,7 @@ def soft_volume(
     """Volume of boxes. Uses softplus instead of ReLU/clamp
 
     Args:
-        box_tensor: input tensor
+        box_tensor: input
         volume_temperature: 1/volume_temperature is the beta parameter for the softplus
         log_scale: Whether the output should be in log scale or not.
         scale: scale parameter. Should be left as 1.0 (default)
@@ -28,15 +29,6 @@ def soft_volume(
 
     Raises:
         ValueError: if scale not in (0,1] or volume_temperature is 0.
-
-    Example:
-        >>> from box_embeddings.parameterizations.box_tensor import BoxTensor
-        >>> z = [-2.0]*100
-        >>> Z = [0.0]*100
-        >>> input = [z, Z]
-        >>> box1 = BoxTensor(torch.tensor(input))
-        >>> print(soft_volume(box1)) # doctest: +NORMALIZE_WHITESPACE
-        tensor(5.9605e+32)
     """
 
     if not (0.0 < scale <= 1.0):
@@ -75,6 +67,7 @@ class SoftVolume(_Volume):
         self, log_scale: bool = True, volume_temperature: float = 1.0
     ) -> None:
         """
+
         Args:
             log_scale: Where the output should be in log scale.
             volume_temperature: 1/volume_temperature is the beta parameter for the softplus
@@ -83,11 +76,10 @@ class SoftVolume(_Volume):
         self.volume_temperature = volume_temperature
 
     def forward(self, box_tensor: BoxTensor) -> torch.Tensor:
-        """
-        Soft softplus base (instead of ReLU) volume.
+        """Soft softplus base (instead of ReLU) volume.
 
         Args:
-            box_tensor: Input box tensor
+            box_tensor: TODO
 
         Returns:
             torch.Tensor
