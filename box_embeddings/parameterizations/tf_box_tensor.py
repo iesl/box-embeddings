@@ -340,6 +340,15 @@ class TFBoxTensor(object):
             assert self.box_shape == tuple(potential_final_shape)
 
     @classmethod
+    def zZ_to_embedding(
+        cls, z: tf.Tensor, Z: tf.Tensor, *args: Any, **kwargs: Any
+    ) -> tf.Tensor:
+        W = cls.W(z, Z, *args, **kwargs)
+        # collapse the last two dimensions
+
+        return tf.reshape(W, (*W.shape[:-2], -1))
+
+    @classmethod
     def from_zZ(
         cls: Type[TFTBoxTensor],
         z: tf.Tensor,
