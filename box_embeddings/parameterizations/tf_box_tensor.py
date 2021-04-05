@@ -481,6 +481,23 @@ class TFBoxTensor(object):
 
         return reshaped_box
 
+    def __eq__(self, other: TFTBoxTensor) -> bool:  # type:ignore
+        return np.allclose(self.z, other.z) and np.allclose(self.Z, other.Z)
+
+    def __getitem__(self, indx: Any) -> "TFBoxTensor":
+        """Creates a TBoxTensor for the min-max coordinates at the given indexes
+
+        Args:
+            indx: Indexes of the required boxes
+
+        Returns:
+            TBoxTensor
+        """
+        z_ = self.z[indx]
+        Z_ = self.Z[indx]
+
+        return self.from_zZ(z_, Z_)
+
 
 class TFBoxFactory(Registrable):
 
