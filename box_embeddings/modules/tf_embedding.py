@@ -50,7 +50,7 @@ class TFBoxEmbedding(tf.keras.layers.Embedding):
         self.built = True
         box_initializer(self.embeddings)
 
-    def call(self, inputs: tf.Tensor) -> TFBoxTensor:
+    def __call__(self, inputs: tf.Tensor) -> TFBoxTensor:
         emb = super().call(inputs)
         box_emb = self.box_factory(emb)
 

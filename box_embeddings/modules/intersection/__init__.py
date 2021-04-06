@@ -11,6 +11,10 @@ if torch_is_available():
 if tensorflow_is_available():
     from .tf_intersection import TFIntersection
     from .tf_hard_intersection import tf_hard_intersection, TFHardIntersection
+    from .tf_gumbel_intersection import (
+        tf_gumbel_intersection,
+        TFGumbelIntersection,
+    )
 
 if not torch_is_available() and not tensorflow_is_available():
     logger.warning("Can't find versions of Pytorch or Tensorflow")

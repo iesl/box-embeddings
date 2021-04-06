@@ -30,7 +30,7 @@ def test_forward() -> None:
     box_tensor = box_factory(W)
     box_tensor_direct = box_tensor.data.numpy()[2:4, ...]
     inputs = tf.Variable([2, 3])
-    box_tensor_from_emb = embedding.call(inputs)
+    box_tensor_from_emb = embedding(inputs)
 
     assert (box_tensor_direct == box_tensor_from_emb.data.numpy()).all()
 
