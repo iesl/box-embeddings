@@ -76,7 +76,7 @@ class TFHardVolume(TFVolume):
 
     """Hard ReLU based volume."""
 
-    def forward(self, box_tensor: TFBoxTensor) -> tf.Tensor:
+    def __call__(self, box_tensor: TFBoxTensor) -> tf.Tensor:
         """Hard ReLU base volume.
 
         Args:
