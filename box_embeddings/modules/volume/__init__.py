@@ -24,6 +24,11 @@ if tensorflow_is_available():
         tf_log_soft_volume,
         TFSoftVolume,
     )
+    from .tf_bessel_volume import (
+        tf_bessel_volume_approx,
+        tf_log_bessel_volume_approx,
+        TFBesselApproxVolume,
+    )
 
 if not torch_is_available() and not tensorflow_is_available():
     logger.warning("Can't find versions of Pytorch or Tensorflow")
