@@ -6,9 +6,9 @@ A BoxTensor contains single tensor which represents single or multiple boxes.
         Have to use composition instead of inheritance because currently it is not safe to interit from :class:`torch.Tensor` because creating an instance of such a class will always make it a leaf node. This works for :class:`torch.nn.Parameter` but won't work for a general BoxTensor. This most likely will change in the future as pytorch starts offical support for inheriting from a Tensor. Give this point some thought when this happens.
 
 """
-import tensorflow as tf
+
+import logging
 from typing import (
-    List,
     Tuple,
     Union,
     Dict,
@@ -18,16 +18,13 @@ from typing import (
     TypeVar,
     Callable,
 )
+import tensorflow as tf
 from box_embeddings.common.registrable import Registrable
 from box_embeddings.common.tf_utils import (
     tf_index_select,
     _box_shape_ok,
     _shape_error_str,
 )
-import logging
-from copy import deepcopy
-
-import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +75,21 @@ class TFBoxTensor(object):
     def reinit(
         self, data: Union[tf.Tensor, Tuple[tf.Tensor, tf.Tensor]]
     ) -> None:
+        """
+        Constructor
+
+        Args:
+            data: Tensor of shape (..., zZ, num_dims). Here, zZ=2, where
+                the 0th dim is for bottom left corner and 1st dim is for
+                top right corner of the box
+
+        Returns: None
+
+        Raises:
+            ValueError: If new shape is different than old shape
+
+        """
+
         assert data is not None
 
         if self.data is not None:

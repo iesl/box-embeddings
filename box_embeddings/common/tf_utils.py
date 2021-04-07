@@ -1,17 +1,10 @@
-import tensorflow as tf
 import math
-import warnings
 from typing import (
     List,
     Tuple,
-    Union,
-    Dict,
     Any,
-    Optional,
-    Type,
-    TypeVar,
-    Callable,
 )
+import tensorflow as tf
 
 
 def tiny_value_of_dtype(dtype: tf.dtypes.DType) -> float:
@@ -33,10 +26,9 @@ def tiny_value_of_dtype(dtype: tf.dtypes.DType) -> float:
         TypeError: Given non-float or unknown type
     """
 
-    if dtype == tf.float16 or dtype == tf.float32 or dtype == tf.float64:
+    if dtype in (tf.float16, tf.float32, tf.float64):
         return 1e-13
-    else:
-        raise TypeError("Does not support dtype " + str(dtype))
+    raise TypeError("Does not support dtype " + str(dtype))
 
 
 _log1mexp_switch = math.log(0.5)
@@ -123,6 +115,19 @@ def log1pexp(x: tf.Tensor) -> tf.Tensor:
 def softplus_inverse(
     t: tf.Tensor, beta: float = 1.0, threshold: float = 20
 ) -> tf.Tensor:
+    """
+
+    Computes the inverse softplus
+
+    Args:
+        t: input tensor
+        beta: TODO
+        threshold: TODO
+
+    Returns:
+        softplus inverse of the input
+
+    """
     below_thresh = beta * t < threshold
     res = t
     # res[below_thresh] = (
@@ -173,6 +178,16 @@ def logsumexp2(t1: tf.Tensor, t2: tf.Tensor) -> tf.Tensor:
 
 
 def inv_sigmoid(t1: tf.Tensor) -> tf.Tensor:
+    """
+    Calculate the inverse of the sigmoid function
+
+    Args:
+        t1: a tensor
+
+    Returns:
+        inverse sigmoid of the input
+
+    """
     res = tf.math.log(t1 / (1.0 - t1))
     return res
 

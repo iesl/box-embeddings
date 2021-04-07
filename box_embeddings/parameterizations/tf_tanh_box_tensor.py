@@ -1,7 +1,8 @@
 """
     Implementation of Tanh box parameterization.
 """
-from typing import List, Tuple, Union, Dict, Any, Optional, Type
+from typing import Tuple, Union, Any, Type
+import tensorflow as tf
 from box_embeddings.parameterizations.tf_box_tensor import (
     TFBoxTensor,
     TFBoxFactory,
@@ -9,8 +10,6 @@ from box_embeddings.parameterizations.tf_box_tensor import (
 )
 import box_embeddings.common.constant as constant
 from box_embeddings.common.tf_utils import tf_index_select
-import tensorflow as tf
-import warnings
 
 
 @TFBoxFactory.register_box_class("tftanh")
@@ -38,8 +37,7 @@ class TFTanhBoxTensor(TFBoxTensor):
 
         if self.data is not None:
             return (self.data[..., 0, :] + 1) / 2
-        else:
-            return self._z  # type:ignore
+        return self._z  # type:ignore
 
     @property
     def Z(self) -> tf.Tensor:
@@ -52,8 +50,7 @@ class TFTanhBoxTensor(TFBoxTensor):
         if self.data is not None:
             z = self.z
             return z + (self.data[..., 1, :] + 1) * (1.0 - z) / 2  # type: ignore
-        else:
-            return self._Z  # type:ignore
+        return self._Z  # type:ignore
 
     @classmethod
     def W(  # type:ignore
