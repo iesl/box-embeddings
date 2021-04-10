@@ -63,7 +63,7 @@ def tf_log_soft_volume(
         tf.math.log(
             tf.math.softplus((box_tensor.Z - box_tensor.z) * beta) + eps
         ),
-        dim=-1,
+        axis=-1,
     ) + float(
         np.log(scale)
     )  # need this eps to that the derivative of log does not blow
