@@ -63,7 +63,6 @@ def tf_log_hard_volume(box_tensor: TFBoxTensor) -> tf.Tensor:
                 clip_value_min=eps,
                 clip_value_max=float('inf'),
             ),
-            dim=-1,
         ),
         axis=1,
     )
