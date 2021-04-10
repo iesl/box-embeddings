@@ -56,7 +56,7 @@ def tf_hard_volume(box_tensor: TFBoxTensor) -> tf.Tensor:
 
 
 def tf_log_hard_volume(box_tensor: TFBoxTensor) -> tf.Tensor:
-    res = tf.math.sum(
+    res = tf.math.reduce_sum(
         tf.math.log(
             tf.clip_by_value(
                 box_tensor.Z - box_tensor.z,
