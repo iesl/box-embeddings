@@ -18,6 +18,8 @@ Pytorch implementation for box embeddings as well as box representations.
 
 4. Xiang (Lorraine) Li [@Lorraine333](https://github.com/Lorraine333)
 
+5. Trang Tran [@trangtran72](https://github.com/trangtran72)
+
 # Cite
 
 1. If you use simple hard boxes with surrogate loss then cite the following paper:
