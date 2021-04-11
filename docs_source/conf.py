@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-
+import time
 import sys
 import os
 
@@ -19,15 +19,19 @@ extensions = [
     "m2r",
 ]
 source_suffix = [".rst", ".md"]
-# source_suffix = '.rst'
+html_last_updated_fmt = "%c"
 master_doc = "index"
 project = "Box Embeddings"
-copyright = "Information Extraction and Synthesis Lab., UMass"
+copyright = "2021, Information Extraction and Synthesis Lab, UMass"
 exclude_patterns = ["_build", "**/docs", "**/.docs"]
-pygments_style = "sphinx"
-# html_theme = "sphinx_rtd_theme"
+
+pygments_style = "friendly"
+html_theme = "alabaster"
+def setup(app):
+  app.add_css_file( "custom_t.css" )
 templates_path = ["templates"]  # needed for multiversion
-autoclass_content = "class"
+#autoclass_content = "class"
+
 html_baseurl = "http://iesl.cs.umass.edu/box-embeddings/"
 html_logo = "images/UMass_IESL.png"
 html_theme_options = {
@@ -35,7 +39,9 @@ html_theme_options = {
     "github_repo": "box-embeddings",
     "github_banner": True,
     "github_button": True,
+    #"description": "Python implementation for box embeddings and box representations",
 }
+html_css_files = ['custom_t.css']
 
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#confval-autoclass_content
 autoclass_content = "both"
@@ -49,21 +55,17 @@ autoapi_options = [
     "inherited-members",
     "undoc-members",
     "show-inheritance",
-    "show-module-summary",
+    #"show-module-summary",
 ]
 autoapi_add_toctree_entry = False
 autoapi_keep_files = True
 
 # see: https://github.com/data-describe/data-describe/blob/master/docs/source/conf.py
 # and https://github.com/data-describe/data-describe/blob/master/docs/make.py
-# multiversion
 # Multiversioning
 smv_tag_whitelist = r"^v\d+\.\d+\.\d+b?\d*$"
 smv_branch_whitelist = r"^.*main$"
 smv_remote_whitelist = r"^.*$"
-templates_path = [
-    "templates",
-]
 html_sidebars = {
     "**": [
         "about.html",
