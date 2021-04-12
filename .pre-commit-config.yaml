@@ -1,6 +1,6 @@
 default_language_version:
-  python: python3.7
-
+  python: python3
+exclude: (^docs/|^docs_source)
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
@@ -8,7 +8,11 @@ repos:
       - id: trailing-whitespace
       - id: check-yaml
       - id: end-of-file-fixer
-
+  - repo: https://github.com/terrencepreilly/darglint
+    rev: master
+    hooks:
+    - id: darglint # default config comes from tox.ini
+      args: [-v, '2']
   - repo: local
     hooks:
       - id: black
@@ -24,14 +28,18 @@ repos:
         language: system
         types: [python]
 
-      - id: mypy
+      - id: mypy # default config comes from setup.cfg
         name: mypy
         entry: python -m mypy
         language: system
         types: [python]
+        exclude: "test_.*" # exclude all test files form type checking
 
-
-  - repo: https://github.com/terrencepreilly/darglint
-    rev: master
-    hooks:
-    - id: darglint
+      - id: docstr-coverage
+        name: docstr-coverage
+        entry: docstr-coverage
+        types: [python]
+        exclude: "test_.*"
+        language: system
+        args: [--fail-under, '0'] # fail if less than 50 of code has docstrings
+        log_file: docstring-coverage.txt

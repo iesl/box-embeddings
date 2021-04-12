@@ -6,8 +6,7 @@ A BoxTensor contains single tensor which represents single or multiple boxes.
         Have to use composition instead of inheritance because currently it is not safe to interit from :class:`torch.Tensor` because creating an instance of such a class will always make it a leaf node. This works for :class:`torch.nn.Parameter` but won't work for a general BoxTensor. This most likely will change in the future as pytorch starts offical support for inheriting from a Tensor. Give this point some thought when this happens.
 
 """
-import torch
-from torch import Tensor
+import tensorflow as tf
 from typing import (
     List,
     Tuple,
@@ -20,43 +19,29 @@ from typing import (
     Callable,
 )
 from box_embeddings.common.registrable import Registrable
+from box_embeddings.common.tf_utils import (
+    tf_index_select,
+    _box_shape_ok,
+    _shape_error_str,
+)
 import logging
 from copy import deepcopy
 
+import numpy as np
+
 logger = logging.getLogger(__name__)
 
-
-def _box_shape_ok(t: Tensor) -> bool:
-    if len(t.shape) < 2:
-        return False
-    else:
-        if t.size(-2) != 2:
-            return False
-
-        return True
+TFTBoxTensor = TypeVar("TFTBoxTensor", bound="TFBoxTensor")
 
 
-def _shape_error_str(
-    tensor_name: str, expected_shape: Any, actual_shape: Tuple
-) -> str:
-    return "Shape of {} has to be {} but is {}".format(
-        tensor_name, expected_shape, tuple(actual_shape)
-    )
-
-
-# see: https://realpython.com/python-type-checking/#type-hints-for-methods
-# to know why we need to use TypeVar
-TBoxTensor = TypeVar("TBoxTensor", bound="BoxTensor")
-
-
-class BoxTensor(object):
+class TFBoxTensor(object):
     """Base class defining the interface for BoxTensor."""
 
     w2z_ratio: int = 2  #: number of parameters required per dim
 
     def __init__(
         self,
-        data: Union[Tensor, Tuple[Tensor, Tensor]],
+        data: Union[tf.Tensor, Tuple[tf.Tensor, tf.Tensor]],
         *args: Any,
         **kwargs: Any,
     ) -> None:
@@ -70,9 +55,9 @@ class BoxTensor(object):
             *args: TODO
             **kwargs: TODO
         """
-        self.data: Optional[Tensor] = None
-        self._z: Optional[Tensor] = None
-        self._Z: Optional[Tensor] = None
+        self.data: Optional[tf.Tensor] = None
+        self._z: Optional[tf.Tensor] = None
+        self._Z: Optional[tf.Tensor] = None
 
         self.reinit(data)
 
@@ -90,11 +75,13 @@ class BoxTensor(object):
                 f"\nZ={self._Z.__repr__()})"  # type:ignore
             )
 
-    def reinit(self, data: Union[Tensor, Tuple[Tensor, Tensor]]) -> None:
+    def reinit(
+        self, data: Union[tf.Tensor, Tuple[tf.Tensor, tf.Tensor]]
+    ) -> None:
         assert data is not None
 
         if self.data is not None:
-            if isinstance(data, Tensor):
+            if isinstance(data, tf.Tensor):
                 if data.shape != self.data.shape:
                     raise ValueError(
                         f"Cannot reinitialize with different shape. New {data.shape}, old {self.data.shape}"
@@ -112,7 +99,7 @@ class BoxTensor(object):
                     f"Cannot reinitialize with different shape. New Z shape ={data[1].shape}, old ={self._Z.shape}"
                 )
 
-        if isinstance(data, Tensor):
+        if isinstance(data, tf.Tensor):
             if _box_shape_ok(data):
                 self.data = data
             else:
@@ -137,7 +124,7 @@ class BoxTensor(object):
         return tuple()
 
     @property
-    def z(self) -> Tensor:
+    def z(self) -> tf.Tensor:
         """Lower left coordinate as Tensor
 
         Returns:
@@ -150,7 +137,7 @@ class BoxTensor(object):
             return self._z  # type:ignore
 
     @property
-    def Z(self) -> Tensor:
+    def Z(self) -> tf.Tensor:
         """Top right coordinate as Tensor
 
         Returns:
@@ -163,7 +150,7 @@ class BoxTensor(object):
             return self._Z  # type:ignore
 
     @property
-    def centre(self) -> Tensor:
+    def centre(self) -> tf.Tensor:
         """Centre coordinate as Tensor
 
         Returns:
@@ -173,7 +160,9 @@ class BoxTensor(object):
         return (self.z + self.Z) / 2
 
     @classmethod
-    def check_if_valid_zZ(cls: Type[TBoxTensor], z: Tensor, Z: Tensor) -> None:
+    def check_if_valid_zZ(
+        cls: Type[TFTBoxTensor], z: tf.Tensor, Z: tf.Tensor
+    ) -> None:
         """Check of (z,Z) form a valid box.
 
         If your child class parameterization bounds the boxes to some universe
@@ -189,7 +178,7 @@ class BoxTensor(object):
 
         """
 
-        if not (Z >= z).all().item():  # type: ignore
+        if not (Z >= z).numpy().all().item():  # type: ignore
             raise ValueError(f"Invalid box: Z < z where\nZ = {Z}\nz={z}")
 
         if z.shape != Z.shape:
@@ -198,134 +187,6 @@ class BoxTensor(object):
                     z.shape, Z.shape
                 )
             )
-
-    @classmethod
-    def W(
-        cls: Type[TBoxTensor], z: Tensor, Z: Tensor, *args: Any, **kwargs: Any
-    ) -> Tensor:
-        """Given (z,Z), it returns one set of valid box weights W, such that
-        Box(W) = (z,Z).
-
-        For the base `BoxTensor` class, we just return z and Z stacked together.
-        If you implement any new parameterization for boxes. You most likely
-        need to override this method.
-
-        Args:
-            z: Lower left coordinate of shape (..., hidden_dims)
-            Z: Top right coordinate of shape (..., hidden_dims)
-            *args: TODO
-            **kwargs: TODO
-
-        Returns:
-            Tensor: Parameters of the box. In base class implementation, this
-                will have shape (..., 2, hidden_dims).
-        """
-        cls.check_if_valid_zZ(z, Z)
-
-        return torch.stack((z, Z), -2)
-
-    @classmethod
-    def zZ_to_embedding(
-        cls, z: Tensor, Z: Tensor, *args: Any, **kwargs: Any
-    ) -> Tensor:
-        W = cls.W(z, Z, *args, **kwargs)
-        # collapse the last two dimensions
-
-        return W.reshape(*W.shape[:-2], -1)
-
-    @classmethod
-    def from_zZ(
-        cls: Type[TBoxTensor], z: Tensor, Z: Tensor, *args: Any, **kwargs: Any
-    ) -> TBoxTensor:
-        """Creates a box for the given min-max coordinates (z,Z).
-
-        In the this base implementation we do this by
-        stacking z and Z along -2 dim to form W.
-
-        Args:
-            z: lower left
-            Z: top right
-            *args: extra arguments for child class
-            **kwargs: extra arguments for child class
-
-        Returns:
-            A BoxTensor
-
-        """
-        assert z.shape == Z.shape, "z,Z shape not matching"
-
-        return cls((z, Z), *args, **kwargs)
-
-    def like_this_from_zZ(
-        self,
-        z: Tensor,
-        Z: Tensor,
-    ) -> "BoxTensor":
-        """Creates a box for the given min-max coordinates (z,Z).
-        This is similar to the class method :method:`from_zZ`, but
-        uses the attributes on self and not external args, kwargs.
-
-        For the base class, since we do not have extra attributes,
-        we simply call from_zZ.
-
-
-        Args:
-            z: lower left
-            Z: top right
-
-        Returns:
-            A BoxTensor
-
-        """
-
-        return self.from_zZ(z, Z, *self.args, *self.kwargs)
-
-    @classmethod
-    def from_vector(
-        cls, vector: Tensor, *args: Any, **kwargs: Any
-    ) -> TBoxTensor:
-        """Creates a box for a vector. In this base implementation the vector is split
-        into two pieces and these are used as z,Z.
-
-        Args:
-            vector: tensor
-            *args: extra arguments for child class
-            **kwargs: extra arguments for child class
-
-        Returns:
-            A BoxTensor
-
-        Raises:
-            ValueError: if last dimension is not even
-        """
-        len_dim = vector.shape[-1]
-        dim = -1
-
-        if vector.shape[-1] % 2 != 0:
-            raise ValueError(
-                f"The last dimension of vector should be even but is {vector.shape[-1]}"
-            )
-
-        split_point = int(len_dim / 2)
-        z = vector.index_select(
-            dim,
-            torch.tensor(
-                list(range(split_point)),
-                dtype=torch.int64,
-                device=vector.device,
-            ),
-        )
-
-        Z = vector.index_select(
-            dim,
-            torch.tensor(
-                list(range(split_point, len_dim)),
-                dtype=torch.int64,
-                device=vector.device,
-            ),
-        )
-
-        return cls.from_zZ(z, Z, *args, **kwargs)  # type:ignore
 
     @property
     def box_shape(self) -> Tuple:
@@ -439,16 +300,101 @@ class BoxTensor(object):
 
             if self.data is not None:
                 for d in dim_to_unsqueeze:
-                    self.data.unsqueeze_(
-                        d - 1
+                    self.data = tf.expand_dims(
+                        self.data, d - 1
                     )  # -1 because of extra 2 at dim -2
+
             else:
                 for d in dim_to_unsqueeze:
-                    self._z.unsqueeze_(d)  # type:ignore
-                    self._Z.unsqueeze_(d)  # type: ignore
+                    self._z = tf.expand_dims(self._z, d)  # type:ignore
+                    self._Z = tf.expand_dims(self._Z, d)  # type: ignore
             assert self.box_shape == tuple(potential_final_shape)
 
-    def box_reshape(self, target_shape: Tuple) -> "BoxTensor":
+    @classmethod
+    def from_zZ(
+        cls: Type[TFTBoxTensor],
+        z: tf.Tensor,
+        Z: tf.Tensor,
+        *args: Any,
+        **kwargs: Any,
+    ) -> TFTBoxTensor:
+        """Creates a box for the given min-max coordinates (z,Z).
+
+        In the this base implementation we do this by
+        stacking z and Z along -2 dim to form W.
+
+        Args:
+            z: lower left
+            Z: top right
+            *args: extra arguments for child class
+            **kwargs: extra arguments for child class
+
+        Returns:
+            A BoxTensor
+
+        """
+        assert z.shape == Z.shape, "z,Z shape not matching"
+
+        return cls((z, Z), *args, **kwargs)
+
+    def like_this_from_zZ(
+        self,
+        z: tf.Tensor,
+        Z: tf.Tensor,
+    ) -> "TFBoxTensor":
+        """Creates a box for the given min-max coordinates (z,Z).
+        This is similar to the class method :method:`from_zZ`, but
+        uses the attributes on self and not external args, kwargs.
+
+        For the base class, since we do not have extra attributes,
+        we simply call from_zZ.
+
+
+        Args:
+            z: lower left
+            Z: top right
+
+        Returns:
+            A BoxTensor
+
+        """
+
+        return self.from_zZ(z, Z, *self.args, *self.kwargs)
+
+    @classmethod
+    def from_vector(
+        cls, vector: tf.Tensor, *args: Any, **kwargs: Any
+    ) -> TFTBoxTensor:
+        """Creates a box for a vector. In this base implementation the vector is split
+        into two pieces and these are used as z,Z.
+
+        Args:
+            vector: tensor
+            *args: extra arguments for child class
+            **kwargs: extra arguments for child class
+
+        Returns:
+            A BoxTensor
+
+        Raises:
+            ValueError: if last dimension is not even
+        """
+        len_dim = vector.shape[-1]
+        dim = -1
+
+        if vector.shape[-1] % 2 != 0:
+            raise ValueError(
+                f"The last dimension of vector should be even but is {vector.shape[-1]}"
+            )
+
+        split_point = int(len_dim / 2)
+
+        z = tf_index_select(vector, dim, list(range(split_point)))
+        Z = tf_index_select(vector, dim, list(range(split_point, len_dim)))
+
+        return cls.from_zZ(z, Z, *args, **kwargs)  # type:ignore
+
+    def box_reshape(self, target_shape: Tuple) -> "TFBoxTensor":
         """Reshape the z,Z and center.
 
         Ex:
@@ -479,53 +425,33 @@ class BoxTensor(object):
         if self.data is not None:
             _target_shape.insert(-1, 2)  # insert the zZ
             try:
-                new_data = self.data.reshape(*_target_shape).contiguous()
-            except RuntimeError as re:
+                new_data = tf.reshape(self.data, _target_shape)
+            except Exception:
                 raise RuntimeError(
                     f"Cannot reshape current box_shape {self.box_shape} to {target_shape}"
-                ) from re
+                )
             reshaped_box = self.__class__(new_data, *self.args, **self.kwargs)
         else:
             try:
-                new_z = self._z.reshape(  # type:ignore
-                    *_target_shape
-                ).contiguous()
-                new_Z = self._Z.reshape(  # type:ignore
-                    *_target_shape
-                ).contiguous()
-            except RuntimeError as re:
+                new_z = tf.reshape(self._z, _target_shape)  # type:ignore
+                new_Z = tf.reshape(self._Z, _target_shape)  # type:ignore
+            except Exception:
                 raise RuntimeError(
                     f"Cannot reshape current box_shape {self.box_shape} to {target_shape}"
-                ) from re
+                )
             reshaped_box = self.like_this_from_zZ(new_z, new_Z)
 
         return reshaped_box
 
-    def __eq__(self, other: TBoxTensor) -> bool:  # type:ignore
-        return torch.allclose(self.z, other.z) and torch.allclose(
-            self.Z, other.Z
-        )
 
-    def __getitem__(self, indx: Any) -> "BoxTensor":
-        """Creates a TBoxTensor for the min-max coordinates at the given indexes
-
-        Args:
-            indx: Indexes of the required boxes
-
-        Returns:
-            TBoxTensor
-        """
-        z_ = self.z[indx]
-        Z_ = self.Z[indx]
-
-        return self.from_zZ(z_, Z_)
+R = TypeVar("R", bound="TFBoxTensor")
 
 
-class BoxFactory(Registrable):
+class TFBoxFactory(Registrable):
 
     """A factory class which will be subclassed(one for each box type)."""
 
-    box_registry: Dict[str, Tuple[Type[BoxTensor], Optional[str]]] = {}
+    box_registry: Dict[str, Tuple[Type[R], str]] = {}  # type:ignore
 
     def __init__(self, name: str, kwargs_dict: Dict = None):
         self.name = name  #: Name of the registered BoxTensor class
@@ -538,7 +464,7 @@ class BoxFactory(Registrable):
             )
 
         if not box_constructor:
-            self.creator: Type[BoxTensor] = self.box_subclass
+            self.creator: Type[TFTBoxTensor] = self.box_subclass  # type: ignore
         else:
             try:
                 self.creator = getattr(self.box_subclass, box_constructor)
@@ -555,7 +481,7 @@ class BoxFactory(Registrable):
         name: str,
         constructor: str = None,
         exist_ok: bool = False,
-    ) -> Callable[[Type[BoxTensor]], Type[BoxTensor]]:
+    ) -> Callable[[Type[TFBoxTensor]], Type[TFBoxTensor]]:
         """This is different from allennlp registrable because what this class registers
         is not subclasses but subclasses of BoxTensor
 
@@ -569,36 +495,36 @@ class BoxFactory(Registrable):
 
         """
 
-        def add_box_class(subclass: Type[BoxTensor]) -> Type[BoxTensor]:
+        def add_box_class(subclass: Type[TFTBoxTensor]) -> Type[TFTBoxTensor]:
             if name in cls.box_registry:
                 if exist_ok:
                     message = (
-                        f"{name} has already been registered as a "
+                        f"{name} has already been registered as a "  # type:ignore
                         f"box class {cls.box_registry[name][0].__name__}"
                         f", but exist_ok=True, so overriting with {subclass.__name__}"
                     )
                     logger.warning(message)
                 else:
                     message = (
-                        f"Cannot register {name} as box class"
+                        f"Cannot register {name} as box class"  # type:ignore
                         f"name already in use for {cls.box_registry[name][0].__name__}"
                     )
                     raise RuntimeError(message)
-            cls.box_registry[name] = (subclass, constructor)
+            cls.box_registry[name] = (subclass, constructor)  # type: ignore
 
             return subclass
 
         return add_box_class
 
-    def __call__(self, *args: Any, **kwargs: Any) -> BoxTensor:
+    def __call__(self, *args: Any, **kwargs: Any) -> TFBoxTensor:
 
-        return self.creator(*args, **kwargs, **self.kwargs_dict)  # type: ignore
+        return self.creator(*args, **kwargs, **self.kwargs_dict)  # type:ignore
 
 
-BoxFactory.register("box_factory")(BoxFactory)  # register itself
+TFBoxFactory.register("box_factory")(TFBoxFactory)  # register itself
 
-BoxFactory.register_box_class("boxtensor")(BoxTensor)
-BoxFactory.register_box_class("boxtensor_from_zZ", "from_zZ")(BoxTensor)
-BoxFactory.register_box_class("boxtensor_from_vector", "from_vector")(
-    BoxTensor
+TFBoxFactory.register_box_class("boxtensor")(TFBoxTensor)
+TFBoxFactory.register_box_class("boxtensor_from_zZ", "from_zZ")(TFBoxTensor)
+TFBoxFactory.register_box_class("boxtensor_from_vector", "from_vector")(
+    TFBoxTensor
 )

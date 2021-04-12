@@ -53,7 +53,7 @@ help:
 # remove all rst files except index.rst
 clean:
 	rm -rf $(BUILDDIR)/*
-	ls -c1 *.rst | grep -v $(PERSISTENT) | xargs rm
+	ls -c1 *.rst | grep -v $(PERSISTENT) | xargs --no-run-if-empty rm
 
 autogen: clean
 	sphinx-apidoc -e -o . $(SOURCEDIR) $(SKIP) -t $(TEMPLATEDIR)
@@ -62,6 +62,10 @@ html: autogen
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)"
+
+coverage: html
+	$(SPHINXBUILD) -b coverage $(ALLSPHINXOPTS) $(BUILDDIR)
+	@echo
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml

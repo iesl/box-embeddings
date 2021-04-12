@@ -1,7 +1,0 @@
-box\_embeddings.modules.embedding
-=================================
-
-.. automodule:: box_embeddings.modules.embedding
-   :members:
-   :undoc-members:
-   :show-inheritance:

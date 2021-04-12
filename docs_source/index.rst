@@ -4,11 +4,7 @@ Box Embeddings
 .. mdinclude:: ../README.md
 
 .. toctree::
-   :maxdepth: 2
-   :caption: About
+   :maxdepth: 3
+   :caption: Code
 
-.. toctree::
-   :maxdepth: 4
-   :caption: Code Tree
-
-   box_embeddings
+   API Reference <box_embeddings/index>

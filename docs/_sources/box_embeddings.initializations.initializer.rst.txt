@@ -1,7 +1,0 @@
-box\_embeddings.initializations.initializer
-===========================================
-
-.. automodule:: box_embeddings.initializations.initializer
-   :members:
-   :undoc-members:
-   :show-inheritance:

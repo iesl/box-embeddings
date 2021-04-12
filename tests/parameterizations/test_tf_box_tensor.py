@@ -1,5 +1,5 @@
-from box_embeddings.parameterizations.box_tensor import BoxTensor
-import torch
+from box_embeddings.parameterizations.tf_box_tensor import TFBoxTensor
+import tensorflow as tf
 import numpy as np
 import pytest
 import hypothesis
@@ -7,43 +7,44 @@ from hypothesis.strategies import sampled_from
 
 
 def test_simple_creation() -> None:
-    tensor = torch.tensor(np.random.rand(3, 2, 3))
-    box_tensor = BoxTensor(tensor)
-    assert (tensor.data.numpy() == box_tensor.data.numpy()).all()  # type: ignore
-    assert isinstance(box_tensor, BoxTensor)
-    tensor = torch.tensor(np.random.rand(2, 10))
-    box_tensor = BoxTensor(tensor)
-    assert (tensor.data.numpy() == box_tensor.data.numpy()).all()  # type: ignore
-    assert isinstance(box_tensor, BoxTensor)
+    tensor = tf.constant(np.random.rand(3, 2, 3))
+    box_tensor = TFBoxTensor(tensor)
+    assert (tensor.numpy() == box_tensor.data.numpy()).all()  # type: ignore
+    assert isinstance(box_tensor, TFBoxTensor)
+    tensor = tf.constant(np.random.rand(2, 10))
+    box_tensor = TFBoxTensor(tensor)
+    assert (tensor.numpy() == box_tensor.data.numpy()).all()  # type: ignore
+    assert isinstance(box_tensor, TFBoxTensor)
 
 
 def test_shape_validation_during_creation():
-    tensor = torch.tensor(np.random.rand(3))
+    tensor = tf.constant(np.random.rand(3))
     with pytest.raises(ValueError):
-        box_tensor = BoxTensor(tensor)
-    tensor = torch.tensor(np.random.rand(3, 11))
+        box_tensor = TFBoxTensor(tensor)
+    tensor = tf.constant(np.random.rand(3, 11))
     with pytest.raises(ValueError):
-        box_tensor = BoxTensor(tensor)
-    tensor = torch.tensor(np.random.rand(3, 3, 3))
+        box_tensor = TFBoxTensor(tensor)
+    tensor = tf.constant(np.random.rand(3, 3, 3))
     with pytest.raises(ValueError):
-        box_tensor = BoxTensor(tensor)
+        box_tensor = TFBoxTensor(tensor)
 
 
 def test_creation_from_zZ():
     shape = (3, 1, 5)
-    z = torch.tensor(np.random.rand(*shape))
-    Z = z + torch.tensor(np.random.rand(*shape))
-    box = BoxTensor.from_zZ(z, Z)
+    z = tf.constant(np.random.rand(*shape))
+    Z = z + tf.constant(np.random.rand(*shape))
+    print(z, Z)
+    box = TFBoxTensor.from_zZ(z, Z)
     assert box.z.shape == (3, 1, 5)
     assert box.data is None
 
 
 def test_creation_from_vector():
     shape = (3, 1, 5)
-    z = torch.tensor(np.random.rand(*shape))
-    delta = torch.tensor(np.random.rand(*shape))
-    v = torch.cat((z, z + delta.abs()), dim=-1)
-    box = BoxTensor.from_vector(v)
+    z = tf.constant(np.random.rand(*shape))
+    delta = tf.constant(np.random.rand(*shape))
+    v = tf.concat([z, z + delta], axis=-1)
+    box = TFBoxTensor.from_vector(v)
     assert box.Z.shape == (3, 1, 5)
 
 
@@ -100,25 +101,15 @@ def test_creation_from_vector():
 )
 def test_broadcasting(sample):
     target_shape, input_data_shape, self_shape, expected = sample
-    box = BoxTensor(torch.tensor(np.random.rand(*input_data_shape)))
+    box = TFBoxTensor(tf.constant(np.random.rand(*input_data_shape)))
     assert box.box_shape == self_shape
-
+    print(box)
     if isinstance(expected, tuple):
         box.broadcast(target_shape)
         assert box.box_shape == expected
     else:
         with pytest.raises(expected):
             box.broadcast(target_shape)
-
-
-# def test_reshape1():
-#    target_shape = (-1, 10)
-#    input_data_shape, self_shape = (5, 2, 10), (5, 10)
-#    box = BoxTensor(torch.tensor(np.random.rand(*input_data_shape)))
-#    assert box.box_shape == self_shape
-#    box.box_reshape(target_shape)
-#    assert box.box_shape == (5, 10)
-#
 
 
 @hypothesis.given(
@@ -134,7 +125,7 @@ def test_broadcasting(sample):
 )
 def test_reshape(sample):
     target_shape, input_data_shape, self_shape, expected = sample
-    box = BoxTensor(torch.tensor(np.random.rand(*input_data_shape)))
+    box = TFBoxTensor(tf.constant(np.random.rand(*input_data_shape)))
     assert box.box_shape == self_shape
 
     if expected == RuntimeError:
@@ -143,14 +134,3 @@ def test_reshape(sample):
     else:
         new = box.box_reshape(target_shape)
         assert new.box_shape == expected
-
-
-def test_indexing():
-    shape = (3, 4, 5)
-    z = torch.tensor(np.random.rand(*shape))
-    Z = z + torch.tensor(np.random.rand(*shape))
-    box = BoxTensor.from_zZ(z, Z)
-    box_idx = box[2, 2:, 3]
-    assert box_idx.data is None
-    assert (box_idx.z == box.z[2, 2:, 3]).all()
-    assert (box_idx.Z == box.Z[2, 2:, 3]).all()
