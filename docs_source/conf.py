@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 #
-import time
+
 import sys
 import os
 
 sys.path.insert(0, os.path.abspath("../"))
 
 extensions = [
-    #    "sphinx.ext.autodoc",
     "autoapi.extension",
     "sphinx.ext.todo",
     "sphinx.ext.napoleon",
@@ -26,11 +25,7 @@ copyright = "2021, Information Extraction and Synthesis Lab, UMass"
 exclude_patterns = ["_build", "**/docs", "**/.docs"]
 
 pygments_style = "friendly"
-html_theme = "alabaster"
-def setup(app):
-  app.add_css_file( "custom_t.css" )
 templates_path = ["templates"]  # needed for multiversion
-#autoclass_content = "class"
 
 html_baseurl = "http://iesl.cs.umass.edu/box-embeddings/"
 html_logo = "images/UMass_IESL.png"
@@ -41,7 +36,10 @@ html_theme_options = {
     "github_button": True,
     #"description": "Python implementation for box embeddings and box representations",
 }
-html_css_files = ['custom_t.css']
+
+html_extra_path = ['../docs_source/static']
+html_css_files = ['../custom_t.css']
+add_module_names = False
 
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#confval-autoclass_content
 autoclass_content = "both"
