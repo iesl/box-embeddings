@@ -10,17 +10,6 @@ Pytorch implementation for box embeddings and box representations.
 ![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg) ![Typing/Doc/Style](https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg)
 
 
-## Contributors
-
-1. Dhruvesh Patel [@dhruvdcoder](https://github.com/dhruvdcoder) (Active Maintainer)
-
-2. Shib Sankar Dasgupta [@ssdasgupta](https://github.com/ssdasgupta) (Active Maintainer)
-
-3. Michael Boratko [@mboratko](https://github.com/mboratko)
-
-4. Xiang (Lorraine) Li [@Lorraine333](https://github.com/Lorraine333)
-
-5. Trang Tran [@trangtran72](https://github.com/trangtran72)
 
 ## Installation
 
@@ -95,6 +84,22 @@ url={https://openreview.net/forum?id=J246NSqR_l}
 ```
 
 The code for this library can be found [here](https://github.com/iesl/box-embeddings).
+
+## Contributors
+
+* Dhruvesh Patel [@dhruvdcoder](https://github.com/dhruvdcoder) 
+
+* Shib Sankar Dasgupta [@ssdasgupta](https://github.com/ssdasgupta) 
+
+* Michael Boratko [@mboratko](https://github.com/mboratko)
+
+* Xiang (Lorraine) Li [@Lorraine333](https://github.com/Lorraine333)
+
+* Trang Tran [@trangtran72](https://github.com/trangtran72)
+
+* Purujit Goyal [@purujitgoyal](https://github.com/purujitgoyal)
+
+* Tejas Chheda [@tejas4888](https://github.com/tejas4888)
 
 ## Contributions
 We welcome all contributions from the community to make Box Embeddings a better package.
