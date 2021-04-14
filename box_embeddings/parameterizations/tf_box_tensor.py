@@ -81,7 +81,7 @@ class TFBoxTensor(object):
         assert data is not None
 
         if self.data is not None:
-            if isinstance(data, tf.Tensor):
+            if isinstance(data, (tf.Tensor, tf.Variable)):
                 if data.shape != self.data.shape:
                     raise ValueError(
                         f"Cannot reinitialize with different shape. New {data.shape}, old {self.data.shape}"
@@ -99,7 +99,7 @@ class TFBoxTensor(object):
                     f"Cannot reinitialize with different shape. New Z shape ={data[1].shape}, old ={self._Z.shape}"
                 )
 
-        if isinstance(data, tf.Tensor):
+        if isinstance(data, (tf.Tensor, tf.Variable)):
             if _box_shape_ok(data):
                 self.data = data
             else:
@@ -187,6 +187,35 @@ class TFBoxTensor(object):
                     z.shape, Z.shape
                 )
             )
+
+    @classmethod
+    def W(
+        cls: Type[TFTBoxTensor],
+        z: tf.Tensor,
+        Z: tf.Tensor,
+        *args: Any,
+        **kwargs: Any,
+    ) -> tf.Tensor:
+        """Given (z,Z), it returns one set of valid box weights W, such that
+        Box(W) = (z,Z).
+
+        For the base `BoxTensor` class, we just return z and Z stacked together.
+        If you implement any new parameterization for boxes. You most likely
+        need to override this method.
+
+        Args:
+            z: Lower left coordinate of shape (..., hidden_dims)
+            Z: Top right coordinate of shape (..., hidden_dims)
+            *args: TODO
+            **kwargs: TODO
+
+        Returns:
+            Tensor: Parameters of the box. In base class implementation, this
+                will have shape (..., 2, hidden_dims).
+        """
+        cls.check_if_valid_zZ(z, Z)
+
+        return tf.stack((z, Z), axis=-2)
 
     @property
     def box_shape(self) -> Tuple:
@@ -444,14 +473,13 @@ class TFBoxTensor(object):
         return reshaped_box
 
 
-R = TypeVar("R", bound="TFBoxTensor")
-
-
 class TFBoxFactory(Registrable):
 
     """A factory class which will be subclassed(one for each box type)."""
 
-    box_registry: Dict[str, Tuple[Type[R], str]] = {}  # type:ignore
+    box_registry: Dict[
+        str, Tuple[Type[TFBoxTensor], Optional[str]]
+    ] = {}  # type:ignore
 
     def __init__(self, name: str, kwargs_dict: Dict = None):
         self.name = name  #: Name of the registered BoxTensor class
@@ -464,7 +492,7 @@ class TFBoxFactory(Registrable):
             )
 
         if not box_constructor:
-            self.creator: Type[TFTBoxTensor] = self.box_subclass  # type: ignore
+            self.creator: Type[TFBoxTensor] = self.box_subclass  # type: ignore
         else:
             try:
                 self.creator = getattr(self.box_subclass, box_constructor)
@@ -495,7 +523,7 @@ class TFBoxFactory(Registrable):
 
         """
 
-        def add_box_class(subclass: Type[TFTBoxTensor]) -> Type[TFTBoxTensor]:
+        def add_box_class(subclass: Type[TFBoxTensor]) -> Type[TFBoxTensor]:
             if name in cls.box_registry:
                 if exist_ok:
                     message = (

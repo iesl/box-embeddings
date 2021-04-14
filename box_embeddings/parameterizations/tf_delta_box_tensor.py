@@ -2,8 +2,6 @@
     Implementation of min-delta box parameterization.
 """
 from typing import List, Tuple, Union, Dict, Any, Optional, Type
-
-# from box_embeddings.common.utils import softplus_inverse
 from box_embeddings.parameterizations.tf_box_tensor import (
     TFBoxTensor,
     TFBoxFactory,
@@ -70,10 +68,6 @@ class TFMinDeltaBoxTensor(TFBoxTensor):
                 + tf.math.softplus(self.data[..., 1, :] * self.beta)
                 / self.beta
             )
-
-            # return self.z + torch.nn.functional.softplus(
-            #    self.data[..., 1, :], beta=self.beta, threshold=self.threshold
-            # )
         else:
             return self._Z  # type:ignore
 
@@ -107,7 +101,7 @@ class TFMinDeltaBoxTensor(TFBoxTensor):
         """
         cls.check_if_valid_zZ(z, Z)
 
-        if ((Z - z) < 0).any():
+        if tf.reduce_any((Z - z) < 0):
             warnings.warn(
                 "W() method for TFMinDeltaBoxTensor is numerically unstable."
                 " It can produce high error when input Z-z is < 0."
