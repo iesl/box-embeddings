@@ -50,8 +50,7 @@ pip install -r core_requirements.txt
 | `box_embeddings.parameterizations` | A collection of modules to parameterize boxes|
 
 
-
-## Cite
+## Citing
 
 1. If you use simple hard boxes with surrogate loss then cite the following paper:
 
@@ -92,3 +91,13 @@ url={https://openreview.net/forum?id=J246NSqR_l}
 ```
 
 The code for this library can be found [here](https://github.com/iesl/box-embeddings).
+
+## Contributions
+We welcome all contributions from the community to make Box Embeddings a better package.
+If you're a first time contributor, we recommend you start by reading our
+[CONTRIBUTING.md](https://github.com/iesl/box-embeddings/blob/main/.github/CONTRIBUTING.md) guide.
+
+## Team
+Box Embeddings is an open-source project developed by the research team from the
+[Information Extraction and Synthesis Laboratory](http://www.iesl.cs.umass.edu/) at the
+[College of Information and Computer Sciences (UMass Amherst)](https://www.cics.umass.edu/).
