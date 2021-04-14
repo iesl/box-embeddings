@@ -25,6 +25,7 @@ from box_embeddings.common.tf_utils import (
     _box_shape_ok,
     _shape_error_str,
 )
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
