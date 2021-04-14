@@ -60,7 +60,8 @@ pip install -r core_requirements.txt
 @inproceedings{vilnis2018probabilistic,
   title={Probabilistic Embedding of Knowledge Graphs with Box Lattice Measures},
   author={Vilnis, Luke and Li, Xiang and Murty, Shikhar and McCallum, Andrew},
-  booktitle={Proceedings of the 56th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  booktitle={Proceedings of the 56th Annual Meeting of the Association for
+  Computational Linguistics (Volume 1: Long Papers)},
   pages={263--272},
   year={2018}
 }
@@ -85,7 +86,8 @@ url={https://openreview.net/forum?id=H1xSNiRcF7},
 @inproceedings{
 patel2020representing,
 title={Representing Joint Hierarchies with Box Embeddings},
-author={Dhruvesh Patel and Shib Sankar Dasgupta and Michael Boratko and Xiang Li and Luke Vilnis and Andrew McCallum},
+author={Dhruvesh Patel and Shib Sankar Dasgupta and Michael Boratko and Xiang Li and Luke Vilnis
+and Andrew McCallum},
 booktitle={Automated Knowledge Base Construction},
 year={2020},
 url={https://openreview.net/forum?id=J246NSqR_l}
