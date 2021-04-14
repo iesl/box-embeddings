@@ -6,10 +6,7 @@ A BoxTensor contains single tensor which represents single or multiple boxes.
         Have to use composition instead of inheritance because currently it is not safe to interit from :class:`torch.Tensor` because creating an instance of such a class will always make it a leaf node. This works for :class:`torch.nn.Parameter` but won't work for a general BoxTensor. This most likely will change in the future as pytorch starts offical support for inheriting from a Tensor. Give this point some thought when this happens.
 
 """
-import torch
-from torch import Tensor
 from typing import (
-    List,
     Tuple,
     Union,
     Dict,
@@ -19,9 +16,10 @@ from typing import (
     TypeVar,
     Callable,
 )
-from box_embeddings.common.registrable import Registrable
 import logging
-from copy import deepcopy
+import torch
+from torch import Tensor
+from box_embeddings.common.registrable import Registrable
 
 logger = logging.getLogger(__name__)
 
@@ -91,6 +89,19 @@ class BoxTensor(object):
             )
 
     def reinit(self, data: Union[Tensor, Tuple[Tensor, Tensor]]) -> None:
+        """
+        Constructor.
+
+        Arguments:
+            data: Tensor of shape (..., zZ, num_dims). Here, zZ=2, where
+                the 0th dim is for bottom left corner and 1st dim is for
+                top right corner of the box
+
+        Returns: None
+
+        Raises:
+            ValueError: If new shape is different than old shape
+        """
         assert data is not None
 
         if self.data is not None:
@@ -134,6 +145,11 @@ class BoxTensor(object):
 
     @property
     def args(self) -> Tuple:
+        """Configuration attribute as Tuple
+
+        Returns:
+            Tuple
+        """
         return tuple()
 
     @property
@@ -228,8 +244,19 @@ class BoxTensor(object):
     def zZ_to_embedding(
         cls, z: Tensor, Z: Tensor, *args: Any, **kwargs: Any
     ) -> Tensor:
+        """
+        collapse the last two dimensions
+
+        Arguments:
+            z: Lower left coordinate of shape (..., hidden_dims)
+            Z: Top right coordinate of shape (..., hidden_dims)
+            *args: TODO
+            **kwargs: TODO
+
+        Returns:
+            A Box tensor with the last two dimensions z, Z collapsed
+        """
         W = cls.W(z, Z, *args, **kwargs)
-        # collapse the last two dimensions
 
         return W.reshape(*W.shape[:-2], -1)
 
@@ -432,7 +459,7 @@ class BoxTensor(object):
             assert len(potential_final_shape) == len(target_shape)
 
             for p_d, t_d in zip(potential_final_shape, target_shape):
-                if not ((p_d == 1) or (p_d == t_d)):
+                if not (p_d in (1, t_d)):
                     raise ValueError(
                         f"Cannot make box_shape {self_box_shape} compatible to {target_shape}"
                     )
@@ -532,7 +559,7 @@ class BoxFactory(Registrable):
         self.kwargs_dict = kwargs_dict or {}
         try:
             self.box_subclass, box_constructor = self.box_registry[name]
-        except KeyError as ke:
+        except KeyError as _ke:
             raise KeyError(
                 f"{name} not present in box_registry: {list(self.box_registry.keys())}"
             )
@@ -542,7 +569,7 @@ class BoxFactory(Registrable):
         else:
             try:
                 self.creator = getattr(self.box_subclass, box_constructor)
-            except AttributeError as ae:
+            except AttributeError as _ae:
                 raise ValueError(
                     f"{self.box_subclass.__name__} registered as {name} "
                     f"with constructor {box_constructor} "
@@ -566,6 +593,9 @@ class BoxFactory(Registrable):
 
         Returns:
             ()
+
+        Raises:
+            RuntimeError
 
         """
 

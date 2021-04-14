@@ -1,19 +1,17 @@
 """
     Implementation of sigmoid box parameterization.
 """
-from typing import List, Tuple, Union, Dict, Any, Optional, Type
+from typing import Tuple, Union, Any, Type
+import tensorflow as tf
 from box_embeddings.parameterizations.tf_box_tensor import (
     TFBoxTensor,
     TFBoxFactory,
     TFTBoxTensor,
 )
 from box_embeddings.common.tf_utils import (
-    softplus_inverse,
     inv_sigmoid,
     tf_index_select,
 )
-import tensorflow as tf
-import warnings
 
 
 @TFBoxFactory.register_box_class("tfsigmoid")
@@ -41,8 +39,7 @@ class TFSigmoidBoxTensor(TFBoxTensor):
 
         if self.data is not None:
             return tf.math.sigmoid(self.data[..., 0, :])
-        else:
-            return self._z  # type:ignore
+        return self._z  # type:ignore
 
     @property
     def Z(self) -> tf.Tensor:
@@ -55,8 +52,7 @@ class TFSigmoidBoxTensor(TFBoxTensor):
         if self.data is not None:
             z = self.z
             return z + tf.math.sigmoid(self.data[..., 1, :]) * (1.0 - z)  # type: ignore
-        else:
-            return self._Z  # type:ignore
+        return self._Z  # type:ignore
 
     @classmethod
     def W(  # type:ignore
