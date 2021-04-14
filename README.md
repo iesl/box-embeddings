@@ -1,6 +1,10 @@
 
 Pytorch implementation for box embeddings as well as box representations.
 
+<p align="center">
+  <img src="/images/boxes.png">
+</p>
+
 ![Boxes Picture](/images/boxes.png)
 
 ## Status
