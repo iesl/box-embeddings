@@ -124,6 +124,7 @@ def softplus_inverse(
     t: tf.Tensor, beta: float = 1.0, threshold: float = 20
 ) -> tf.Tensor:
     below_thresh = beta * t < threshold
+
     y = (
         tf.math.log(
             tf.clip_by_value(
@@ -137,6 +138,7 @@ def softplus_inverse(
     res_n = tf.where(below_thresh, y, t)
 
     return res_n
+
 
 
 lse_eps = 1e-38

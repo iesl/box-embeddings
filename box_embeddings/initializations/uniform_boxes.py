@@ -111,7 +111,7 @@ class UniformBoxInitializer(BoxInitializer):
         )
         with torch.no_grad():
             W = self.box_type_factory.box_subclass.W(z, Z, **self.box_type_factory.kwargs_dict)  # type: ignore
-            # print(W.shape,t.shape)
+
             if W.shape == t.shape:
                 # print(t,W)
                 t.copy_(W)
