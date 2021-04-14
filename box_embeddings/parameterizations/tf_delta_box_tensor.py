@@ -1,17 +1,19 @@
 """
     Implementation of min-delta box parameterization.
 """
-from typing import List, Tuple, Union, Dict, Any, Optional, Type
+
+
+from typing import Tuple, Union, Dict, Type, Any, Optional, List
+import warnings
+import tensorflow as tf
+
 from box_embeddings.parameterizations.tf_box_tensor import (
     TFBoxTensor,
     TFBoxFactory,
     TFTBoxTensor,
 )
-import tensorflow as tf
-import warnings
 from box_embeddings.common.tf_utils import (
     tf_index_select,
-    _box_shape_ok,
     softplus_inverse,
 )
 
@@ -68,6 +70,7 @@ class TFMinDeltaBoxTensor(TFBoxTensor):
                 + tf.math.softplus(self.data[..., 1, :] * self.beta)
                 / self.beta
             )
+
         else:
             return self._Z  # type:ignore
 

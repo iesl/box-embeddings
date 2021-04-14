@@ -1,15 +1,15 @@
 """
     Implementation of min-delta box parameterization.
 """
-from typing import List, Tuple, Union, Dict, Any, Optional, Type
+from typing import Tuple, Union, Dict, Type
+import warnings
+import torch
 from box_embeddings.parameterizations.box_tensor import (
     BoxTensor,
     BoxFactory,
     TBoxTensor,
 )
 from box_embeddings.common.utils import softplus_inverse
-import torch
-import warnings
 
 
 @BoxFactory.register_box_class("mindelta")
@@ -62,8 +62,7 @@ class MinDeltaBoxTensor(BoxTensor):
             return self.z + torch.nn.functional.softplus(
                 self.data[..., 1, :], beta=self.beta, threshold=self.threshold
             )
-        else:
-            return self._Z  # type:ignore
+        return self._Z  # type:ignore
 
     @classmethod
     def W(  # type:ignore
@@ -165,7 +164,6 @@ class MinDeltaBoxTensor(BoxTensor):
                 universe box and your inputs ranges, you might want to change this.
                 Higher values of beta will make softplus harder and bring it close to ReLU.
             threshold: parameter for the softplus for delta
-
 
         Returns:
             A BoxTensor
