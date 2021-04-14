@@ -3,12 +3,12 @@ Pytorch implementation for box embeddings as well as box representations.
 
 ![Boxes Picture](/images/boxes.png)
 
-# Status
+## Status
 
 ![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg) ![Typing/Doc/Style](https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg)
 
 
-# Contributors
+## Contributors
 
 1. Dhruvesh Patel [@dhruvdcoder](https://github.com/dhruvdcoder) (Active Maintainer)
 
@@ -20,7 +20,38 @@ Pytorch implementation for box embeddings as well as box representations.
 
 5. Trang Tran [@trangtran72](https://github.com/trangtran72)
 
-# Cite
+## Installation
+
+### Installing via pip
+
+The preferred way to install Box Embeddings is via `pip`. Just run `pip install box-embeddings`
+
+### Installing from source
+
+You can also install Box Embeddings by cloning our git repository
+
+```
+git clone https://github.com/iesl/box-embeddings
+```
+
+Create a Python 3.7 or 3.8 virtual environment, and install Box Embeddings in editable mode by running:
+
+```
+pip install --editable . --user
+pip install -r core_requirements.txt
+```
+## Package Overview
+| Command | Description |
+| --- | --- |
+| `box_embeddings` | An open-source NLP research library, built on PyTorch & TensorFlow |
+| `box_embeddings.common` | Utility modules that are used across the library |
+| `box_embeddings.initializations` | Initialization modules |
+| `box_embeddings.modules` | A collection of modules to operate on boxes|
+| `box_embeddings.parameterizations` | A collection of modules to parameterize boxes|
+
+
+
+## Cite
 
 1. If you use simple hard boxes with surrogate loss then cite the following paper:
 
