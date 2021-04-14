@@ -352,6 +352,15 @@ class TFBoxTensor(object):
             assert self.box_shape == tuple(potential_final_shape)
 
     @classmethod
+    def zZ_to_embedding(
+        cls, z: tf.Tensor, Z: tf.Tensor, *args: Any, **kwargs: Any
+    ) -> tf.Tensor:
+        W = cls.W(z, Z, *args, **kwargs)
+        # collapse the last two dimensions
+
+        return tf.reshape(W, (*W.shape[:-2], -1))
+
+    @classmethod
     def from_zZ(
         cls: Type[TFTBoxTensor],
         z: tf.Tensor,
@@ -483,6 +492,23 @@ class TFBoxTensor(object):
             reshaped_box = self.like_this_from_zZ(new_z, new_Z)
 
         return reshaped_box
+
+    def __eq__(self, other: TFTBoxTensor) -> bool:  # type:ignore
+        return np.allclose(self.z, other.z) and np.allclose(self.Z, other.Z)
+
+    def __getitem__(self, indx: Any) -> "TFBoxTensor":
+        """Creates a TBoxTensor for the min-max coordinates at the given indexes
+
+        Args:
+            indx: Indexes of the required boxes
+
+        Returns:
+            TBoxTensor
+        """
+        z_ = self.z[indx]
+        Z_ = self.Z[indx]
+
+        return self.from_zZ(z_, Z_)
 
 
 class TFBoxFactory(Registrable):

@@ -129,22 +129,21 @@ def softplus_inverse(
 
     """
     below_thresh = beta * t < threshold
-    res_n = t.numpy()
-    # res[below_thresh] = (
-    # torch.log(torch.exp(beta * t[below_thresh]) - 1.0) / beta
-    # )
-    res_n[below_thresh.numpy()] = (
+
+    y = (
         tf.math.log(
             tf.clip_by_value(
-                tf.math.expm1(beta * t[below_thresh]),
+                tf.math.expm1(beta * t),
                 clip_value_min=1e-323,
                 clip_value_max=float('inf'),
             )
         )
         / beta
     )
+    res_n = tf.where(below_thresh, y, t)
 
-    return tf.Variable(res_n)
+    return res_n
+
 
 
 lse_eps = 1e-38
