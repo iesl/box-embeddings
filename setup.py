@@ -46,7 +46,14 @@ setup(
     ),
     package_data={"box_embeddings": ["py.typed"]},
     install_requires=install_requires,
-    keywords=["pytorch", "tensorflow", "AI", "ML", "Machine Learning", "Deep Learning"],
+    keywords=[
+        "pytorch",
+        "tensorflow",
+        "AI",
+        "ML",
+        "Machine Learning",
+        "Deep Learning",
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
