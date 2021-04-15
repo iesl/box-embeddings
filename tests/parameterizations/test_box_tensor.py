@@ -143,3 +143,14 @@ def test_reshape(sample):
     else:
         new = box.box_reshape(target_shape)
         assert new.box_shape == expected
+
+
+def test_indexing():
+    shape = (3, 4, 5)
+    z = torch.tensor(np.random.rand(*shape))
+    Z = z + torch.tensor(np.random.rand(*shape))
+    box = BoxTensor.from_zZ(z, Z)
+    box_idx = box[2, 2:, 3]
+    assert box_idx.data is None
+    assert (box_idx.z == box.z[2, 2:, 3]).all()
+    assert (box_idx.Z == box.Z[2, 2:, 3]).all()

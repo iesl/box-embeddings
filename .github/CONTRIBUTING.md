@@ -19,11 +19,11 @@ pre-commit install
 
 1. Make changes, add awesome code!
 
-2. Build docs locally and inspect the new html pages.
+2. Build docs locally and inspect the new html pages in `docs/` folder.
 
 ```
 cd docs_source
-make html
+python make.py --local --smv_branch_whitelist <your_current_branch_name>
 ```
 
 Open `docs/index.html` and see if the docs are rendered correctly.

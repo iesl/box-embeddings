@@ -1,8 +1,8 @@
-from typing import List, Tuple, Union, Dict, Any, Optional
+from typing import List, Tuple
 import numpy as np
 import torch
-from .initializer import BoxInitializer
 from box_embeddings.parameterizations.box_tensor import BoxFactory, BoxTensor
+from .initializer import BoxInitializer
 
 
 def uniform_boxes(
@@ -17,10 +17,10 @@ def uniform_boxes(
     bounding box defined by (minimum,maximum) in each dimension.
 
     Args:
-        dimensions: TODO
-        num_boxes: TODO
-        minimum: TODO
-        maximum: TODO
+        dimensions: number of dimensions for the box
+        num_boxes: number of boxes to be created
+        minimum: min dimension of the bounding box in each dimension.
+        maximum: maximum dimension of the bounding box in each dimension.
         delta_min: TODO
         delta_max: TODO
 
@@ -32,20 +32,20 @@ def uniform_boxes(
         ValueError: TODO
     """
 
-    if not (delta_min > 0):
+    if delta_min <= 0:
         raise ValueError(f"Delta min should be >0 but is {delta_min}")
 
-    if not (delta_max - delta_min > 0):
+    if (delta_max - delta_min) <= 0:
         raise ValueError(
             f"Expected: delta_max {delta_max}  > delta_min {delta_min} "
         )
 
-    if not (delta_max <= (maximum - minimum)):
+    if delta_max > (maximum - minimum):
         raise ValueError(
             f"Expected: delta_max {delta_max} <= (max-min) {maximum-minimum}"
         )
 
-    if not (maximum > minimum):
+    if maximum <= minimum:
         raise ValueError(f"Expected: maximum {maximum} > minimum {minimum}")
     centers = np.random.uniform(
         minimum + delta_max / 2.0 + 1e-8,
@@ -113,6 +113,7 @@ class UniformBoxInitializer(BoxInitializer):
             W = self.box_type_factory.box_subclass.W(z, Z, **self.box_type_factory.kwargs_dict)  # type: ignore
 
             if W.shape == t.shape:
+                # print(t,W)
                 t.copy_(W)
             else:
                 emb = self.box_type_factory.box_subclass.zZ_to_embedding(  # type:ignore

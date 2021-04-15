@@ -1,7 +1,0 @@
-box_embeddings
-==============
-
-.. toctree::
-   :maxdepth: 4
-
-   box_embeddings
