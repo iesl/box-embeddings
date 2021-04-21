@@ -1,0 +1,927 @@
+:mod:`box_embeddings.modules.tf_embedding`
+==========================================
+
+.. py:module:: box_embeddings.modules.tf_embedding
+
+
+Module Contents
+---------------
+
+.. class:: TFBoxEmbedding(num_embeddings: int, embedding_dim: int, box_factory: box_embeddings.parameterizations.tf_box_tensor.TFBoxFactory = None, box_initializer: box_embeddings.initializations.tf_initializer.TFBoxInitializer = None, **kwargs: Any)
+
+
+   Bases: :py:obj:`tensorflow.keras.layers.Embedding`
+
+   Embedding which returns boxes instead of vectors
+
+   .. method:: all_boxes(self) -> box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor
+      :property:
+
+
+   .. method:: get_bounding_box(self) -> box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor
+
+
+   .. method:: build(self, input_shape)
+
+      Creates the variables of the layer (optional, for subclass implementers).
+
+      This is a method that implementers of subclasses of `Layer` or `Model`
+      can override if they need a state-creation step in-between
+      layer instantiation and layer call.
+
+      This is typically used to create the weights of `Layer` subclasses.
+
+      :param input_shape: Instance of `TensorShape`, or list of instances of
+                          `TensorShape` if the layer expects a list of inputs
+                          (one instance per input).
+
+
+   .. method:: compute_mask(self, inputs, mask=None)
+
+      Computes an output mask tensor.
+
+      :param inputs: Tensor or list of tensors.
+      :param mask: Tensor or list of tensors.
+
+      :returns:
+
+                None or a tensor (or list of tensors,
+                    one per output tensor of the layer).
+
+
+   .. method:: compute_output_shape(self, input_shape)
+
+      Computes the output shape of the layer.
+
+      If the layer has not been built, this method will call `build` on the
+      layer. This assumes that the layer will later be used with inputs that
+      match the input shape provided here.
+
+      :param input_shape: Shape tuple (tuple of integers)
+                          or list of shape tuples (one per output tensor of the layer).
+                          Shape tuples can include None for free dimensions,
+                          instead of an integer.
+
+      :returns: An input shape tuple.
+
+
+   .. method:: call(self, inputs)
+
+      This is where the layer's logic lives.
+
+      Note here that `call()` method in `tf.keras` is little bit different
+      from `keras` API. In `keras` API, you can pass support masking for
+      layers as additional arguments. Whereas `tf.keras` has `compute_mask()`
+      method to support masking.
+
+      :param inputs: Input tensor, or list/tuple of input tensors.
+      :param \*\*kwargs: Additional keyword arguments. Currently unused.
+
+      :returns: A tensor or list/tuple of tensors.
+
+
+   .. method:: get_config(self)
+
+      Returns the config of the layer.
+
+      A layer config is a Python dictionary (serializable)
+      containing the configuration of a layer.
+      The same layer can be reinstantiated later
+      (without its trained weights) from this configuration.
+
+      The config of a layer does not include connectivity
+      information, nor the layer class name. These are handled
+      by `Network` (one layer of abstraction above).
+
+      :returns: Python dictionary.
+
+
+   .. method:: add_weight(self, name=None, shape=None, dtype=None, initializer=None, regularizer=None, trainable=None, constraint=None, use_resource=None, synchronization=tf_variables.VariableSynchronization.AUTO, aggregation=tf_variables.VariableAggregation.NONE, **kwargs)
+
+      Adds a new variable to the layer.
+
+      :param name: Variable name.
+      :param shape: Variable shape. Defaults to scalar if unspecified.
+      :param dtype: The type of the variable. Defaults to `self.dtype`.
+      :param initializer: Initializer instance (callable).
+      :param regularizer: Regularizer instance (callable).
+      :param trainable: Boolean, whether the variable should be part of the layer's
+                        "trainable_variables" (e.g. variables, biases)
+                        or "non_trainable_variables" (e.g. BatchNorm mean and variance).
+                        Note that `trainable` cannot be `True` if `synchronization`
+                        is set to `ON_READ`.
+      :param constraint: Constraint instance (callable).
+      :param use_resource: Whether to use `ResourceVariable`.
+      :param synchronization: Indicates when a distributed a variable will be
+                              aggregated. Accepted values are constants defined in the class
+                              `tf.VariableSynchronization`. By default the synchronization is set to
+                              `AUTO` and the current `DistributionStrategy` chooses
+                              when to synchronize. If `synchronization` is set to `ON_READ`,
+                              `trainable` must not be set to `True`.
+      :param aggregation: Indicates how a distributed variable will be aggregated.
+                          Accepted values are constants defined in the class
+                          `tf.VariableAggregation`.
+      :param \*\*kwargs: Additional keyword arguments. Accepted values are `getter`,
+                         `collections`, `experimental_autocast` and `caching_device`.
+
+      :returns: The variable created.
+
+      :raises ValueError: When giving unsupported dtype and no initializer or when
+          trainable has been set to True with synchronization set as `ON_READ`.
+
+
+   .. method:: from_config(cls, config)
+      :classmethod:
+
+      Creates a layer from its config.
+
+      This method is the reverse of `get_config`,
+      capable of instantiating the same layer from the config
+      dictionary. It does not handle layer connectivity
+      (handled by Network), nor weights (handled by `set_weights`).
+
+      :param config: A Python dictionary, typically the
+                     output of get_config.
+
+      :returns: A layer instance.
+
+
+   .. method:: compute_output_signature(self, input_signature)
+
+      Compute the output tensor signature of the layer based on the inputs.
+
+      Unlike a TensorShape object, a TensorSpec object contains both shape
+      and dtype information for a tensor. This method allows layers to provide
+      output dtype information if it is different from the input dtype.
+      For any layer that doesn't implement this function,
+      the framework will fall back to use `compute_output_shape`, and will
+      assume that the output dtype matches the input dtype.
+
+      :param input_signature: Single TensorSpec or nested structure of TensorSpec
+                              objects, describing a candidate input for the layer.
+
+      :returns:
+
+                Single TensorSpec or nested structure of TensorSpec objects, describing
+                  how the layer would transform the provided input.
+
+      :raises TypeError: If input_signature contains a non-TensorSpec object.
+
+
+   .. method:: dtype(self)
+      :property:
+
+      The dtype of the layer weights.
+
+      This is equivalent to `Layer.dtype_policy.variable_dtype`. Unless
+      mixed precision is used, this is the same as `Layer.compute_dtype`, the
+      dtype of the layer's computations.
+
+
+   .. method:: name(self)
+      :property:
+
+      Name of the layer (string), set in the constructor.
+
+
+   .. method:: supports_masking(self)
+      :property:
+
+      Whether this layer supports computing a mask using `compute_mask`.
+
+
+   .. method:: dynamic(self)
+      :property:
+
+      Whether the layer is dynamic (eager-only); set in the constructor.
+
+
+   .. method:: stateful(self)
+      :property:
+
+
+   .. method:: trainable(self)
+      :property:
+
+
+   .. method:: activity_regularizer(self)
+      :property:
+
+      Optional regularizer function for the output of this layer.
+
+
+   .. method:: input_spec(self)
+      :property:
+
+      `InputSpec` instance(s) describing the input format for this layer.
+
+      When you create a layer subclass, you can set `self.input_spec` to enable
+      the layer to run input compatibility checks when it is called.
+      Consider a `Conv2D` layer: it can only be called on a single input tensor
+      of rank 4. As such, you can set, in `__init__()`:
+
+      ```python
+      self.input_spec = tf.keras.layers.InputSpec(ndim=4)
+      ```
+
+      Now, if you try to call the layer on an input that isn't rank 4
+      (for instance, an input of shape `(2,)`, it will raise a nicely-formatted
+      error:
+
+      ```
+      ValueError: Input 0 of layer conv2d is incompatible with the layer:
+      expected ndim=4, found ndim=1. Full shape received: [2]
+      ```
+
+      Input checks that can be specified via `input_spec` include:
+      - Structure (e.g. a single input, a list of 2 inputs, etc)
+      - Shape
+      - Rank (ndim)
+      - Dtype
+
+      For more information, see `tf.keras.layers.InputSpec`.
+
+      :returns: A `tf.keras.layers.InputSpec` instance, or nested structure thereof.
+
+
+   .. method:: trainable_weights(self)
+      :property:
+
+      List of all trainable weights tracked by this layer.
+
+      Trainable weights are updated via gradient descent during training.
+
+      Note: This will not track the weights of nested `tf.Modules` that are not
+      themselves Keras layers.
+
+      :returns: A list of trainable variables.
+
+
+   .. method:: non_trainable_weights(self)
+      :property:
+
+      List of all non-trainable weights tracked by this layer.
+
+      Non-trainable weights are *not* updated during training. They are expected
+      to be updated manually in `call()`.
+
+      Note: This will not track the weights of nested `tf.Modules` that are not
+      themselves Keras layers.
+
+      :returns: A list of non-trainable variables.
+
+
+   .. method:: weights(self)
+      :property:
+
+      Returns the list of all layer variables/weights.
+
+      Note: This will not track the weights of nested `tf.Modules` that are not
+      themselves Keras layers.
+
+      :returns: A list of variables.
+
+
+   .. method:: updates(self)
+      :property:
+
+
+   .. method:: losses(self)
+      :property:
+
+      List of losses added using the `add_loss()` API.
+
+      Variable regularization tensors are created when this property is accessed,
+      so it is eager safe: accessing `losses` under a `tf.GradientTape` will
+      propagate gradients back to the corresponding variables.
+
+      Examples:
+
+      >>> class MyLayer(tf.keras.layers.Layer):
+      ...   def call(self, inputs):
+      ...     self.add_loss(tf.abs(tf.reduce_mean(inputs)))
+      ...     return inputs
+      >>> l = MyLayer()
+      >>> l(np.ones((10, 1)))
+      >>> l.losses
+      [1.0]
+
+      >>> inputs = tf.keras.Input(shape=(10,))
+      >>> x = tf.keras.layers.Dense(10)(inputs)
+      >>> outputs = tf.keras.layers.Dense(1)(x)
+      >>> model = tf.keras.Model(inputs, outputs)
+      >>> # Activity regularization.
+      >>> len(model.losses)
+      0
+      >>> model.add_loss(tf.abs(tf.reduce_mean(x)))
+      >>> len(model.losses)
+      1
+
+      >>> inputs = tf.keras.Input(shape=(10,))
+      >>> d = tf.keras.layers.Dense(10, kernel_initializer='ones')
+      >>> x = d(inputs)
+      >>> outputs = tf.keras.layers.Dense(1)(x)
+      >>> model = tf.keras.Model(inputs, outputs)
+      >>> # Weight regularization.
+      >>> model.add_loss(lambda: tf.reduce_mean(d.kernel))
+      >>> model.losses
+      [<tf.Tensor: shape=(), dtype=float32, numpy=1.0>]
+
+      :returns: A list of tensors.
+
+
+   .. method:: add_loss(self, losses, **kwargs)
+
+      Add loss tensor(s), potentially dependent on layer inputs.
+
+      Some losses (for instance, activity regularization losses) may be dependent
+      on the inputs passed when calling a layer. Hence, when reusing the same
+      layer on different inputs `a` and `b`, some entries in `layer.losses` may
+      be dependent on `a` and some on `b`. This method automatically keeps track
+      of dependencies.
+
+      This method can be used inside a subclassed layer or model's `call`
+      function, in which case `losses` should be a Tensor or list of Tensors.
+
+      Example:
+
+      ```python
+      class MyLayer(tf.keras.layers.Layer):
+        def call(self, inputs):
+          self.add_loss(tf.abs(tf.reduce_mean(inputs)))
+          return inputs
+      ```
+
+      This method can also be called directly on a Functional Model during
+      construction. In this case, any loss Tensors passed to this Model must
+      be symbolic and be able to be traced back to the model's `Input`s. These
+      losses become part of the model's topology and are tracked in `get_config`.
+
+      Example:
+
+      ```python
+      inputs = tf.keras.Input(shape=(10,))
+      x = tf.keras.layers.Dense(10)(inputs)
+      outputs = tf.keras.layers.Dense(1)(x)
+      model = tf.keras.Model(inputs, outputs)
+      # Activity regularization.
+      model.add_loss(tf.abs(tf.reduce_mean(x)))
+      ```
+
+      If this is not the case for your loss (if, for example, your loss references
+      a `Variable` of one of the model's layers), you can wrap your loss in a
+      zero-argument lambda. These losses are not tracked as part of the model's
+      topology since they can't be serialized.
+
+      Example:
+
+      ```python
+      inputs = tf.keras.Input(shape=(10,))
+      d = tf.keras.layers.Dense(10)
+      x = d(inputs)
+      outputs = tf.keras.layers.Dense(1)(x)
+      model = tf.keras.Model(inputs, outputs)
+      # Weight regularization.
+      model.add_loss(lambda: tf.reduce_mean(d.kernel))
+      ```
+
+      :param losses: Loss tensor, or list/tuple of tensors. Rather than tensors, losses
+                     may also be zero-argument callables which create a loss tensor.
+      :param \*\*kwargs: Additional keyword arguments for backward compatibility.
+                         Accepted values:
+                           inputs - Deprecated, will be automatically inferred.
+
+
+   .. method:: metrics(self)
+      :property:
+
+      List of metrics added using the `add_metric()` API.
+
+      Example:
+
+      >>> input = tf.keras.layers.Input(shape=(3,))
+      >>> d = tf.keras.layers.Dense(2)
+      >>> output = d(input)
+      >>> d.add_metric(tf.reduce_max(output), name='max')
+      >>> d.add_metric(tf.reduce_min(output), name='min')
+      >>> [m.name for m in d.metrics]
+      ['max', 'min']
+
+      :returns: A list of `Metric` objects.
+
+
+   .. method:: add_metric(self, value, name=None, **kwargs)
+
+      Adds metric tensor to the layer.
+
+      This method can be used inside the `call()` method of a subclassed layer
+      or model.
+
+      ```python
+      class MyMetricLayer(tf.keras.layers.Layer):
+        def __init__(self):
+          super(MyMetricLayer, self).__init__(name='my_metric_layer')
+          self.mean = tf.keras.metrics.Mean(name='metric_1')
+
+        def call(self, inputs):
+          self.add_metric(self.mean(x))
+          self.add_metric(tf.reduce_sum(x), name='metric_2')
+          return inputs
+      ```
+
+      This method can also be called directly on a Functional Model during
+      construction. In this case, any tensor passed to this Model must
+      be symbolic and be able to be traced back to the model's `Input`s. These
+      metrics become part of the model's topology and are tracked when you
+      save the model via `save()`.
+
+      ```python
+      inputs = tf.keras.Input(shape=(10,))
+      x = tf.keras.layers.Dense(10)(inputs)
+      outputs = tf.keras.layers.Dense(1)(x)
+      model = tf.keras.Model(inputs, outputs)
+      model.add_metric(math_ops.reduce_sum(x), name='metric_1')
+      ```
+
+      Note: Calling `add_metric()` with the result of a metric object on a
+      Functional Model, as shown in the example below, is not supported. This is
+      because we cannot trace the metric result tensor back to the model's inputs.
+
+      ```python
+      inputs = tf.keras.Input(shape=(10,))
+      x = tf.keras.layers.Dense(10)(inputs)
+      outputs = tf.keras.layers.Dense(1)(x)
+      model = tf.keras.Model(inputs, outputs)
+      model.add_metric(tf.keras.metrics.Mean()(x), name='metric_1')
+      ```
+
+      :param value: Metric tensor.
+      :param name: String metric name.
+      :param \*\*kwargs: Additional keyword arguments for backward compatibility.
+                         Accepted values:
+                         `aggregation` - When the `value` tensor provided is not the result of
+                         calling a `keras.Metric` instance, it will be aggregated by default
+                         using a `keras.Metric.Mean`.
+
+
+   .. method:: add_update(self, updates, inputs=None)
+
+      Add update op(s), potentially dependent on layer inputs.
+
+      Weight updates (for instance, the updates of the moving mean and variance
+      in a BatchNormalization layer) may be dependent on the inputs passed
+      when calling a layer. Hence, when reusing the same layer on
+      different inputs `a` and `b`, some entries in `layer.updates` may be
+      dependent on `a` and some on `b`. This method automatically keeps track
+      of dependencies.
+
+      This call is ignored when eager execution is enabled (in that case, variable
+      updates are run on the fly and thus do not need to be tracked for later
+      execution).
+
+      :param updates: Update op, or list/tuple of update ops, or zero-arg callable
+                      that returns an update op. A zero-arg callable should be passed in
+                      order to disable running the updates by setting `trainable=False`
+                      on this Layer, when executing in Eager mode.
+      :param inputs: Deprecated, will be automatically inferred.
+
+
+   .. method:: set_weights(self, weights)
+
+      Sets the weights of the layer, from Numpy arrays.
+
+      The weights of a layer represent the state of the layer. This function
+      sets the weight values from numpy arrays. The weight values should be
+      passed in the order they are created by the layer. Note that the layer's
+      weights must be instantiated before calling this function by calling
+      the layer.
+
+      For example, a Dense layer returns a list of two values-- per-output
+      weights and the bias value. These can be used to set the weights of another
+      Dense layer:
+
+      >>> a = tf.keras.layers.Dense(1,
+      ...   kernel_initializer=tf.constant_initializer(1.))
+      >>> a_out = a(tf.convert_to_tensor([[1., 2., 3.]]))
+      >>> a.get_weights()
+      [array([[1.],
+             [1.],
+             [1.]], dtype=float32), array([0.], dtype=float32)]
+      >>> b = tf.keras.layers.Dense(1,
+      ...   kernel_initializer=tf.constant_initializer(2.))
+      >>> b_out = b(tf.convert_to_tensor([[10., 20., 30.]]))
+      >>> b.get_weights()
+      [array([[2.],
+             [2.],
+             [2.]], dtype=float32), array([0.], dtype=float32)]
+      >>> b.set_weights(a.get_weights())
+      >>> b.get_weights()
+      [array([[1.],
+             [1.],
+             [1.]], dtype=float32), array([0.], dtype=float32)]
+
+      :param weights: a list of Numpy arrays. The number
+                      of arrays and their shape must match
+                      number of the dimensions of the weights
+                      of the layer (i.e. it should match the
+                      output of `get_weights`).
+
+      :raises ValueError: If the provided weights list does not match the
+          layer's specifications.
+
+
+   .. method:: get_weights(self)
+
+      Returns the current weights of the layer.
+
+      The weights of a layer represent the state of the layer. This function
+      returns both trainable and non-trainable weight values associated with this
+      layer as a list of Numpy arrays, which can in turn be used to load state
+      into similarly parameterized layers.
+
+      For example, a Dense layer returns a list of two values-- per-output
+      weights and the bias value. These can be used to set the weights of another
+      Dense layer:
+
+      >>> a = tf.keras.layers.Dense(1,
+      ...   kernel_initializer=tf.constant_initializer(1.))
+      >>> a_out = a(tf.convert_to_tensor([[1., 2., 3.]]))
+      >>> a.get_weights()
+      [array([[1.],
+             [1.],
+             [1.]], dtype=float32), array([0.], dtype=float32)]
+      >>> b = tf.keras.layers.Dense(1,
+      ...   kernel_initializer=tf.constant_initializer(2.))
+      >>> b_out = b(tf.convert_to_tensor([[10., 20., 30.]]))
+      >>> b.get_weights()
+      [array([[2.],
+             [2.],
+             [2.]], dtype=float32), array([0.], dtype=float32)]
+      >>> b.set_weights(a.get_weights())
+      >>> b.get_weights()
+      [array([[1.],
+             [1.],
+             [1.]], dtype=float32), array([0.], dtype=float32)]
+
+      :returns: Weights values as a list of numpy arrays.
+
+
+   .. method:: get_updates_for(self, inputs)
+
+      Deprecated, do NOT use!
+
+      Retrieves updates relevant to a specific set of inputs.
+
+      :param inputs: Input tensor or list/tuple of input tensors.
+
+      :returns: List of update ops of the layer that depend on `inputs`.
+
+
+   .. method:: get_losses_for(self, inputs)
+
+      Deprecated, do NOT use!
+
+      Retrieves losses relevant to a specific set of inputs.
+
+      :param inputs: Input tensor or list/tuple of input tensors.
+
+      :returns: List of loss tensors of the layer that depend on `inputs`.
+
+
+   .. method:: get_input_mask_at(self, node_index)
+
+      Retrieves the input mask tensor(s) of a layer at a given node.
+
+      :param node_index: Integer, index of the node
+                         from which to retrieve the attribute.
+                         E.g. `node_index=0` will correspond to the
+                         first time the layer was called.
+
+      :returns: A mask tensor
+                (or list of tensors if the layer has multiple inputs).
+
+
+   .. method:: get_output_mask_at(self, node_index)
+
+      Retrieves the output mask tensor(s) of a layer at a given node.
+
+      :param node_index: Integer, index of the node
+                         from which to retrieve the attribute.
+                         E.g. `node_index=0` will correspond to the
+                         first time the layer was called.
+
+      :returns: A mask tensor
+                (or list of tensors if the layer has multiple outputs).
+
+
+   .. method:: input_mask(self)
+      :property:
+
+      Retrieves the input mask tensor(s) of a layer.
+
+      Only applicable if the layer has exactly one inbound node,
+      i.e. if it is connected to one incoming layer.
+
+      :returns: Input mask tensor (potentially None) or list of input
+                mask tensors.
+
+      :raises AttributeError: if the layer is connected to
+      :raises more than one incoming layers.:
+
+
+   .. method:: output_mask(self)
+      :property:
+
+      Retrieves the output mask tensor(s) of a layer.
+
+      Only applicable if the layer has exactly one inbound node,
+      i.e. if it is connected to one incoming layer.
+
+      :returns: Output mask tensor (potentially None) or list of output
+                mask tensors.
+
+      :raises AttributeError: if the layer is connected to
+      :raises more than one incoming layers.:
+
+
+   .. method:: get_input_shape_at(self, node_index)
+
+      Retrieves the input shape(s) of a layer at a given node.
+
+      :param node_index: Integer, index of the node
+                         from which to retrieve the attribute.
+                         E.g. `node_index=0` will correspond to the
+                         first time the layer was called.
+
+      :returns: A shape tuple
+                (or list of shape tuples if the layer has multiple inputs).
+
+      :raises RuntimeError: If called in Eager mode.
+
+
+   .. method:: get_output_shape_at(self, node_index)
+
+      Retrieves the output shape(s) of a layer at a given node.
+
+      :param node_index: Integer, index of the node
+                         from which to retrieve the attribute.
+                         E.g. `node_index=0` will correspond to the
+                         first time the layer was called.
+
+      :returns: A shape tuple
+                (or list of shape tuples if the layer has multiple outputs).
+
+      :raises RuntimeError: If called in Eager mode.
+
+
+   .. method:: get_input_at(self, node_index)
+
+      Retrieves the input tensor(s) of a layer at a given node.
+
+      :param node_index: Integer, index of the node
+                         from which to retrieve the attribute.
+                         E.g. `node_index=0` will correspond to the
+                         first time the layer was called.
+
+      :returns: A tensor (or list of tensors if the layer has multiple inputs).
+
+      :raises RuntimeError: If called in Eager mode.
+
+
+   .. method:: get_output_at(self, node_index)
+
+      Retrieves the output tensor(s) of a layer at a given node.
+
+      :param node_index: Integer, index of the node
+                         from which to retrieve the attribute.
+                         E.g. `node_index=0` will correspond to the
+                         first time the layer was called.
+
+      :returns: A tensor (or list of tensors if the layer has multiple outputs).
+
+      :raises RuntimeError: If called in Eager mode.
+
+
+   .. method:: input(self)
+      :property:
+
+      Retrieves the input tensor(s) of a layer.
+
+      Only applicable if the layer has exactly one input,
+      i.e. if it is connected to one incoming layer.
+
+      :returns: Input tensor or list of input tensors.
+
+      :raises RuntimeError: If called in Eager mode.
+      :raises AttributeError: If no inbound nodes are found.
+
+
+   .. method:: output(self)
+      :property:
+
+      Retrieves the output tensor(s) of a layer.
+
+      Only applicable if the layer has exactly one output,
+      i.e. if it is connected to one incoming layer.
+
+      :returns: Output tensor or list of output tensors.
+
+      :raises AttributeError: if the layer is connected to more than one incoming
+          layers.
+      :raises RuntimeError: if called in Eager mode.
+
+
+   .. method:: input_shape(self)
+      :property:
+
+      Retrieves the input shape(s) of a layer.
+
+      Only applicable if the layer has exactly one input,
+      i.e. if it is connected to one incoming layer, or if all inputs
+      have the same shape.
+
+      :returns: Input shape, as an integer shape tuple
+                (or list of shape tuples, one tuple per input tensor).
+
+      :raises AttributeError: if the layer has no defined input_shape.
+      :raises RuntimeError: if called in Eager mode.
+
+
+   .. method:: count_params(self)
+
+      Count the total number of scalars composing the weights.
+
+      :returns: An integer count.
+
+      :raises ValueError: if the layer isn't yet built
+          (in which case its weights aren't yet defined).
+
+
+   .. method:: output_shape(self)
+      :property:
+
+      Retrieves the output shape(s) of a layer.
+
+      Only applicable if the layer has one output,
+      or if all outputs have the same shape.
+
+      :returns: Output shape, as an integer shape tuple
+                (or list of shape tuples, one tuple per output tensor).
+
+      :raises AttributeError: if the layer has no defined output shape.
+      :raises RuntimeError: if called in Eager mode.
+
+
+   .. method:: inbound_nodes(self)
+      :property:
+
+      Deprecated, do NOT use! Only for compatibility with external Keras.
+
+
+   .. method:: outbound_nodes(self)
+      :property:
+
+      Deprecated, do NOT use! Only for compatibility with external Keras.
+
+
+   .. method:: apply(self, inputs, *args, **kwargs)
+
+      Deprecated, do NOT use!
+
+      This is an alias of `self.__call__`.
+
+      :param inputs: Input tensor(s).
+      :param \*args: additional positional arguments to be passed to `self.call`.
+      :param \*\*kwargs: additional keyword arguments to be passed to `self.call`.
+
+      :returns: Output tensor(s).
+
+
+   .. method:: add_variable(self, *args, **kwargs)
+
+      Deprecated, do NOT use! Alias for `add_weight`.
+
+
+   .. method:: variables(self)
+      :property:
+
+      Returns the list of all layer variables/weights.
+
+      Alias of `self.weights`.
+
+      Note: This will not track the weights of nested `tf.Modules` that are not
+      themselves Keras layers.
+
+      :returns: A list of variables.
+
+
+   .. method:: trainable_variables(self)
+      :property:
+
+      Sequence of trainable variables owned by this module and its submodules.
+
+      Note: this method uses reflection to find variables on the current instance
+      and submodules. For performance reasons you may wish to cache the result
+      of calling this method if you don't expect the return value to change.
+
+      :returns: A sequence of variables for the current module (sorted by attribute
+                name) followed by variables from all submodules recursively (breadth
+                first).
+
+
+   .. method:: non_trainable_variables(self)
+      :property:
+
+
+   .. method:: dtype_policy(self)
+      :property:
+
+      The dtype policy associated with this layer.
+
+      This is an instance of a `tf.keras.mixed_precision.Policy`.
+
+
+   .. method:: compute_dtype(self)
+      :property:
+
+      The dtype of the layer's computations.
+
+      This is equivalent to `Layer.dtype_policy.compute_dtype`. Unless
+      mixed precision is used, this is the same as `Layer.dtype`, the dtype of
+      the weights.
+
+      Layers automatically cast their inputs to the compute dtype, which causes
+      computations and the output to be in the compute dtype as well. This is done
+      by the base Layer class in `Layer.__call__`, so you do not have to insert
+      these casts if implementing your own layer.
+
+      Layers often perform certain internal computations in higher precision when
+      `compute_dtype` is float16 or bfloat16 for numeric stability. The output
+      will still typically be float16 or bfloat16 in such cases.
+
+      :returns: The layer's compute dtype.
+
+
+   .. method:: variable_dtype(self)
+      :property:
+
+      Alias of `Layer.dtype`, the dtype of the weights.
+
+
+   .. method:: name_scope(self)
+      :property:
+
+      Returns a `tf.name_scope` instance for this class.
+
+
+   .. method:: submodules(self)
+      :property:
+
+      Sequence of all sub-modules.
+
+      Submodules are modules which are properties of this module, or found as
+      properties of modules which are properties of this module (and so on).
+
+      >>> a = tf.Module()
+      >>> b = tf.Module()
+      >>> c = tf.Module()
+      >>> a.b = b
+      >>> b.c = c
+      >>> list(a.submodules) == [b, c]
+      True
+      >>> list(b.submodules) == [c]
+      True
+      >>> list(c.submodules) == []
+      True
+
+      :returns: A sequence of all submodules.
+
+
+   .. method:: with_name_scope(cls, method)
+      :classmethod:
+
+      Decorator to automatically enter the module name scope.
+
+      >>> class MyModule(tf.Module):
+      ...   @tf.Module.with_name_scope
+      ...   def __call__(self, x):
+      ...     if not hasattr(self, 'w'):
+      ...       self.w = tf.Variable(tf.random.normal([x.shape[1], 3]))
+      ...     return tf.matmul(x, self.w)
+
+      Using the above module would produce `tf.Variable`s and `tf.Tensor`s whose
+      names included the module name:
+
+      >>> mod = MyModule()
+      >>> mod(tf.ones([1, 2]))
+      <tf.Tensor: shape=(1, 3), dtype=float32, numpy=..., dtype=float32)>
+      >>> mod.w
+      <tf.Variable 'my_module/Variable:0' shape=(2, 3) dtype=float32,
+      numpy=..., dtype=float32)>
+
+      :param method: The method to wrap.
+
+      :returns: The original method wrapped such that it enters the module's name scope.
+
+
+

@@ -1,0 +1,229 @@
+:mod:`box_embeddings.parameterizations.tf_tanh_box_tensor`
+==========================================================
+
+.. py:module:: box_embeddings.parameterizations.tf_tanh_box_tensor
+
+.. autoapi-nested-parse::
+
+   Implementation of Tanh box parameterization.
+
+
+
+Module Contents
+---------------
+
+.. class:: TFTanhBoxTensor(data: Union[tensorflow.Tensor, Tuple[tensorflow.Tensor, tensorflow.Tensor]])
+
+
+   Bases: :py:obj:`box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor`
+
+   Tanh Activated Box Tensor
+
+   .. attribute:: w2z_ratio
+      :annotation: :int = 2
+
+      
+
+   .. method:: z(self) -> tensorflow.Tensor
+      :property:
+
+      Lower left coordinate as Tensor
+
+      :returns: lower left corner
+      :rtype: Tensor
+
+
+   .. method:: Z(self) -> tensorflow.Tensor
+      :property:
+
+      Top right coordinate as Tensor
+
+      :returns: top right corner
+      :rtype: Tensor
+
+
+   .. method:: W(cls: Type[box_embeddings.parameterizations.tf_box_tensor.TFTBoxTensor], z: tensorflow.Tensor, Z: tensorflow.Tensor, *args: Any, **kwargs: Any) -> tensorflow.Tensor
+      :classmethod:
+
+      Given (z,Z), it returns one set of valid box weights W, such that
+      Box(W) = (z,Z).
+
+      :param z: Lower left coordinate of shape (..., hidden_dims)
+      :param Z: Top right coordinate of shape (..., hidden_dims)
+      :param \*args: extra arguments for child class
+      :param \*\*kwargs: extra arguments for child class
+
+      :returns:
+
+                Parameters of the box. In base class implementation, this
+                    will have shape (..., 2, hidden_dims).
+      :rtype: Tensor
+
+
+   .. method:: from_vector(cls: Type[box_embeddings.parameterizations.tf_box_tensor.TFTBoxTensor], vector: tensorflow.Tensor, *args: Any, **kwargs: Any) -> box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor
+      :classmethod:
+
+      Creates a box for a vector. In this base implementation the vector is split
+      into two pieces and these are used as box weights.
+
+      :param vector: tensor
+      :param \*args: extra arguments for child class
+      :param \*\*kwargs: extra arguments for child class
+
+      :returns: A BoxTensor
+
+      :raises ValueError: if last dimension is not even
+
+
+   .. method:: reinit(self, data: Union[tensorflow.Tensor, Tuple[tensorflow.Tensor, tensorflow.Tensor]]) -> None
+
+      Constructor
+
+      :param data: Tensor of shape (..., zZ, num_dims). Here, zZ=2, where
+                   the 0th dim is for bottom left corner and 1st dim is for
+                   top right corner of the box
+
+      Returns: None
+
+      :raises ValueError: If new shape is different than old shape
+
+
+   .. method:: kwargs(self) -> Dict
+      :property:
+
+      Configuration attribute values
+
+      :returns: Dict
+
+
+   .. method:: args(self) -> Tuple
+      :property:
+
+
+   .. method:: centre(self) -> tensorflow.Tensor
+      :property:
+
+      Centre coordinate as Tensor
+
+      :returns: Center
+      :rtype: Tensor
+
+
+   .. method:: check_if_valid_zZ(cls: Type[TFTBoxTensor], z: tensorflow.Tensor, Z: tensorflow.Tensor) -> None
+      :classmethod:
+
+      Check of (z,Z) form a valid box.
+
+      If your child class parameterization bounds the boxes to some universe
+      box then this is the right place to check that.
+
+      :param z: Lower left coordinate of shape (..., hidden_dims)
+      :param Z: Top right coordinate of shape (..., hidden_dims)
+
+      :raises ValueError: If `z` and `Z` do not have the same shape
+      :raises ValueError: If `Z` < `z`
+
+
+   .. method:: box_shape(self) -> Tuple
+      :property:
+
+      Shape of z, Z and center.
+
+      :returns: Shape of z, Z and center.
+
+      .. note:: This is *not* the shape of the `data` attribute.
+
+
+   .. method:: broadcast(self, target_shape: Tuple) -> None
+
+      Broadcasts the internal data member in-place such that z and Z
+      return tensors that can be automatically broadcasted to perform
+      arithmetic operations with shape `target_shape`.
+
+      Ex:
+          target_shape = (4,5,10)
+
+          1. self.box_shape = (10,) => (1,1,10)
+          2. self.box_shape = (3,) => ValueError
+          3. self.box_shape = (4,10) => (4,1,10)
+          4. self.box_shape = (4,2,10) =>  ValueError
+          5. self.box_shape = (5,10) => (1,5,10)
+
+      .. note::
+
+         This operation will not result in self.z, self.Z and self.center returning
+         tensor of shape `target_shape` but it will result in return a tensor
+         which is arithmetic compatible with `target_shape`.
+
+      :param target_shape: Shape of the broadcast target. Usually will be the shape of
+                           the tensor you wish to use z, Z with. For instance, if you wish to
+                           add self box's center [shape=(batch, hidden_dim)] with other
+                           box whose center's shape is (batch, extra_dim, hidden_dim), then
+                           this function will reshape the data such that the resulting center
+                           has shape (batch, 1, hidden_dim).
+
+      :raises ValueError: If bad target
+
+      ..todo::
+          Add an extra argument `repeat` which tell the
+          function to repeat values till target is satisfied.
+          This is needed for gumbel_intersection, where the broadcasted
+          tensors need to be stacked.
+
+
+   .. method:: zZ_to_embedding(cls, z: tensorflow.Tensor, Z: tensorflow.Tensor, *args: Any, **kwargs: Any) -> tensorflow.Tensor
+      :classmethod:
+
+
+   .. method:: from_zZ(cls: Type[TFTBoxTensor], z: tensorflow.Tensor, Z: tensorflow.Tensor, *args: Any, **kwargs: Any) -> TFTBoxTensor
+      :classmethod:
+
+      Creates a box for the given min-max coordinates (z,Z).
+
+      In the this base implementation we do this by
+      stacking z and Z along -2 dim to form W.
+
+      :param z: lower left
+      :param Z: top right
+      :param \*args: extra arguments for child class
+      :param \*\*kwargs: extra arguments for child class
+
+      :returns: A BoxTensor
+
+
+   .. method:: like_this_from_zZ(self, z: tensorflow.Tensor, Z: tensorflow.Tensor) -> TFBoxTensor
+
+      Creates a box for the given min-max coordinates (z,Z).
+      This is similar to the class method :method:`from_zZ`, but
+      uses the attributes on self and not external args, kwargs.
+
+      For the base class, since we do not have extra attributes,
+      we simply call from_zZ.
+
+
+      :param z: lower left
+      :param Z: top right
+
+      :returns: A BoxTensor
+
+
+   .. method:: box_reshape(self, target_shape: Tuple) -> TFBoxTensor
+
+      Reshape the z,Z and center.
+
+      Ex:
+          1. self.box_shape = (5,10), target_shape = (-1,10), creates box_shape (5,10)
+          2. self.box_shape = (5,4,10), target_shape = (-1,10), creates box_shape (20,10)
+          4. self.box_shape = (20,10), target_shape = (10,2,10), creates box_shape (10,2,10)
+          3. self.box_shape = (5,), target_shape = (-1,10),  raises RuntimeError
+          5. self.box_shape = (5,10), target_shape = (2,10),  raises RuntimeError
+
+      :param target_shape: TODO
+
+      :returns: TBoxTensor
+
+      :raises RuntimeError: If space dimensions, ie. the last dimensions do not match.
+      :raises RuntimeError: If cannot reshape the extra dimensions and torch.reshape raises.
+
+
+
