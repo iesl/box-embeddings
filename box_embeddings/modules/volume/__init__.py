@@ -13,20 +13,11 @@ if torch_is_available():
     )
 
 if tensorflow_is_available():
-    from .tf_volume import (
-        TFVolume,
-        tf_hard_volume,
-        tf_log_hard_volume,
-        TFHardVolume,
-    )
-    from .tf_soft_volume import (
-        tf_soft_volume,
-        tf_log_soft_volume,
-        TFSoftVolume,
-    )
+    from .tf_volume import TFVolume
+    from .tf_hard_volume import tf_hard_volume, TFHardVolume
+    from .tf_soft_volume import tf_soft_volume, TFSoftVolume
     from .tf_bessel_volume import (
         tf_bessel_volume_approx,
-        tf_log_bessel_volume_approx,
         TFBesselApproxVolume,
     )
 
