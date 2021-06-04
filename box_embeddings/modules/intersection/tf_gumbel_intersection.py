@@ -1,6 +1,8 @@
 from typing import List, Tuple, Union, Dict, Any, Optional
 import tensorflow as tf
-from box_embeddings.modules.intersection import TFIntersection
+from box_embeddings.modules.intersection._tf_intersection import (
+    _TFIntersection,
+)
 from box_embeddings.parameterizations import TFTBoxTensor
 from box_embeddings.common.tf_utils import logsumexp2
 from box_embeddings import box_debug_level
@@ -101,8 +103,8 @@ def tf_gumbel_intersection(
     return left.from_zZ(z, Z)
 
 
-@TFIntersection.register("gumbel")
-class TFGumbelIntersection(TFIntersection):
+@_TFIntersection.register("gumbel")
+class TFGumbelIntersection(_TFIntersection):
     """Gumbel intersection operation as a Layer/Module.
 
     Performs the intersection operation as described in `Improving Local Identifiability in Probabilistic Box Embeddings <https://arxiv.org/abs/2010.04831>`_ .
