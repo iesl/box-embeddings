@@ -43,7 +43,7 @@ class TFIntersection(_TFIntersection):
         self.intersection_temperature = intersection_temperature
         self.approximation_mode = approximation_mode
 
-    def _call__(self, left: TFBoxTensor, right: TFBoxTensor) -> TFBoxTensor:
+    def __call__(self, left: TFBoxTensor, right: TFBoxTensor) -> TFBoxTensor:
         """Gives intersection of self and other.
 
         Args:
