@@ -11,6 +11,8 @@ local vol_temp = std.parseJson(std.extVar('vol_temp'));
 local box_tensor = 'mindelta_from_vector';
 
 {
+  [if use_wandb then 'type']: 'train_test_log_to_wandb',
+  evaluate_on_test: true,
   "dataset_reader": {
     "type": "snli",
     "tokenizer": {
@@ -93,6 +95,12 @@ local box_tensor = 'mindelta_from_vector';
       "type": "huggingface_adamw",
       "lr": 2e-6,
       "weight_decay": 0.1,
-    }
+    },
+    callbacks: [
+      'track_epoch_callback',
+      {
+        type: 'tensorboard-custom',
+      },
+    ] + (if use_wandb then ['log_metrics_to_wandb'] else [])
   }
 }
