@@ -1,7 +1,15 @@
 local transformer_model = "roberta-base";
 local transformer_dim = 768;
+local ff_hidden_1 = std.parseJson(std.extVar('ff_hidden_1'));
+local ff_hidden_2 = std.parseJson(std.extVar('ff_hidden_2'));
+local ff_dropout = std.parseJson(std.extVar('ff_dropout'));
+local dropout = std.parseJson(std.extVar('dropout'));
+local vol_temp = std.parseJson(std.extVar('vol_temp'));
+local box_tensor = std.parseJson(std.extVar('box_tensor'));
 
 {
+  [if use_wandb then 'type']: 'train_test_log_to_wandb',
+  "evaluate_on_test": true,
   "dataset_reader": {
     "type": "snli",
     "tokenizer": {
@@ -39,40 +47,42 @@ local transformer_dim = 768;
     },
     "box_factory": {
       "type": 'box_factory',
-      "name": 'mindelta_from_vector',
+      "name": box_tensor,
     },
     "intersection": {
       "type": 'hard',
     },
     "volume": {
       "type": 'soft',
-      "volume_temperature": 20,
+      "volume_temperature": vol_temp,
     },
     "premise_feedforward": {
       "input_dim": transformer_dim,
       "num_layers": 2,
-      "hidden_dims": [500, 200],
+      "hidden_dims": [ff_hidden_1, ff_hidden_2],
       "activations": "tanh",
-      "dropout": 0.2,
+      "dropout": ff_dropout,
     },
     "hypothesis_feedforward": {
       "input_dim": transformer_dim,
       "num_layers": 2,
-      "hidden_dims": [500, 200],
+      "hidden_dims": [ff_hidden_1, ff_hidden_2],
       "activations": "tanh",
-      "dropout": 0.2,
+      "dropout": ff_dropoout,
     },
-    "dropout": 0.1,
+    "dropout": dropout,
     "namespace": "tags"
   },
   "data_loader": {
     "batch_sampler": {
       "type": "bucket",
-      "batch_size" : 16
+      "batch_size" : 32
     }
   },
   "trainer": {
-    "num_epochs": 10,
+    "num_epochs": 30,
+    "cuda_device": 0,
+    "patience": 20,
     "validation_metric": "+accuracy",
     "learning_rate_scheduler": {
       "type": "slanted_triangular",
