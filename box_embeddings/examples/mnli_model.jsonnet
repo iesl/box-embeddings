@@ -1,3 +1,6 @@
+local test = std.extVar('TEST');
+local cuda_device = std.extVar('CUDA_DEVICE');
+local use_wandb = (if test == '1' then false else true);
 local transformer_model = "roberta-base";
 local transformer_dim = 768;
 local ff_hidden_1 = std.parseJson(std.extVar('ff_hidden_1'));
@@ -81,7 +84,7 @@ local box_tensor = std.parseJson(std.extVar('box_tensor'));
   },
   "trainer": {
     "num_epochs": 30,
-    "cuda_device": 0,
+    "cuda_device": std.parseInt(cuda_device),
     "patience": 20,
     "validation_metric": "+accuracy",
     "learning_rate_scheduler": {
