@@ -145,7 +145,6 @@ def softplus_inverse(
     return res_n
 
 
-
 lse_eps = 1e-38
 log_lse_eps = math.log(lse_eps)
 

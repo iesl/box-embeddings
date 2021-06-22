@@ -87,9 +87,9 @@ The code for this library can be found [here](https://github.com/iesl/box-embedd
 
 ## Contributors
 
-* Dhruvesh Patel [@dhruvdcoder](https://github.com/dhruvdcoder) 
+* Dhruvesh Patel [@dhruvdcoder](https://github.com/dhruvdcoder)
 
-* Shib Sankar Dasgupta [@ssdasgupta](https://github.com/ssdasgupta) 
+* Shib Sankar Dasgupta [@ssdasgupta](https://github.com/ssdasgupta)
 
 * Michael Boratko [@mboratko](https://github.com/mboratko)
 
