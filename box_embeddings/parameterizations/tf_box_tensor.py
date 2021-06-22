@@ -19,6 +19,7 @@ from typing import (
     Callable,
 )
 import tensorflow as tf
+import numpy as np
 from box_embeddings.common.registrable import Registrable
 from box_embeddings.common.tf_utils import (
     tf_index_select,
