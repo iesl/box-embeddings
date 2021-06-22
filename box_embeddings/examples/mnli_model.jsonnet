@@ -8,7 +8,7 @@ local ff_hidden_2 = std.parseJson(std.extVar('ff_hidden_2'));
 local ff_dropout = std.parseJson(std.extVar('ff_dropout'));
 local dropout = std.parseJson(std.extVar('dropout'));
 local vol_temp = std.parseJson(std.extVar('vol_temp'));
-local box_tensor = std.parseJson(std.extVar('box_tensor'));
+local box_tensor = 'mindelta_from_vector';
 
 {
   [if use_wandb then 'type']: 'train_test_log_to_wandb',
@@ -71,7 +71,7 @@ local box_tensor = std.parseJson(std.extVar('box_tensor'));
       "num_layers": 2,
       "hidden_dims": [ff_hidden_1, ff_hidden_2],
       "activations": "tanh",
-      "dropout": ff_dropoout,
+      "dropout": ff_dropout,
     },
     "dropout": dropout,
     "namespace": "tags"
