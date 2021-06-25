@@ -82,6 +82,10 @@ class MNLIModel(Model):
             hypothesis_embedded_text, mask=hypothesis_mask
         )
 
+        activations = {
+            'premise_embedded_text': premise_embedded_text,
+            'hypothesis_embedded_text': hypothesis_embedded_text,
+        }
         if self._dropout:
             premise_embedded_text = self._dropout(premise_embedded_text)
             hypothesis_embedded_text = self._dropout(hypothesis_embedded_text)
@@ -91,6 +95,8 @@ class MNLIModel(Model):
             hypothesis_embedded_text
         )
 
+        activations['premise_embeddings'] = premise_embeddings
+        activations['hypothesis_embeddings'] = hypothesis_embeddings
         premise_box = self._box_factory(premise_embeddings)
         hypothesis_box = self._box_factory(hypothesis_embeddings)
 
@@ -107,6 +113,8 @@ class MNLIModel(Model):
             output_dict["loss"] = loss
             y_pred = 1 - torch.round(torch.exp(y_prob.detach()))
             self._accuracy(y_pred, label)
+
+        output_dict.update(activations)
         return output_dict
 
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:

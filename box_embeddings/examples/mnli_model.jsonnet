@@ -63,15 +63,15 @@ local box_tensor = 'mindelta_from_vector';
       "input_dim": transformer_dim,
       "num_layers": 2,
       "hidden_dims": [ff_hidden_1, ff_hidden_2],
-      "activations": "tanh",
-      "dropout": ff_dropout,
+      "activations": ["tanh", "linear"],
+      "dropout": [ff_dropout, 0],
     },
     "hypothesis_feedforward": {
       "input_dim": transformer_dim,
       "num_layers": 2,
       "hidden_dims": [ff_hidden_1, ff_hidden_2],
-      "activations": "tanh",
-      "dropout": ff_dropout,
+      "activations": ["tanh", "linear"],
+      "dropout": [ff_dropout, 0],
     },
     "dropout": dropout,
     "namespace": "tags"
@@ -100,6 +100,10 @@ local box_tensor = 'mindelta_from_vector';
       'track_epoch_callback',
       {
         type: 'tensorboard-custom',
+        tensorboard_writer: {
+          histogram_interval: 2000
+        },
+        model_outputs_to_log: ['premise_embedded_text', 'hypothesis_embedded_text', 'premise_embeddings', 'hypothesis_embeddings'],
       },
     ] + (if use_wandb then ['log_metrics_to_wandb'] else [])
   }

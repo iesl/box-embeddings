@@ -1,15 +1,15 @@
 from typing import List, Tuple, Union, Dict, Any, Optional
 import torch
 from allennlp.common.lazy import Lazy
-from allennlp.data import TensorDict
-from allennlp.training import (
+from allennlp.training.trainer import (
+    TensorBoardCallback,
     TrainerCallback,
     GradientDescentTrainer,
+    TensorDict,
+    TensorBoardWriter,
 )
 import warnings
 import logging
-
-from allennlp.training.callbacks import TensorBoardCallback
 
 logger = logging.getLogger(__name__)
 
@@ -19,10 +19,12 @@ class CustomTensorBoardCallback(TensorBoardCallback):
     def __init__(
         self,
         serialization_dir: str,
+        tensorboard_writer: Lazy[TensorBoardWriter] = Lazy(TensorBoardWriter),
         model_outputs_to_log: List[str] = None,
     ) -> None:
         super().__init__(
             serialization_dir=serialization_dir,
+            tensorboard_writer=tensorboard_writer,
         )
         self._model_outputs_to_log = model_outputs_to_log or []
         self._warned_about_missing_keys = False
@@ -67,12 +69,12 @@ class CustomTensorBoardCallback(TensorBoardCallback):
         )
         assert len(batch_outputs) == 1, "Gradient accumulation not supported"
         self._warn_about_missing_keys(batch_outputs)
+        if self._tensorboard.should_log_histograms_this_batch():
+            for key in self._model_outputs_to_log:
+                value = batch_outputs[0].get(key, None)
 
-        for key in self._model_outputs_to_log:
-            value = batch_outputs[0].get(key, None)
-
-            if value is not None:
-                if is_training:
-                    self._tensorboard.add_train_histogram(  # type: ignore
-                        "model_outputs/" + key, value
-                    )
+                if value is not None:
+                    if is_training:
+                        self._tensorboard.add_train_histogram(  # type: ignore
+                            "model_outputs/" + key, value
+                        )
