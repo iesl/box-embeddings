@@ -68,9 +68,11 @@ class CustomTensorBoardCallback(TensorBoardCallback):
             **kwargs,
         )
         assert len(batch_outputs) == 1, "Gradient accumulation not supported"
+
         self._warn_about_missing_keys(batch_outputs)
         if self._tensorboard.should_log_histograms_this_batch():
             for key in self._model_outputs_to_log:
+                logger.info(key)
                 value = batch_outputs[0].get(key, None)
 
                 if value is not None:

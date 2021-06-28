@@ -10,6 +10,7 @@ from allennlp.nn.util import get_text_field_mask
 from allennlp.training.metrics import BooleanAccuracy
 
 from box_embeddings.common.utils import log1mexp
+from box_embeddings.modules.regularization import BoxRegularizer
 from box_embeddings.modules.volume._volume import _Volume
 from box_embeddings.modules.intersection._intersection import _Intersection
 
@@ -28,7 +29,8 @@ class MNLIModel(Model):
         volume: _Volume,
         premise_feedforward: FeedForward,
         hypothesis_feedforward: FeedForward,
-        dropout: float,
+        dropout: Optional[float] = None,
+        box_regularizer: Optional[BoxRegularizer] = None,
         num_labels: int = None,
         label_namespace: str = "labels",
         namespace: str = "tokens",
@@ -48,6 +50,10 @@ class MNLIModel(Model):
             self._dropout = torch.nn.Dropout(dropout)
         else:
             self._dropout = None
+        if box_regularizer:
+            self._box_regularizer = box_regularizer
+        else:
+            self._box_regularizer = None
         self._label_namespace = label_namespace
         self._namespace = namespace
 
@@ -109,6 +115,8 @@ class MNLIModel(Model):
             loss = self._loss(
                 torch.stack((y_prob, log1mexp(y_prob)), dim=-1),
                 label.long().view(-1),
+            ) + self._box_regularizer(
+                self._box_intersection(premise_box, hypothesis_box)
             )
             output_dict["loss"] = loss
             y_pred = 1 - torch.round(torch.exp(y_prob.detach()))
