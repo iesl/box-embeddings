@@ -8,6 +8,7 @@ local ff_hidden_2 = std.parseJson(std.extVar('ff_hidden_2'));
 local ff_dropout = std.parseJson(std.extVar('ff_dropout'));
 local dropout = std.parseJson(std.extVar('dropout'));
 local vol_temp = std.parseJson(std.extVar('vol_temp'));
+local box_reg_wt = std.parseJson(std.extVar('box_reg_wt'));
 local box_tensor = 'mindelta_from_vector';
 
 {
@@ -74,6 +75,11 @@ local box_tensor = 'mindelta_from_vector';
       "dropout": [ff_dropout, 0],
     },
     "dropout": dropout,
+    "box_regularizer" : {
+      "type": "l2_side",
+      "weight": box_reg_wt,
+      "log_scale": true,
+    }
     "namespace": "tags"
   },
   "data_loader": {
