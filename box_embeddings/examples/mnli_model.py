@@ -1,10 +1,15 @@
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Union
 
 import torch
 from allennlp.data import TextFieldTensors, TokenIndexer
 from allennlp.data.vocabulary import Vocabulary
 from allennlp.models import Model
-from allennlp.modules import TextFieldEmbedder, FeedForward, Seq2VecEncoder
+from allennlp.modules import (
+    TextFieldEmbedder,
+    FeedForward,
+    Seq2VecEncoder,
+    Seq2SeqEncoder,
+)
 from allennlp.nn import InitializerApplicator, RegularizerApplicator
 from allennlp.nn.util import get_text_field_mask
 from allennlp.training.metrics import BooleanAccuracy
@@ -13,8 +18,12 @@ from box_embeddings.common.utils import log1mexp
 from box_embeddings.modules.regularization import BoxRegularizer
 from box_embeddings.modules.volume._volume import _Volume
 from box_embeddings.modules.intersection._intersection import _Intersection
-
 from box_embeddings.parameterizations.box_tensor import BoxFactory
+import logging
+
+logging.getLogger('allennlp.modules.token_embedders.embedding').setLevel(
+    logging.INFO
+)
 
 
 @Model.register("mnli")
@@ -23,7 +32,7 @@ class MNLIModel(Model):
         self,
         vocab: Vocabulary,
         text_field_embedder: TextFieldEmbedder,
-        seq2vec_encoder: Seq2VecEncoder,
+        encoder: Union[Seq2VecEncoder, Seq2SeqEncoder],
         box_factory: BoxFactory,
         intersection: _Intersection,
         volume: _Volume,
@@ -40,7 +49,7 @@ class MNLIModel(Model):
     ) -> None:
         super().__init__(vocab, regularizer=regularizer)  # type:ignore
         self._text_field_embedder = text_field_embedder
-        self._seq2vec_encoder = seq2vec_encoder
+        self._encoder = encoder
         self._box_factory = box_factory
         self._box_intersection = intersection
         self._box_volume = volume
@@ -81,10 +90,10 @@ class MNLIModel(Model):
         premise_mask = get_text_field_mask(premise)
         hypothesis_mask = get_text_field_mask(hypothesis)
 
-        premise_embedded_text = self._seq2vec_encoder(
+        premise_embedded_text = self._encoder(
             premise_embedded_text, mask=premise_mask
         )
-        hypothesis_embedded_text = self._seq2vec_encoder(
+        hypothesis_embedded_text = self._encoder(
             hypothesis_embedded_text, mask=hypothesis_mask
         )
 
