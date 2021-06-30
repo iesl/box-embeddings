@@ -1,5 +1,6 @@
 import tensorflow as tf
-from box_embeddings.modules.volume.tf_volume import TFHardVolume
+from box_embeddings.modules.volume.tf_volume import TFVolume
+from box_embeddings.modules.volume.tf_hard_volume import TFHardVolume
 from box_embeddings.parameterizations.tf_box_tensor import TFBoxTensor
 import numpy as np
 
