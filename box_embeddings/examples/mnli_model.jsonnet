@@ -6,10 +6,12 @@ local transformer_dim = 768;
 local ff_hidden_1 = std.parseJson(std.extVar('ff_hidden_1'));
 local ff_hidden_2 = std.parseJson(std.extVar('ff_hidden_2'));
 local ff_dropout = std.parseJson(std.extVar('ff_dropout'));
+local ff_activation = std.parseJson(std.extVar('ff_activation'));
 local dropout = std.parseJson(std.extVar('dropout'));
 local vol_temp = std.parseJson(std.extVar('vol_temp'));
 local box_reg_wt = std.parseJson(std.extVar('box_reg_wt'));
 local box_tensor = 'mindelta_from_vector';
+local gain = (if ff_activation == 'tanh' then 5 / 3 else 1);
 
 {
   [if use_wandb then 'type']: 'train_test_log_to_wandb',
@@ -64,14 +66,14 @@ local box_tensor = 'mindelta_from_vector';
       "input_dim": transformer_dim,
       "num_layers": 2,
       "hidden_dims": [ff_hidden_1, ff_hidden_2],
-      "activations": ["tanh", "linear"],
+      "activations": [ff_activation, "linear"],
       "dropout": [ff_dropout, 0],
     },
     "hypothesis_feedforward": {
       "input_dim": transformer_dim,
       "num_layers": 2,
       "hidden_dims": [ff_hidden_1, ff_hidden_2],
-      "activations": ["tanh", "linear"],
+      "activations": [ff_activation, "linear"],
       "dropout": [ff_dropout, 0],
     },
     "dropout": dropout,
@@ -80,7 +82,13 @@ local box_tensor = 'mindelta_from_vector';
       "weight": box_reg_wt,
       "log_scale": true,
     },
-    "namespace": "tags"
+    "namespace": "tags",
+    "initializer": {
+      "regexes": [
+        [@'.*feedforward._linear_layers.*weight', (if std.member(['tanh', 'sigmoid'], ff_activation) then { type: 'xavier_uniform', gain: gain } else { type: 'kaiming_uniform', nonlinearity: 'relu' })],
+        [@'.*linear_layers.*bias', { type: 'zero' }],
+      ],
+    }
   },
   "data_loader": {
     "batch_sampler": {
