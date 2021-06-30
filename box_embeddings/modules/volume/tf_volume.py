@@ -1,92 +1,62 @@
 from typing import List, Tuple, Union, Dict, Any, Optional
 from box_embeddings.common.registrable import Registrable
 import tensorflow as tf
-from box_embeddings.parameterizations.tf_box_tensor import TFBoxTensor
 from box_embeddings.common.tf_utils import tiny_value_of_dtype
+
+from box_embeddings.modules.volume._tf_volume import _TFVolume
+from box_embeddings.modules.volume.tf_bessel_volume import (
+    tf_bessel_volume_approx,
+)
+from box_embeddings.modules.volume.tf_hard_volume import tf_hard_volume
+from box_embeddings.modules.volume.tf_soft_volume import tf_soft_volume
+from box_embeddings.parameterizations.tf_box_tensor import TFBoxTensor
+
 
 eps = tiny_value_of_dtype(tf.float64)
 
 
-class TFVolume(tf.Module, Registrable):
+class TFVolume(_TFVolume):
+    """One for All volume class"""
 
-    """Base volume class"""
-
-    default_implementation = "hard"
-
-    def __init__(self, log_scale: bool = True, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        log_scale: bool = True,
+        volume_temperature: float = 0.0,
+        intersection_temperature: float = 0.0,
+        **kwargs: Any,
+    ) -> None:
         """
         Args:
             log_scale: Whether the output should be in log scale or not.
                 Should be true in almost any practical case where box_dim>5.
+            volume_temperature: if non-zero, uses softplus instead of ReLU/clamp
+            intersection_temperature: if non-zero, uses softplus as approximation of Bessel function
             kwargs: Unused
         """
         super().__init__()  # type:ignore
         self.log_scale = log_scale
+        self.volume_temperature = volume_temperature
+        self.intersection_temperature = intersection_temperature
 
-    def forward(self, box_tensor: TFBoxTensor) -> tf.Tensor:
+    def __call__(self, box_tensor: TFBoxTensor) -> tf.Tensor:
         """Base implementation is hard (ReLU) volume.
 
         Args:
             box_tensor: Input box tensor
 
-        Raises:
-            NotImplementedError: base class
-        """
-        raise NotImplementedError
-
-
-def tf_hard_volume(box_tensor: TFBoxTensor) -> tf.Tensor:
-    """Volume of boxes. Returns 0 where boxes are flipped.
-
-    Args:
-        box_tensor: input
-
-    Returns:
-        Tensor of shape (..., ) when self has shape (..., 2, num_dims)
-    """
-
-    return tf.math.reduce_prod(
-        tf.clip_by_value(
-            box_tensor.Z - box_tensor.z,
-            clip_value_min=0,
-            clip_value_max=float('inf'),
-        ),
-        axis=-1,
-    )
-
-
-def tf_log_hard_volume(box_tensor: TFBoxTensor) -> tf.Tensor:
-    res = tf.math.reduce_sum(
-        tf.math.log(
-            tf.clip_by_value(
-                box_tensor.Z - box_tensor.z,
-                clip_value_min=eps,
-                clip_value_max=float('inf'),
-            ),
-        ),
-        axis=1,
-    )
-
-    return res
-
-
-@TFVolume.register("hard")
-class TFHardVolume(TFVolume):
-
-    """Hard ReLU based volume."""
-
-    def __call__(self, box_tensor: TFBoxTensor) -> tf.Tensor:
-        """Hard ReLU base volume.
-
-        Args:
-            box_tensor: TODO
-
         Returns:
             torch.Tensor
-
         """
-
-        if self.log_scale:
-            return tf_log_hard_volume(box_tensor)
+        if self.volume_temperature == 0 and self.intersection_temperature == 0:
+            return tf_hard_volume(box_tensor, self.log_scale)
+        elif self.intersection_temperature == 0:
+            return tf_soft_volume(
+                box_tensor, self.volume_temperature, self.log_scale
+            )
         else:
-            return tf_hard_volume(box_tensor)
+            return tf_bessel_volume_approx(
+                box_tensor,
+                self.volume_temperature,
+                self.intersection_temperature,
+                self.log_scale,
+            )

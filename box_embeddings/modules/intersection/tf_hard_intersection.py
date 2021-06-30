@@ -1,7 +1,9 @@
 from typing import List, Tuple, Union, Dict, Any, Optional
 import tensorflow as tf
-from .tf_intersection import TFIntersection
 from box_embeddings.parameterizations import TFTBoxTensor
+from box_embeddings.modules.intersection._tf_intersection import (
+    _TFIntersection,
+)
 
 
 def tf_hard_intersection(
@@ -31,27 +33,9 @@ def tf_hard_intersection(
     return left.from_zZ(z, Z)
 
 
-@TFIntersection.register("hard")
-class TFHardIntersection(TFIntersection):
+@_TFIntersection.register("hard")
+class TFHardIntersection(_TFIntersection):
     """Hard intersection operation as a Layer/Module"""
-
-    def _forward(
-        self, left: TFTBoxTensor, right: TFTBoxTensor
-    ) -> TFTBoxTensor:
-        """Gives intersection of self and other.
-
-        Args:
-            left: First operand for intersection
-            right: Second operand
-
-        Returns:
-            Intersection box
-
-        Note:
-            This function can give fipped boxes, i.e. where z[i] > Z[i]
-        """
-
-        return tf_hard_intersection(left, right)
 
     def __call__(
         self, left: TFTBoxTensor, right: TFTBoxTensor
