@@ -124,9 +124,11 @@ class MNLIModel(Model):
             loss = self._loss(
                 torch.stack((y_prob, log1mexp(y_prob)), dim=-1),
                 label.long().view(-1),
-            ) + self._box_regularizer(
-                self._box_intersection(premise_box, hypothesis_box)
             )
+            if self._box_regularizer:
+                loss += self._box_regularizer(
+                    self._box_intersection(premise_box, hypothesis_box)
+                )
             output_dict["loss"] = loss
             y_pred = 1 - torch.round(torch.exp(y_prob.detach()))
             self._accuracy(y_pred, label)

@@ -1,15 +1,17 @@
-local test = '1'; //std.extVar('TEST');
-local cuda_device = '-1'; //std.extVar('CUDA_DEVICE');
+local test = std.extVar('TEST');
+local cuda_device = std.extVar('CUDA_DEVICE');
 local use_wandb = (if test == '1' then false else true);
 local transformer_model = "roberta-base";
 local transformer_dim = 768;
-local ff_hidden_1 = 200; //std.parseJson(std.extVar('ff_hidden_1'));
-local ff_hidden_2 = 100; //std.parseJson(std.extVar('ff_hidden_2'));
-local ff_dropout = 0.2; //std.parseJson(std.extVar('ff_dropout'));
-local dropout = 0.2; //std.parseJson(std.extVar('dropout'));
-local vol_temp = 20; // std.parseJson(std.extVar('vol_temp'));
-local box_reg_wt = 0.01; //std.parseJson(std.extVar('box_reg_wt'));
+local ff_hidden_1 = std.parseJson(std.extVar('ff_hidden_1'));
+local ff_hidden_2 = std.parseJson(std.extVar('ff_hidden_2'));
+local ff_dropout = std.parseJson(std.extVar('ff_dropout'));
+local ff_activation = std.parseJson(std.extVar('ff_activation'));
+local dropout = std.parseJson(std.extVar('dropout'));
+local vol_temp = std.parseJson(std.extVar('vol_temp'));
+local box_reg_wt = std.parseJson(std.extVar('box_reg_wt'));
 local box_tensor = 'mindelta_from_vector';
+local gain = (if ff_activation == 'tanh' then 5 / 3 else 1);
 
 {
   [if use_wandb then 'type']: 'train_test_log_to_wandb',
@@ -65,24 +67,26 @@ local box_tensor = 'mindelta_from_vector';
       "input_dim": 300,
       "num_layers": 2,
       "hidden_dims": [ff_hidden_1, ff_hidden_2],
-      "activations": ["tanh", "linear"],
+      "activations": [ff_activation, "linear"],
       "dropout": [ff_dropout, 0],
     },
     "hypothesis_feedforward": {
       "input_dim": 300,
       "num_layers": 2,
       "hidden_dims": [ff_hidden_1, ff_hidden_2],
-      "activations": ["tanh", "linear"],
+      "activations": [ff_activation, "linear"],
       "dropout": [ff_dropout, 0],
     },
     "dropout": dropout,
-//    "box_regularizer" : {
-//      "type": "l2_side",
-//      "weight": box_reg_wt,
-//      "log_scale": true,
-//    },
-    "namespace": "tags"
-  },
+    "namespace": "tags",
+    "initializer": {
+      "regexes": [
+        //[@'.*_feedforward._linear_layers.0.weight', {type: 'normal'}],
+        [@'.*feedforward._linear_layers.*weight', (if std.member(['tanh', 'sigmoid'], ff_activation) then { type: 'xavier_uniform', gain: gain } else { type: 'kaiming_uniform', nonlinearity: 'relu' })],
+        [@'.*linear_layers.*bias', { type: 'zero' }],
+      ],
+    }
+},
   "data_loader": {
     "batch_sampler": {
       "type": "bucket",
