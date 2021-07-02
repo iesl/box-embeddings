@@ -85,7 +85,7 @@ local gain = (if ff_activation == 'tanh' then 5 / 3 else 1);
         [@'.*feedforward._linear_layers.*weight', (if std.member(['tanh', 'sigmoid'], ff_activation) then { type: 'xavier_uniform', gain: gain } else { type: 'kaiming_uniform', nonlinearity: 'relu' })],
         [@'.*linear_layers.*bias', { type: 'zero' }],
       ],
-    }
+    },
 },
   "data_loader": {
     "batch_sampler": {

@@ -38,7 +38,7 @@ class TanhBoxTensor(BoxTensor):
         """
 
         if self.data is not None:
-            return (torch.tanh(self.data[..., 0, :]) + 1) / 2
+            return (self.data[..., 0, :] + 1) / 2
         else:
             return self._z  # type:ignore
 
@@ -52,7 +52,7 @@ class TanhBoxTensor(BoxTensor):
 
         if self.data is not None:
             z = self.z
-            return z + (torch.tanh(self.data[..., 1, :]) + 1) * (1.0 - z) / 2  # type: ignore
+            return z + (self.data[..., 1, :] + 1) * (1.0 - z) / 2  # type: ignore
         else:
             return self._Z  # type:ignore
 
@@ -82,10 +82,8 @@ class TanhBoxTensor(BoxTensor):
         tanh_eps = constant.TANH_EPS
         z_ = z.clamp(0.0, 1.0 - tanh_eps / 2.0)
         Z_ = Z.clamp(tanh_eps / 2.0, 1.0)
-        w1_ = 2 * z_ - 1
-        w2_ = 2 * (Z_ - z_) / (1.0 - z_) - 1
-        w1 = torch.atanh(w1_)
-        w2 = torch.atanh(w2_)
+        w1 = 2 * z_ - 1
+        w2 = 2 * (Z_ - z_) / (1.0 - z_) - 1
 
         return torch.stack((w1, w2), -2)
 

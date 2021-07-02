@@ -1,15 +1,15 @@
 from typing import List, Tuple, Union, Dict, Any, Optional
 import torch
 from allennlp.common.lazy import Lazy
-from allennlp.training.trainer import (
-    TensorBoardCallback,
+from allennlp.data import TensorDict
+from allennlp.training import (
     TrainerCallback,
     GradientDescentTrainer,
-    TensorDict,
-    TensorBoardWriter,
 )
 import warnings
 import logging
+
+from allennlp.training.callbacks import TensorBoardCallback
 
 logger = logging.getLogger(__name__)
 
@@ -19,12 +19,10 @@ class CustomTensorBoardCallback(TensorBoardCallback):
     def __init__(
         self,
         serialization_dir: str,
-        tensorboard_writer: Lazy[TensorBoardWriter] = Lazy(TensorBoardWriter),
         model_outputs_to_log: List[str] = None,
     ) -> None:
         super().__init__(
             serialization_dir=serialization_dir,
-            tensorboard_writer=tensorboard_writer,
         )
         self._model_outputs_to_log = model_outputs_to_log or []
         self._warned_about_missing_keys = False
