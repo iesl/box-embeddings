@@ -81,6 +81,16 @@ year={2020},
 url={https://openreview.net/forum?id=J246NSqR_l}
 }
 ```
+4. If you use Gumbel box then cite the following paper:
+
+```
+@article{dasgupta2020improving,
+  title={Improving Local Identifiability in Probabilistic Box Embeddings},
+  author={Dasgupta, Shib Sankar and Boratko, Michael and Zhang, Dongxu and Vilnis, Luke and Li, Xiang Lorraine and McCallum, Andrew},
+  journal={arXiv preprint arXiv:2010.04831},
+  year={2020}
+}
+```
 
 The code for this library can be found [here](https://github.com/iesl/box-embeddings).
 
