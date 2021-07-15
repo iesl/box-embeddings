@@ -33,7 +33,7 @@ pip install -r core_requirements.txt
 ## Package Overview
 | Command | Description |
 | --- | --- |
-| `box_embeddings` | An open-source NLP research library, built on PyTorch & TensorFlow |
+| `box_embeddings` | An open-source research library for NLP or graph learning, built on PyTorch & TensorFlow |
 | `box_embeddings.common` | Utility modules that are used across the library |
 | `box_embeddings.initializations` | Initialization modules |
 | `box_embeddings.modules` | A collection of modules to operate on boxes|
