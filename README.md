@@ -86,7 +86,8 @@ url={https://openreview.net/forum?id=J246NSqR_l}
 ```
 @article{dasgupta2020improving,
   title={Improving Local Identifiability in Probabilistic Box Embeddings},
-  author={Dasgupta, Shib Sankar and Boratko, Michael and Zhang, Dongxu and Vilnis, Luke and Li, Xiang Lorraine and McCallum, Andrew},
+  author={Dasgupta, Shib Sankar and Boratko, Michael and Zhang, Dongxu and Vilnis, Luke 
+  and Li, Xiang Lorraine and McCallum, Andrew},
   journal={arXiv preprint arXiv:2010.04831},
   year={2020}
 }
