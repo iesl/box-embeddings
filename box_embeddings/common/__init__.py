@@ -19,7 +19,7 @@ if torch_is_available():
         inv_sigmoid,
     )
 
-if tensorflow_is_available():
+elif tensorflow_is_available():
     from .tf_utils import (
         tiny_value_of_dtype,
         log1mexp,
