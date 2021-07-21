@@ -107,15 +107,5 @@ local gain = (if ff_activation == 'tanh' then 5 / 3 else 1);
       "lr": 2e-6,
       "weight_decay": 0.1,
     },
-    callbacks: [
-      'track_epoch_callback',
-      {
-        type: 'tensorboard-custom',
-        tensorboard_writer: {
-          histogram_interval: 2000
-        },
-        model_outputs_to_log: ['premise_embedded_text', 'hypothesis_embedded_text', 'premise_embeddings', 'hypothesis_embeddings'],
-      },
-    ] + (if use_wandb then ['log_metrics_to_wandb'] else [])
   }
 }
