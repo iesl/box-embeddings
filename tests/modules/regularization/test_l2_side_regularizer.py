@@ -12,7 +12,7 @@ def test_l2_side_regularizer():
     z = box.z  # (..., box_dim)
     Z = box.Z  # (..., box_dim)
 
-    expected = 0.1 * torch.mean((Z - z) ** 2)
+    expected = 0.1 * torch.sum((Z - z) ** 2)
     res = regularizer(box)
     assert res == expected
 
@@ -24,6 +24,6 @@ def test_l2_side_regularizer_log():
     z = box.z  # (..., box_dim)
     Z = box.Z  # (..., box_dim)
 
-    expected = 0.1 * torch.mean(torch.log(torch.abs(Z - z) + eps))
+    expected = 0.1 * torch.sum(torch.log(torch.abs(Z - z) + eps))
     res = regularizer(box)
     assert res == expected
