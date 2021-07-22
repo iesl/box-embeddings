@@ -1,5 +1,5 @@
 
-Pytorch implementation for box embeddings and box representations.
+Open-source library for Box Embeddings and Box Representations, built on PyTorch & TensorFlow.
 
 <p align="center">
   <img src="/images/boxes.png">
@@ -33,7 +33,7 @@ pip install -r core_requirements.txt
 ## Package Overview
 | Command | Description |
 | --- | --- |
-| `box_embeddings` | An open-source research library for NLP or graph learning, built on PyTorch & TensorFlow |
+| `box_embeddings` | An open-source library for NLP or graph learning |
 | `box_embeddings.common` | Utility modules that are used across the library |
 | `box_embeddings.initializations` | Initialization modules |
 | `box_embeddings.modules` | A collection of modules to operate on boxes|
