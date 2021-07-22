@@ -61,7 +61,7 @@ def soft_volume(
 
 @_Volume.register("soft")
 class SoftVolume(_Volume):
-    """ Softplus based volume."""
+    """Softplus based volume."""
 
     def __init__(
         self, log_scale: bool = True, volume_temperature: float = 1.0
