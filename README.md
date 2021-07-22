@@ -7,7 +7,7 @@ Pytorch implementation for box embeddings and box representations.
 
 ## Status
 
-![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg) ![Typing/Doc/Style](https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg)
+![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg) ![Typing/Doc/Style](https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/iesl/box-embeddings/dev/main)
 
 
 ## Installation
@@ -86,7 +86,7 @@ url={https://openreview.net/forum?id=J246NSqR_l}
 ```
 @article{dasgupta2020improving,
   title={Improving Local Identifiability in Probabilistic Box Embeddings},
-  author={Dasgupta, Shib Sankar and Boratko, Michael and Zhang, Dongxu and Vilnis, Luke 
+  author={Dasgupta, Shib Sankar and Boratko, Michael and Zhang, Dongxu and Vilnis, Luke
   and Li, Xiang Lorraine and McCallum, Andrew},
   journal={arXiv preprint arXiv:2010.04831},
   year={2020}
