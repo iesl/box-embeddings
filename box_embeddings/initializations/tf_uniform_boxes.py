@@ -69,7 +69,7 @@ def tf_uniform_boxes(
 
 class TFUniformBoxInitializer(TFBoxInitializer):
 
-    """Docstring for UniformBoxInitializer. """
+    """Docstring for UniformBoxInitializer."""
 
     def __init__(
         self,
