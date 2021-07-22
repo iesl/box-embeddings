@@ -56,11 +56,13 @@ class MNLIModel(Model):
         self._premise_feedforward = premise_feedforward
         self._hypothesis_feedforward = hypothesis_feedforward
         if dropout:
-            self._dropout = torch.nn.Dropout(dropout)
+            self._dropout: Optional[torch.nn.Dropout] = torch.nn.Dropout(
+                dropout
+            )
         else:
             self._dropout = None
         if box_regularizer:
-            self._box_regularizer = box_regularizer
+            self._box_regularizer: Optional[BoxRegularizer] = box_regularizer
         else:
             self._box_regularizer = None
         self._label_namespace = label_namespace
