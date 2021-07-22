@@ -73,7 +73,7 @@ def tf_soft_volume(
 
 @_TFVolume.register("soft")
 class TFSoftVolume(_TFVolume):
-    """ Softplus based volume."""
+    """Softplus based volume."""
 
     def __init__(
         self, log_scale: bool = True, volume_temperature: float = 1.0
