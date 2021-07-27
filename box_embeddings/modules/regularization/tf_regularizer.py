@@ -1,10 +1,10 @@
 from typing import List, Tuple, Union, Dict, Any, Optional
 from box_embeddings.common.registrable import Registrable
-import torch
-from box_embeddings.parameterizations.box_tensor import BoxTensor
+import tensorflow as tf
+from box_embeddings.parameterizations.tf_box_tensor import TFBoxTensor
 
 
-class BoxRegularizer(torch.nn.Module, Registrable):
+class TFBoxRegularizer(tf.Module, Registrable):
 
     """Base box-regularizer class"""
 
@@ -29,7 +29,7 @@ class BoxRegularizer(torch.nn.Module, Registrable):
         self.log_scale = log_scale
         self.reduction = reduction
 
-    def forward(self, box_tensor: BoxTensor) -> Union[float, torch.Tensor]:
+    def __call__(self, box_tensor: TFBoxTensor) -> Union[float, tf.Tensor]:
         """Calls the _forward and multiplies the weight
 
         Args:
@@ -41,13 +41,13 @@ class BoxRegularizer(torch.nn.Module, Registrable):
 
         return self.weight * self._reduce(self._forward(box_tensor))
 
-    def _forward(self, box_tensor: BoxTensor) -> torch.Tensor:
+    def _forward(self, box_tensor: TFBoxTensor) -> tf.Tensor:
         raise NotImplementedError
 
-    def _reduce(self, reg_unreduced: torch.Tensor) -> torch.Tensor:
+    def _reduce(self, reg_unreduced: tf.Tensor) -> tf.Tensor:
         if self.reduction == "sum":
-            return torch.sum(reg_unreduced)
+            return tf.reduce_sum(reg_unreduced)
         elif self.reduction == "mean":
-            return torch.mean(reg_unreduced)
+            return tf.reduce_mean(reg_unreduced)
         else:
             raise ValueError

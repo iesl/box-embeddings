@@ -18,14 +18,16 @@ from typing import (
     TypeVar,
     Callable,
 )
+
+import numpy as np
 import tensorflow as tf
+
 from box_embeddings.common.registrable import Registrable
 from box_embeddings.common.tf_utils import (
     tf_index_select,
     _box_shape_ok,
     _shape_error_str,
 )
-import numpy as np
 
 logger = logging.getLogger(__name__)
 

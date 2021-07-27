@@ -1,5 +1,5 @@
 
-Pytorch implementation for box embeddings and box representations.
+Open-source library for Box Embeddings and Box Representations, built on PyTorch & TensorFlow.
 
 <p align="center">
   <img src="/images/boxes.png">
@@ -7,8 +7,7 @@ Pytorch implementation for box embeddings and box representations.
 
 ## Status
 
-![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg) ![Typing/Doc/Style](https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg)
-
+![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg) ![Typing/Doc/Style](https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/iesl/box-embeddings/dev/main)
 
 
 ## Installation
@@ -34,7 +33,7 @@ pip install -r core_requirements.txt
 ## Package Overview
 | Command | Description |
 | --- | --- |
-| `box_embeddings` | An open-source NLP research library, built on PyTorch & TensorFlow |
+| `box_embeddings` | An open-source library for NLP or graph learning |
 | `box_embeddings.common` | Utility modules that are used across the library |
 | `box_embeddings.initializations` | Initialization modules |
 | `box_embeddings.modules` | A collection of modules to operate on boxes|
@@ -80,6 +79,17 @@ and Andrew McCallum},
 booktitle={Automated Knowledge Base Construction},
 year={2020},
 url={https://openreview.net/forum?id=J246NSqR_l}
+}
+```
+4. If you use Gumbel box then cite the following paper:
+
+```
+@article{dasgupta2020improving,
+  title={Improving Local Identifiability in Probabilistic Box Embeddings},
+  author={Dasgupta, Shib Sankar and Boratko, Michael and Zhang, Dongxu and Vilnis, Luke
+  and Li, Xiang Lorraine and McCallum, Andrew},
+  journal={arXiv preprint arXiv:2010.04831},
+  year={2020}
 }
 ```
 

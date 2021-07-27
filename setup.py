@@ -30,7 +30,7 @@ install_requires = load_requirements()
 
 setup(
     name="box_embeddings",
-    version="0.0.1",
+    version="0.1.0",
     author="Dhruvesh Patel, Shib Sankar Dasgupta, Michael Boratko, Purujit Goyal, Tejas Chheda, Trang Tran, Xiang (Lorraine) Li",
     author_email="1793dnp@gmail.com",
     description="Pytorch and Tensorflow implemention of box embedding models",
