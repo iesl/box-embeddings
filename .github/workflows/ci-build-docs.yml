@@ -7,6 +7,8 @@ on:
     branches: [ main, dev/main ]
   pull_request:
     branches: [ main, dev/main ]
+  release:
+    types: [created]
 
 jobs:
   build_docs:
