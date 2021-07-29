@@ -66,7 +66,7 @@ def uniform_boxes(
 
 class UniformBoxInitializer(BoxInitializer):
 
-    """Docstring for UniformBoxInitializer. """
+    """Docstring for UniformBoxInitializer."""
 
     def __init__(
         self,
