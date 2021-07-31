@@ -6,7 +6,9 @@ eps = 1e-23
 
 
 def test_l2_side_regularizer():
-    box = TFBoxTensor(tf.Variable([[[1, 1], [3, 5]], [[2, 0], [6, 2]]]).float())
+    box = TFBoxTensor(
+        tf.Variable([[[1, 1], [3, 5]], [[2, 0], [6, 2]]], dtype=tf.float64)
+    )
     regularizer = TFL2SideBoxRegularizer(weight=0.1)
 
     z = box.z  # (..., box_dim)
@@ -18,7 +20,9 @@ def test_l2_side_regularizer():
 
 
 def test_l2_side_regularizer_mean_reduction():
-    box = TFBoxTensor(tf.Variable([[[1, 1], [3, 5]], [[2, 0], [6, 2]]]).float())
+    box = TFBoxTensor(
+        tf.Variable([[[1, 1], [3, 5]], [[2, 0], [6, 2]]], dtype=tf.float64)
+    )
     regularizer = TFL2SideBoxRegularizer(weight=0.1, reduction='mean')
 
     z = box.z  # (..., box_dim)
@@ -30,7 +34,9 @@ def test_l2_side_regularizer_mean_reduction():
 
 
 def test_l2_side_regularizer_log():
-    box = TFBoxTensor(tf.Variable([[[1, 1], [3, 5]], [[2, 0], [6, 2]]]).float())
+    box = TFBoxTensor(
+        tf.Variable([[[1, 1], [3, 5]], [[2, 0], [6, 2]]], dtype=tf.float64)
+    )
     regularizer = TFL2SideBoxRegularizer(weight=0.1, log_scale=True)
 
     z = box.z  # (..., box_dim)
