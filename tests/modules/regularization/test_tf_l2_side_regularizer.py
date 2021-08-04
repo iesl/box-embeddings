@@ -16,7 +16,7 @@ def test_l2_side_regularizer():
 
     expected = 0.1 * tf.math.reduce_sum((Z - z) ** 2)
     res = regularizer(box)
-    assert res == expected
+    assert tf.reduce_all(res == expected)
 
 
 def test_l2_side_regularizer_mean_reduction():
@@ -30,7 +30,7 @@ def test_l2_side_regularizer_mean_reduction():
 
     expected = 0.1 * tf.reduce_mean((Z - z) ** 2)
     res = regularizer(box)
-    assert res == expected
+    assert tf.reduce_all(res == expected)
 
 
 def test_l2_side_regularizer_log():
@@ -44,4 +44,4 @@ def test_l2_side_regularizer_log():
 
     expected = 0.1 * tf.math.reduce_sum(tf.math.log(tf.math.abs(Z - z) + eps))
     res = regularizer(box)
-    assert res == expected
+    assert tf.reduce_all(res == expected)
