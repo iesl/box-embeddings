@@ -49,7 +49,7 @@ class TFL2SideBoxRegularizer(TFBoxRegularizer):
         """
         super().__init__(weight, log_scale=log_scale, reduction=reduction)
 
-    def __call__(self, box_tensor: TFBoxTensor) -> tf.Tensor:
+    def _forward(self, box_tensor: TFBoxTensor) -> tf.Tensor:
         """Applies l2 regularization on all sides of all boxes and returns the sum.
 
         Args:
