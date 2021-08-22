@@ -3,14 +3,11 @@ local cuda_device = std.extVar('CUDA_DEVICE');
 local use_wandb = (if test == '1' then false else true);
 local transformer_model = "roberta-base";
 local transformer_dim = 768;
-local ff_hidden_1 = std.parseJson(std.extVar('ff_hidden_1'));
-local ff_hidden_2 = std.parseJson(std.extVar('ff_hidden_2'));
-local ff_dropout = std.parseJson(std.extVar('ff_dropout'));
-local ff_activation = std.parseJson(std.extVar('ff_activation'));
-local dropout = std.parseJson(std.extVar('dropout'));
-local vol_temp = std.parseJson(std.extVar('vol_temp'));
-local box_reg_wt = std.parseJson(std.extVar('box_reg_wt'));
-local box_tensor = 'mindelta_from_vector';
+local ff_hidden_1 = 400; //std.parseJson(std.extVar('ff_hidden_1'));
+local ff_hidden_2 = 200; //std.parseJson(std.extVar('ff_hidden_2'));
+local ff_dropout = 0.2; //std.parseJson(std.extVar('ff_dropout'));
+local ff_activation = 'relu'; //std.parseJson(std.extVar('ff_activation'));
+local dropout = 0.4; //std.parseJson(std.extVar('dropout'));
 local gain = (if ff_activation == 'tanh' then 5 / 3 else 1);
 
 {
@@ -18,60 +15,48 @@ local gain = (if ff_activation == 'tanh' then 5 / 3 else 1);
   evaluate_on_test: true,
   "dataset_reader": {
     "type": "snli",
-    tokenizer: {
-      "type": 'whitespace',
+    "tokenizer": {
+      "type": "pretrained_transformer",
+      "model_name": transformer_model,
+      "add_special_tokens": false
     },
     "token_indexers": {
       "tokens": {
-        "type": "single_id",
-        "lowercase_tokens": true,
+        "type": "pretrained_transformer",
+        "model_name": transformer_model,
+        "max_length": 512
       }
     },
     "combine_input_fields": false,
     "collapse_labels": true
   },
-  "train_data_path": "https://allennlp.s3.amazonaws.com/datasets/multinli/multinli_1.0_train.jsonl",
+  "train_data_path": "https://allennlp.s3.amazonaws.com/datasets/multinli/multinli_1.0_dev_matched.jsonl",
   "validation_data_path": "https://allennlp.s3.amazonaws.com/datasets/multinli/multinli_1.0_dev_matched.jsonl",
   "test_data_path": "https://allennlp.s3.amazonaws.com/datasets/multinli/multinli_1.0_dev_mismatched.jsonl",
   "model": {
-    "type": "mnli",
+    "type": "mnli-vector-embeddings",
     "text_field_embedder": {
       "token_embedders": {
         "tokens": {
-          "type": "embedding",
-          "pretrained_file": "https://allennlp.s3.amazonaws.com/datasets/glove/glove.840B.300d.txt.gz",
-          "embedding_dim": 300,
-          "trainable": true
+          "type": "pretrained_transformer",
+          "model_name": transformer_model,
+          "max_length": 512
         }
       }
     },
     "encoder": {
-        "type": "lstm",
-        "input_size": 300,
-        "hidden_size": 300,
-        "num_layers": 2,
-        "bidirectional": true
-    },
-    "box_factory": {
-      "type": 'box_factory',
-      "name": box_tensor,
-    },
-    "intersection": {
-      "type": 'hard',
-    },
-    "volume": {
-      "type": 'soft',
-      "volume_temperature": vol_temp,
+       "type": "cls_pooler",
+       "embedding_dim": transformer_dim,
     },
     "premise_feedforward": {
-      "input_dim": 300,
+      "input_dim": transformer_dim,
       "num_layers": 2,
       "hidden_dims": [ff_hidden_1, ff_hidden_2],
       "activations": [ff_activation, "linear"],
       "dropout": [ff_dropout, 0],
     },
     "hypothesis_feedforward": {
-      "input_dim": 300,
+      "input_dim": transformer_dim,
       "num_layers": 2,
       "hidden_dims": [ff_hidden_1, ff_hidden_2],
       "activations": [ff_activation, "linear"],
@@ -81,12 +66,11 @@ local gain = (if ff_activation == 'tanh' then 5 / 3 else 1);
     "namespace": "tags",
     "initializer": {
       "regexes": [
-        //[@'.*_feedforward._linear_layers.0.weight', {type: 'normal'}],
         [@'.*feedforward._linear_layers.*weight', (if std.member(['tanh', 'sigmoid'], ff_activation) then { type: 'xavier_uniform', gain: gain } else { type: 'kaiming_uniform', nonlinearity: 'relu' })],
         [@'.*linear_layers.*bias', { type: 'zero' }],
       ],
-    },
-},
+    }
+  },
   "data_loader": {
     "batch_sampler": {
       "type": "bucket",

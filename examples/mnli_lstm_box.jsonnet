@@ -18,16 +18,13 @@ local gain = (if ff_activation == 'tanh' then 5 / 3 else 1);
   evaluate_on_test: true,
   "dataset_reader": {
     "type": "snli",
-    "tokenizer": {
-      "type": "pretrained_transformer",
-      "model_name": transformer_model,
-      "add_special_tokens": false
+    tokenizer: {
+      "type": 'whitespace',
     },
     "token_indexers": {
       "tokens": {
-        "type": "pretrained_transformer",
-        "model_name": transformer_model,
-        "max_length": 512
+        "type": "single_id",
+        "lowercase_tokens": true,
       }
     },
     "combine_input_fields": false,
@@ -37,19 +34,23 @@ local gain = (if ff_activation == 'tanh' then 5 / 3 else 1);
   "validation_data_path": "https://allennlp.s3.amazonaws.com/datasets/multinli/multinli_1.0_dev_matched.jsonl",
   "test_data_path": "https://allennlp.s3.amazonaws.com/datasets/multinli/multinli_1.0_dev_mismatched.jsonl",
   "model": {
-    "type": "mnli",
+    "type": "mnli-box-embeddings",
     "text_field_embedder": {
       "token_embedders": {
         "tokens": {
-          "type": "pretrained_transformer",
-          "model_name": transformer_model,
-          "max_length": 512
+          "type": "embedding",
+          "pretrained_file": "https://allennlp.s3.amazonaws.com/datasets/glove/glove.840B.300d.txt.gz",
+          "embedding_dim": 300,
+          "trainable": true
         }
       }
     },
     "encoder": {
-       "type": "cls_pooler",
-       "embedding_dim": transformer_dim,
+        "type": "lstm",
+        "input_size": 300,
+        "hidden_size": 300,
+        "num_layers": 2,
+        "bidirectional": true
     },
     "box_factory": {
       "type": 'box_factory',
@@ -63,33 +64,29 @@ local gain = (if ff_activation == 'tanh' then 5 / 3 else 1);
       "volume_temperature": vol_temp,
     },
     "premise_feedforward": {
-      "input_dim": transformer_dim,
+      "input_dim": 300,
       "num_layers": 2,
       "hidden_dims": [ff_hidden_1, ff_hidden_2],
       "activations": [ff_activation, "linear"],
       "dropout": [ff_dropout, 0],
     },
     "hypothesis_feedforward": {
-      "input_dim": transformer_dim,
+      "input_dim": 300,
       "num_layers": 2,
       "hidden_dims": [ff_hidden_1, ff_hidden_2],
       "activations": [ff_activation, "linear"],
       "dropout": [ff_dropout, 0],
     },
     "dropout": dropout,
-    "box_regularizer" : {
-      "type": "l2_side",
-      "weight": box_reg_wt,
-      "log_scale": true,
-    },
     "namespace": "tags",
     "initializer": {
       "regexes": [
+        //[@'.*_feedforward._linear_layers.0.weight', {type: 'normal'}],
         [@'.*feedforward._linear_layers.*weight', (if std.member(['tanh', 'sigmoid'], ff_activation) then { type: 'xavier_uniform', gain: gain } else { type: 'kaiming_uniform', nonlinearity: 'relu' })],
         [@'.*linear_layers.*bias', { type: 'zero' }],
       ],
-    }
-  },
+    },
+},
   "data_loader": {
     "batch_sampler": {
       "type": "bucket",

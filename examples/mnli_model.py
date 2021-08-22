@@ -26,7 +26,7 @@ logging.getLogger('allennlp.modules.token_embedders.embedding').setLevel(
 )
 
 
-@Model.register("mnli")
+@Model.register("mnli-box-embeddings")
 class MNLIModel(Model):
     def __init__(
         self,
@@ -136,6 +136,104 @@ class MNLIModel(Model):
             self._accuracy(y_pred, label)
 
         output_dict.update(activations)
+        return output_dict
+
+    def get_metrics(self, reset: bool = False) -> Dict[str, float]:
+        metrics = {"accuracy": self._accuracy.get_metric(reset)}
+        return metrics
+
+
+@Model.register("mnli-vector-embeddings")
+class MNLIVectorModel(Model):
+    def __init__(
+        self,
+        vocab: Vocabulary,
+        text_field_embedder: TextFieldEmbedder,
+        encoder: Union[Seq2VecEncoder, Seq2SeqEncoder],
+        premise_feedforward: FeedForward,
+        hypothesis_feedforward: FeedForward,
+        dropout: Optional[float] = None,
+        num_labels: int = None,
+        label_namespace: str = "labels",
+        namespace: str = "tokens",
+        regularizer: Optional[RegularizerApplicator] = None,
+        initializer: Optional[InitializerApplicator] = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(vocab, regularizer=regularizer)  # type:ignore
+        self._text_field_embedder = text_field_embedder
+        self._encoder = encoder
+        self._premise_feedforward = premise_feedforward
+        self._hypothesis_feedforward = hypothesis_feedforward
+        if dropout:
+            self._dropout: Optional[torch.nn.Dropout] = torch.nn.Dropout(
+                dropout
+            )
+        else:
+            self._dropout = None
+
+        self._label_namespace = label_namespace
+        self._namespace = namespace
+
+        if num_labels:
+            self._num_labels = num_labels
+        else:
+            self._num_labels = vocab.get_vocab_size(
+                namespace=self._label_namespace
+            )
+
+        self._loss = torch.nn.NLLLoss()
+        self._accuracy = BooleanAccuracy()
+        if initializer is not None:
+            initializer(self)
+
+    def forward(  # type: ignore
+        self,
+        premise: TextFieldTensors,
+        hypothesis: TextFieldTensors,
+        label: torch.IntTensor = None,
+        **kwargs,
+    ) -> Dict[str, torch.Tensor]:
+        premise_embedded_text = self._text_field_embedder(premise)
+        hypothesis_embedded_text = self._text_field_embedder(hypothesis)
+        premise_mask = get_text_field_mask(premise)
+        hypothesis_mask = get_text_field_mask(hypothesis)
+
+        premise_embedded_text = self._encoder(
+            premise_embedded_text, mask=premise_mask
+        )
+        hypothesis_embedded_text = self._encoder(
+            hypothesis_embedded_text, mask=hypothesis_mask
+        )
+
+        if self._dropout:
+            premise_embedded_text = self._dropout(premise_embedded_text)
+            hypothesis_embedded_text = self._dropout(hypothesis_embedded_text)
+
+        premise_embeddings: torch.Tensor = self._premise_feedforward(
+            premise_embedded_text
+        )
+        hypothesis_embeddings: torch.Tensor = self._hypothesis_feedforward(
+            hypothesis_embedded_text
+        )
+        print(premise_embeddings.shape)
+        print(hypothesis_embeddings.shape)
+        y_prob_unnormalized = torch.sum(
+            premise_embeddings * hypothesis_embeddings, dim=-1
+        ) / torch.linalg.norm(hypothesis_embeddings, dim=1)
+        y_prob = torch.log(torch.sigmoid(y_prob_unnormalized))
+        output_dict = {"y_prob": y_prob}
+        # output_dict["token_ids"] = util.get_token_ids_from_text_field_tensors(tokens)
+        if label is not None:
+            loss = self._loss(
+                torch.stack((y_prob, log1mexp(y_prob)), dim=-1),
+                label.long().view(-1),
+            )
+
+            output_dict["loss"] = loss
+            y_pred = 1 - torch.round(torch.exp(y_prob.detach()))
+            self._accuracy(y_pred, label)
+
         return output_dict
 
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
