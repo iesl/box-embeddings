@@ -3,11 +3,11 @@ local cuda_device = std.extVar('CUDA_DEVICE');
 local use_wandb = (if test == '1' then false else true);
 local transformer_model = "roberta-base";
 local transformer_dim = 768;
-local ff_hidden_1 = 400; //std.parseJson(std.extVar('ff_hidden_1'));
-local ff_hidden_2 = 200; //std.parseJson(std.extVar('ff_hidden_2'));
-local ff_dropout = 0.2; //std.parseJson(std.extVar('ff_dropout'));
-local ff_activation = 'relu'; //std.parseJson(std.extVar('ff_activation'));
-local dropout = 0.4; //std.parseJson(std.extVar('dropout'));
+local ff_hidden_1 = std.parseJson(std.extVar('ff_hidden_1'));
+local ff_hidden_2 = std.parseJson(std.extVar('ff_hidden_2'));
+local ff_dropout = std.parseJson(std.extVar('ff_dropout'));
+local ff_activation = std.parseJson(std.extVar('ff_activation'));
+local dropout = std.parseJson(std.extVar('dropout'));
 local gain = (if ff_activation == 'tanh' then 5 / 3 else 1);
 
 {
@@ -30,7 +30,7 @@ local gain = (if ff_activation == 'tanh' then 5 / 3 else 1);
     "combine_input_fields": false,
     "collapse_labels": true
   },
-  "train_data_path": "https://allennlp.s3.amazonaws.com/datasets/multinli/multinli_1.0_dev_matched.jsonl",
+  "train_data_path": "https://allennlp.s3.amazonaws.com/datasets/multinli/multinli_1.0_train.jsonl",
   "validation_data_path": "https://allennlp.s3.amazonaws.com/datasets/multinli/multinli_1.0_dev_matched.jsonl",
   "test_data_path": "https://allennlp.s3.amazonaws.com/datasets/multinli/multinli_1.0_dev_mismatched.jsonl",
   "model": {
