@@ -29,7 +29,7 @@ You can also install Box Embeddings by cloning our git repository
 git clone https://github.com/iesl/box-embeddings
 ```
 
-Create a Python 3.7 or 3.8 virtual environment under the project directory, install the `Box Embeddings`
+Create a Python 3.7 or 3.8 virtual environment under the project directory and install the `Box Embeddings`
 module in editable mode by running:
 
 ```
