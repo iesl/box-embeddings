@@ -2,7 +2,7 @@
 Open-source library for Box Embeddings and Box Representations, built on PyTorch & TensorFlow.
 
 <p align="center">
-  <img src="~/box-embeddings/images/boxes.png">
+  <img src="/images/boxes.png">
 </p>
 
 ## Status
