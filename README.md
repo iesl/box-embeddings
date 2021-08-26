@@ -2,19 +2,24 @@
 Open-source library for Box Embeddings and Box Representations, built on PyTorch & TensorFlow.
 
 <p align="center">
-  <img src="/images/boxes.png">
+  <img src="~/box-embeddings/images/boxes.png">
 </p>
 
 ## Status
 
-![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg) ![Typing/Doc/Style](https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/iesl/box-embeddings/dev/main)
+![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg)
+![Typing/Doc/Style](https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/iesl/box-embeddings/dev/main)
+[![codecov](https://codecov.io/gh/iesl/box-embeddings/branch/main/graph/badge.svg?token=XPNQI0QXFZ)](https://codecov.io/gh/iesl/box-embeddings)
 
 
 ## Installation
 
 ### Installing via pip
 
-The preferred way to install Box Embeddings is via `pip`. Just run `pip install box-embeddings`
+The preferred way to install Box Embeddings is via `pip`. Just run
+
+`pip install box-embeddings`
 
 ### Installing from source
 
@@ -24,9 +29,12 @@ You can also install Box Embeddings by cloning our git repository
 git clone https://github.com/iesl/box-embeddings
 ```
 
-Create a Python 3.7 or 3.8 virtual environment, and install Box Embeddings in editable mode by running:
+Create a Python 3.7 or 3.8 virtual environment under the project directory, install the `Box Embeddings`
+module in editable mode by running:
 
 ```
+virtualenv box_venv
+source box_venv/bin/activate
 pip install --editable . --user
 pip install -r core_requirements.txt
 ```
