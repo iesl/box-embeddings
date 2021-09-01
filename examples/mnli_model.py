@@ -216,8 +216,7 @@ class MNLIVectorModel(Model):
         hypothesis_embeddings: torch.Tensor = self._hypothesis_feedforward(
             hypothesis_embedded_text
         )
-        print(premise_embeddings.shape)
-        print(hypothesis_embeddings.shape)
+
         y_prob_unnormalized = torch.sum(
             premise_embeddings * hypothesis_embeddings, dim=-1
         ) / torch.linalg.norm(hypothesis_embeddings, dim=1)
