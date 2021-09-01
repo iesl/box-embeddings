@@ -48,7 +48,7 @@ local gain = (if ff_activation == 'tanh' then 5 / 3 else 1);
       }
     },
     "encoder": {
-       "type": "bert_pooler",
+       "type": "cls_pooler",
        "embedding_dim": transformer_dim,
     },
     "box_factory": {
