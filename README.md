@@ -6,7 +6,7 @@ with or transformed into boxes easily.
 
 <hr/>
 
-# Features
+# 🌟 Features
 - Modular and reusable library that aids the researchers in studying probabilistic box embeddings.
 - Extensive documentation and example code, demonstrating the use of the library to make it easy to
   adapt to existing codebases.
@@ -22,7 +22,7 @@ with or transformed into boxes easily.
 [![codecov](https://codecov.io/gh/iesl/box-embeddings/branch/main/graph/badge.svg?token=XPNQI0QXFZ)](https://codecov.io/gh/iesl/box-embeddings)
 
 
-## Installation
+## 💻 Installation
 
 ### Installing via pip
 
@@ -48,7 +48,7 @@ source box_venv/bin/activate
 pip install --editable . --user
 pip install -r core_requirements.txt
 ```
-## Quick start
+## 👟 Quick start
 After installing `Box Embeddings`, a box can be initialized from a tensor as follows:
 
 ```python
@@ -68,7 +68,7 @@ BoxTensor(tensor([[ 1,  2],
 ```
 
 
-## Package Overview
+## 📖 Command Overview
 | Command | Description |
 | --- | --- |
 | `box_embeddings` | An open-source library for NLP or graph learning |
@@ -78,7 +78,7 @@ BoxTensor(tensor([[ 1,  2],
 | `box_embeddings.parameterizations` | A collection of modules to parameterize boxes|
 
 
-## Reference
+## 📚 Reference
 
 1. If you use simple hard boxes with surrogate loss then cite the following paper:
 
@@ -131,7 +131,7 @@ url={https://openreview.net/forum?id=J246NSqR_l}
 }
 ```
 
-## Contributors
+## 💪 Contributors
 
 * Dhruvesh Patel [@dhruvdcoder](https://github.com/dhruvdcoder)
 
@@ -152,7 +152,7 @@ We welcome all contributions from the community to make Box Embeddings a better 
 If you're a first time contributor, we recommend you start by reading our
 [CONTRIBUTING.md](https://github.com/iesl/box-embeddings/blob/main/.github/CONTRIBUTING.md) guide.
 
-## Acknowledgments
+## 🤗 Acknowledgments
 Box Embeddings is an open-source project developed by the research team from the
 [Information Extraction and Synthesis Laboratory](http://www.iesl.cs.umass.edu/) at the
 [College of Information and Computer Sciences (UMass Amherst)](https://www.cics.umass.edu/).
