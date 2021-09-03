@@ -95,8 +95,7 @@ BoxTensor(tensor([[ 1,  2],
 2. If you use softboxes without any regularizaton the cite the following paper:
 
 ```bibtex
-@inproceedings{
-li2018smoothing,
+@inproceedings{li2018smoothing,
 title={Smoothing the Geometry of Probabilistic Box Embeddings},
 author={Xiang Li and Luke Vilnis and Dongxu Zhang and Michael Boratko and Andrew McCallum},
 booktitle={International Conference on Learning Representations},
@@ -108,8 +107,7 @@ url={https://openreview.net/forum?id=H1xSNiRcF7},
 3. If you use softboxes with regularizations defined in the `Regularizations` module then cite the following paper:
 
 ```bibtex
-@inproceedings{
-patel2020representing,
+@inproceedings{patel2020representing,
 title={Representing Joint Hierarchies with Box Embeddings},
 author={Dhruvesh Patel and Shib Sankar Dasgupta and Michael Boratko and Xiang Li and Luke Vilnis
 and Andrew McCallum},
