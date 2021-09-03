@@ -25,18 +25,21 @@ TensorFlow, which allows existing neural network layers to be replaced  with or 
 The preferred way to install Box Embeddings for regular usage, test, or integration into the existing workflow
 is via `pip`. Just run
 
-`pip install box-embeddings`
+```shell
+pip install box-embeddings
+```
+
 
 ### Installing from source
 
 You can also install Box Embeddings by cloning our git repository
 
-```
+```shell
 git clone https://github.com/iesl/box-embeddings
 ```
 
 Create a Python 3.7 or 3.8 virtual environment under the project directory and install the `Box Embeddings`
-module in editable mode by running:
+package in editable mode by running:
 
 ```shell
 virtualenv box_venv
