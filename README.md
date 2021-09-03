@@ -54,11 +54,11 @@ After installing `Box Embeddings`, a box can be initialized from a tensor as fol
 import torch
 from box_embeddings.parameterizations.box_tensor import BoxTensor
 data_x = torch.tensor([[1,2],[-1,5]])
-box_1 = BoxTensor(data_x)
-box_1
+box_x = BoxTensor(data_x)
+box_x
 ```
 
-The result `box_1` is now a `BoxTensor` object. To view other examples, visit the
+The result `box_x` is now a `BoxTensor` object. To view other examples, visit the
 [examples section](https://github.com/iesl/box-embeddings/tree/main/usage_doc).
 
 ```python
