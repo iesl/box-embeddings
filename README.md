@@ -1,15 +1,12 @@
-# Box Embeddings
+<h1 align="center">Box Embeddings</h1>
 
-Box Embeddings is a Python library for **geometric representation learning**. The library is fully open source,
-and compatible with both PyTorch and TensorFlow, which allows existing neural network layers to be replaced
-with or transformed into boxes easily.
+A fully open source Python library for **geometric representation learning**, compatible with both PyTorch and
+TensorFlow, which allows existing neural network layers to be replaced  with or transformed into boxes easily.
 
 ![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg)
 ![Typing/Doc/Style](https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/iesl/box-embeddings/dev/main)
 [![codecov](https://codecov.io/gh/iesl/box-embeddings/branch/main/graph/badge.svg?token=XPNQI0QXFZ)](https://codecov.io/gh/iesl/box-embeddings)
-
-
 
 <hr/>
 
