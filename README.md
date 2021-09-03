@@ -1,13 +1,15 @@
 # Box Embeddings
 
-Box Embeddings is a Python library for geometric representation learning. The library is fully open source,
+Box Embeddings is a Python library for **geometric representation learning**. The library is fully open source,
 and compatible with both PyTorch and TensorFlow, which allows existing neural network layers to be replaced
 with or transformed into boxes easily.
+
+<hr/>
 
 # Features
 - Modular and reusable library that aids the researchers in studying probabilistic box embeddings.
 - Extensive documentation and example code, demonstrating the use of the library to make it easy to
-  adapt to existing code-bases.
+  adapt to existing codebases.
 - Rigorously unit-test the codebase with high coverage, ensuring an additional layer of reliability.
 - Customizable pipelines
 - Actively being maintained by [IESL at UMass](http://www.iesl.cs.umass.edu/)
@@ -40,7 +42,7 @@ git clone https://github.com/iesl/box-embeddings
 Create a Python 3.7 or 3.8 virtual environment under the project directory and install the `Box Embeddings`
 module in editable mode by running:
 
-```
+```shell
 virtualenv box_venv
 source box_venv/bin/activate
 pip install --editable . --user
@@ -49,7 +51,7 @@ pip install -r core_requirements.txt
 ## Quick start
 After installing `Box Embeddings`, a box can be initialized from a tensor as follows:
 
-```
+```python
 import torch
 from box_embeddings.parameterizations.box_tensor import BoxTensor
 data_x = torch.tensor([[1,2],[-1,5]])
