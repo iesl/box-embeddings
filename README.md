@@ -4,23 +4,22 @@ Box Embeddings is a Python library for **geometric representation learning**. Th
 and compatible with both PyTorch and TensorFlow, which allows existing neural network layers to be replaced
 with or transformed into boxes easily.
 
+![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg)
+![Typing/Doc/Style](https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/iesl/box-embeddings/dev/main)
+[![codecov](https://codecov.io/gh/iesl/box-embeddings/branch/main/graph/badge.svg?token=XPNQI0QXFZ)](https://codecov.io/gh/iesl/box-embeddings)
+
+
+
 <hr/>
 
-# 🌟 Features
+## 🌟 Features
 - Modular and reusable library that aids the researchers in studying probabilistic box embeddings.
 - Extensive documentation and example code, demonstrating the use of the library to make it easy to
   adapt to existing codebases.
 - Rigorously unit-test the codebase with high coverage, ensuring an additional layer of reliability.
 - Customizable pipelines
 - Actively being maintained by [IESL at UMass](http://www.iesl.cs.umass.edu/)
-
-## Status
-
-![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg)
-![Typing/Doc/Style](https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/iesl/box-embeddings/dev/main)
-[![codecov](https://codecov.io/gh/iesl/box-embeddings/branch/main/graph/badge.svg?token=XPNQI0QXFZ)](https://codecov.io/gh/iesl/box-embeddings)
-
 
 ## 💻 Installation
 
@@ -147,7 +146,6 @@ url={https://openreview.net/forum?id=J246NSqR_l}
 
 * Tejas Chheda [@tejas4888](https://github.com/tejas4888)
 
-## Contributions
 We welcome all contributions from the community to make Box Embeddings a better package.
 If you're a first time contributor, we recommend you start by reading our
 [CONTRIBUTING.md](https://github.com/iesl/box-embeddings/blob/main/.github/CONTRIBUTING.md) guide.
