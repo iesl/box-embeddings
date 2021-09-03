@@ -68,6 +68,7 @@ BoxTensor(tensor([[ 1,  2],
 
 
 ## 📖 Command Overview
+
 | Command | Description |
 | --- | --- |
 | `box_embeddings` | An open-source library for NLP or graph learning |
@@ -75,6 +76,16 @@ BoxTensor(tensor([[ 1,  2],
 | `box_embeddings.initializations` | Initialization modules |
 | `box_embeddings.modules` | A collection of modules to operate on boxes|
 | `box_embeddings.parameterizations` | A collection of modules to parameterize boxes|
+
+
+## 📍 Navigating the codebase
+
+| Task | Where to go |
+| --- |:---:|
+| Contribution manual | [Link](https://github.com/iesl/box-embeddings/blob/main/.github/CONTRIBUTING.md) |
+| Source codes | [Link](https://github.com/iesl/box-embeddings/tree/main/box_embeddings) |
+| Usage documentation| [Link](https://github.com/iesl/box-embeddings/tree/main/usage_doc) |
+| Unit tests | [Link](https://github.com/iesl/box-embeddings/tree/main/tests)|
 
 
 ## 📚 Reference
