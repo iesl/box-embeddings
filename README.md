@@ -88,10 +88,6 @@ BoxTensor(tensor([[ 1,  2],
 | Training examples | [Link](https://github.com/iesl/box-embeddings/tree/main/examples)|
 | Unit tests | [Link](https://github.com/iesl/box-embeddings/tree/main/tests)|
 
-## 💡 News and Updates
-Our library `Box Embeddings` will be officially introduced at EMNLP 2021!
-
-
 ## 📚 Reference
 
 1. If you use this library in you work, please cite the following arXiv version of the paper
@@ -155,7 +151,6 @@ url={https://openreview.net/forum?id=J246NSqR_l}
 }
 ```
 
-
 ## 💪 Contributors
 
 * Dhruvesh Patel [@dhruvdcoder](https://github.com/dhruvdcoder)
@@ -175,6 +170,10 @@ url={https://openreview.net/forum?id=J246NSqR_l}
 We welcome all contributions from the community to make Box Embeddings a better package.
 If you're a first time contributor, we recommend you start by reading our
 [CONTRIBUTING.md](https://github.com/iesl/box-embeddings/blob/main/.github/CONTRIBUTING.md) guide.
+
+
+## 💡 News and Updates
+Our library `Box Embeddings` will be officially introduced at EMNLP 2021!
 
 ## 🤗 Acknowledgments
 Box Embeddings is an open-source project developed by the research team from the
