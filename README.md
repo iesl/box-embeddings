@@ -85,12 +85,27 @@ BoxTensor(tensor([[ 1,  2],
 | Contribution manual | [Link](https://github.com/iesl/box-embeddings/blob/main/.github/CONTRIBUTING.md) |
 | Source codes | [Link](https://github.com/iesl/box-embeddings/tree/main/box_embeddings) |
 | Usage documentation| [Link](https://github.com/iesl/box-embeddings/tree/main/usage_doc) |
+| Training examples | [Link](https://github.com/iesl/box-embeddings/tree/main/examples)|
 | Unit tests | [Link](https://github.com/iesl/box-embeddings/tree/main/tests)|
+
+## 💡 News and Updates
+Our library `Box Embeddings` will be officially introduced at EMNLP 2021!
 
 
 ## 📚 Reference
 
-1. If you use simple hard boxes with surrogate loss then cite the following paper:
+1. If you use this library in you work, please cite the following arXiv version of the paper
+```bibtex
+@article{chheda2021box,
+  title={Box Embeddings: An open-source library for representation learning using geometric structures},
+  author={Chheda, Tejas and Goyal, Purujit and Tran, Trang and Patel, Dhruvesh and Boratko, Michael
+  and Dasgupta, Shib Sankar and McCallum, Andrew},
+  journal={arXiv preprint arXiv:2109.04997},
+  year={2021}
+}
+```
+
+2. If you use simple hard boxes with surrogate loss then cite the following paper:
 
 ```bibtex
 @inproceedings{vilnis2018probabilistic,
@@ -103,7 +118,7 @@ BoxTensor(tensor([[ 1,  2],
 }
 ```
 
-2. If you use softboxes without any regularizaton the cite the following paper:
+3. If you use softboxes without any regularizaton the cite the following paper:
 
 ```bibtex
 @inproceedings{li2018smoothing,
@@ -115,7 +130,7 @@ url={https://openreview.net/forum?id=H1xSNiRcF7},
 }
 ```
 
-3. If you use softboxes with regularizations defined in the `Regularizations` module then cite the following paper:
+4. If you use softboxes with regularizations defined in the `Regularizations` module then cite the following paper:
 
 ```bibtex
 @inproceedings{patel2020representing,
@@ -127,7 +142,8 @@ year={2020},
 url={https://openreview.net/forum?id=J246NSqR_l}
 }
 ```
-4. If you use Gumbel box then cite the following paper:
+
+5. If you use Gumbel box then cite the following paper:
 
 ```bibtex
 @article{dasgupta2020improving,
@@ -138,6 +154,7 @@ url={https://openreview.net/forum?id=J246NSqR_l}
   year={2020}
 }
 ```
+
 
 ## 💪 Contributors
 
