@@ -13,34 +13,46 @@ repos:
     hooks:
     - id: darglint # default config comes from tox.ini
       args: [-v, '2']
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.910-1
+    hooks:
+      - id: mypy
+        exclude: ^(docs/|example-plugin/)
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: '3.9.2'  # pick a git hash / tag to point to
+    hooks:
+      - id: flake8
   - repo: local
     hooks:
       - id: black
         name: black
-        entry: python -m black
+        entry: black --check
         args: [--skip-string-normalization, --config, ./pyproject.toml]
-        language: system
+        language: python
+        additional_dependencies: ['black']
         types: [python]
 
-      - id: flake8
-        name: flake8
-        args: [--ignore]
-        entry: python -m flake8
-        language: system
-        types: [python]
+#      - id: flake8
+#        name: flake8
+#        args: [--ignore]
+#        entry: flake8
+#        language: python
+#        additional_dependencies: [flake8-docstrings]
+#        types: [python]
 
-      - id: mypy # default config comes from setup.cfg
-        name: mypy
-        entry: python -m mypy
-        language: system
-        types: [python]
-        exclude: "test_.*" # exclude all test files form type checking
+#      - id: mypy # default config comes from setup.cfg
+#        name: mypy
+#        entry: python -m mypy
+#        language: python
+#        types: [python]
+#        additional_dependencies: ['mypy==0.910']
+#        exclude: "test_.*" # exclude all test files form type checking
 
       - id: docstr-coverage
         name: docstr-coverage
         entry: docstr-coverage
         types: [python]
         exclude: "test_.*"
-        language: system
+        language: python
         args: [--fail-under, '0'] # fail if less than 50 of code has docstrings
         log_file: docstring-coverage.txt
