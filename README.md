@@ -1,5 +1,3 @@
-<h1 align="center">Box Embeddings</h1>
-
 A fully open source Python library for **geometric representation learning**, compatible with both PyTorch and
 TensorFlow, which allows existing neural network layers to be replaced  with or transformed into boxes easily.
 
