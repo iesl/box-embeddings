@@ -3,13 +3,13 @@ default_language_version:
 exclude: (^docs/|^docs_source)
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: v4.0.1
     hooks:
       - id: trailing-whitespace
       - id: check-yaml
       - id: end-of-file-fixer
   - repo: https://github.com/terrencepreilly/darglint
-    rev: master
+    rev: v1.8.1
     hooks:
     - id: darglint # default config comes from tox.ini
       args: [-v, '2']
@@ -33,7 +33,7 @@ repos:
         entry: python -m mypy
         language: system
         types: [python]
-        exclude: "test_.*" # exclude all test files form type checking
+        exclude: "docs/|tests/|example-plugin/" # exclude all test files form type checking
 
       - id: docstr-coverage
         name: docstr-coverage
