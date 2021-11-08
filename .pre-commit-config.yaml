@@ -18,33 +18,29 @@ repos:
     hooks:
       - id: black
         name: black
-        entry: black --check
+        entry: python -m black
         args: [--skip-string-normalization, --config, ./pyproject.toml]
-        language: python
-        additional_dependencies: ['black']
+        language: system
         types: [python]
 
       - id: flake8
         name: flake8
-        args: [--ignore]
-        entry: flake8
-        language: python
-        additional_dependencies: [flake8-docstrings]
+        entry: python -m flake8
+        language: system
         types: [python]
 
       - id: mypy # default config comes from setup.cfg
         name: mypy
         entry: python -m mypy
-        language: python
+        language: system
         types: [python]
-        additional_dependencies: ['mypy==0.910']
-        exclude: "^(docs/|test_.*|example-plugin/)" # exclude all test files form type checking
+        exclude: "docs/|test/|example-plugin/" # exclude all test files form type checking
 
       - id: docstr-coverage
         name: docstr-coverage
         entry: docstr-coverage
         types: [python]
         exclude: "test_.*"
-        language: python
+        language: system
         args: [--fail-under, '0'] # fail if less than 50 of code has docstrings
         log_file: docstring-coverage.txt
