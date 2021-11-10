@@ -1,36 +1,72 @@
+A fully open source Python library for **geometric representation learning**, compatible with both PyTorch and
+TensorFlow, which allows existing neural network layers to be replaced  with or transformed into boxes easily.
 
-Open-source library for Box Embeddings and Box Representations, built on PyTorch & TensorFlow.
+![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg)
+![Typing/Doc/Style](https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/iesl/box-embeddings/dev/main)
+[![codecov](https://codecov.io/gh/iesl/box-embeddings/branch/main/graph/badge.svg?token=XPNQI0QXFZ)](https://codecov.io/gh/iesl/box-embeddings)
 
-<p align="center">
-  <img src="/images/boxes.png">
-</p>
+<hr/>
 
-## Status
+## 🌟 Features
+- Modular and reusable library that aids the researchers in studying probabilistic box embeddings.
+- Extensive documentation and example code, demonstrating the use of the library to make it easy to
+  adapt to existing codebases.
+- Rigorously unit-test the codebase with high coverage, ensuring an additional layer of reliability.
+- Customizable pipelines
+- Actively being maintained by [IESL at UMass](http://www.iesl.cs.umass.edu/)
 
-![Tests](https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg) ![Typing/Doc/Style](https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/iesl/box-embeddings/dev/main)
-
-
-## Installation
+## 💻 Installation
 
 ### Installing via pip
 
-The preferred way to install Box Embeddings is via `pip`. Just run `pip install box-embeddings`
+The preferred way to install Box Embeddings for regular usage, test, or integration into the existing workflow
+is via `pip`. Just run
+
+```shell
+pip install box-embeddings
+```
+
 
 ### Installing from source
 
 You can also install Box Embeddings by cloning our git repository
 
-```
+```shell
 git clone https://github.com/iesl/box-embeddings
 ```
 
-Create a Python 3.7 or 3.8 virtual environment, and install Box Embeddings in editable mode by running:
+Create a Python 3.7 or 3.8 virtual environment under the project directory and install the `Box Embeddings`
+package in editable mode by running:
 
-```
+```shell
+virtualenv box_venv
+source box_venv/bin/activate
 pip install --editable . --user
 pip install -r core_requirements.txt
 ```
-## Package Overview
+## 👟 Quick start
+After installing `Box Embeddings`, a box can be initialized from a tensor as follows:
+
+```python
+import torch
+from box_embeddings.parameterizations.box_tensor import BoxTensor
+data_x = torch.tensor([[1,2],[-1,5]])
+box_x = BoxTensor(data_x)
+box_x
+```
+
+The result `box_x` is now a `BoxTensor` object. To view other examples, visit the
+[examples section](https://github.com/iesl/box-embeddings/tree/main/usage_doc).
+
+```python
+BoxTensor(tensor([[ 1,  2],
+        [-1,  5]]))
+```
+
+
+## 📖 Command Overview
+
 | Command | Description |
 | --- | --- |
 | `box_embeddings` | An open-source library for NLP or graph learning |
@@ -40,11 +76,32 @@ pip install -r core_requirements.txt
 | `box_embeddings.parameterizations` | A collection of modules to parameterize boxes|
 
 
-## Citing
+## 📍 Navigating the codebase
 
-1. If you use simple hard boxes with surrogate loss then cite the following paper:
+| Task | Where to go |
+| --- |:---:|
+| Contribution manual | [Link](https://github.com/iesl/box-embeddings/blob/main/.github/CONTRIBUTING.md) |
+| Source codes | [Link](https://github.com/iesl/box-embeddings/tree/main/box_embeddings) |
+| Usage documentation| [Link](https://github.com/iesl/box-embeddings/tree/main/usage_doc) |
+| Training examples | [Link](https://github.com/iesl/box-embeddings/tree/main/examples)|
+| Unit tests | [Link](https://github.com/iesl/box-embeddings/tree/main/tests)|
 
+## 📚 Reference
+
+1. If you use this library in you work, please cite the following arXiv version of the paper
+```bibtex
+@article{chheda2021box,
+  title={Box Embeddings: An open-source library for representation learning using geometric structures},
+  author={Chheda, Tejas and Goyal, Purujit and Tran, Trang and Patel, Dhruvesh and Boratko, Michael
+  and Dasgupta, Shib Sankar and McCallum, Andrew},
+  journal={arXiv preprint arXiv:2109.04997},
+  year={2021}
+}
 ```
+
+2. If you use simple hard boxes with surrogate loss then cite the following paper:
+
+```bibtex
 @inproceedings{vilnis2018probabilistic,
   title={Probabilistic Embedding of Knowledge Graphs with Box Lattice Measures},
   author={Vilnis, Luke and Li, Xiang and Murty, Shikhar and McCallum, Andrew},
@@ -55,11 +112,10 @@ pip install -r core_requirements.txt
 }
 ```
 
-2. If you use softboxes without any regularizaton the cite the following paper:
+3. If you use softboxes without any regularizaton the cite the following paper:
 
-```
-@inproceedings{
-li2018smoothing,
+```bibtex
+@inproceedings{li2018smoothing,
 title={Smoothing the Geometry of Probabilistic Box Embeddings},
 author={Xiang Li and Luke Vilnis and Dongxu Zhang and Michael Boratko and Andrew McCallum},
 booktitle={International Conference on Learning Representations},
@@ -68,11 +124,10 @@ url={https://openreview.net/forum?id=H1xSNiRcF7},
 }
 ```
 
-3. If you use softboxes with regularizations defined in the `Regularizations` module then cite the following paper:
+4. If you use softboxes with regularizations defined in the `Regularizations` module then cite the following paper:
 
-```
-@inproceedings{
-patel2020representing,
+```bibtex
+@inproceedings{patel2020representing,
 title={Representing Joint Hierarchies with Box Embeddings},
 author={Dhruvesh Patel and Shib Sankar Dasgupta and Michael Boratko and Xiang Li and Luke Vilnis
 and Andrew McCallum},
@@ -81,9 +136,10 @@ year={2020},
 url={https://openreview.net/forum?id=J246NSqR_l}
 }
 ```
-4. If you use Gumbel box then cite the following paper:
 
-```
+5. If you use Gumbel box then cite the following paper:
+
+```bibtex
 @article{dasgupta2020improving,
   title={Improving Local Identifiability in Probabilistic Box Embeddings},
   author={Dasgupta, Shib Sankar and Boratko, Michael and Zhang, Dongxu and Vilnis, Luke
@@ -93,9 +149,7 @@ url={https://openreview.net/forum?id=J246NSqR_l}
 }
 ```
 
-The code for this library can be found [here](https://github.com/iesl/box-embeddings).
-
-## Contributors
+## 💪 Contributors
 
 * Dhruvesh Patel [@dhruvdcoder](https://github.com/dhruvdcoder)
 
@@ -111,12 +165,15 @@ The code for this library can be found [here](https://github.com/iesl/box-embedd
 
 * Tejas Chheda [@tejas4888](https://github.com/tejas4888)
 
-## Contributions
 We welcome all contributions from the community to make Box Embeddings a better package.
 If you're a first time contributor, we recommend you start by reading our
 [CONTRIBUTING.md](https://github.com/iesl/box-embeddings/blob/main/.github/CONTRIBUTING.md) guide.
 
-## Team
+
+## 💡 News and Updates
+Our library `Box Embeddings` will be officially introduced at EMNLP 2021!
+
+## 🤗 Acknowledgments
 Box Embeddings is an open-source project developed by the research team from the
 [Information Extraction and Synthesis Laboratory](http://www.iesl.cs.umass.edu/) at the
 [College of Information and Computer Sciences (UMass Amherst)](https://www.cics.umass.edu/).
