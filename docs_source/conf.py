@@ -61,12 +61,9 @@ autoapi_keep_files = True
 # see: https://github.com/data-describe/data-describe/blob/master/docs/source/conf.py
 # and https://github.com/data-describe/data-describe/blob/master/docs/make.py
 # Multiversioning
-##smv_tag_whitelist = r"^v\d+\.\d+\.\d+b?\d*$"
-#smv_tag_whitelist = None
-##smv_branch_whitelist = r"^.*main$"
-#smv_branch_whitelist = r"featfix-docs-and-license"
-#smv_remote_whitelist = r"^.*$"
-##smv_remote_whitelist = None
+smv_tag_whitelist = r"^v\d+\.\d+\.\d+b?\d*$"
+smv_branch_whitelist = r"^.*main$"
+smv_remote_whitelist = r"^.*$"
 html_sidebars = {
     "**": [
         "about.html",

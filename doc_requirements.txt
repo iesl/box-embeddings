@@ -6,3 +6,4 @@ sphinx-autoapi
 sphinx-multiversion
 torch >= 1.6.0
 tensorflow >= 2.4.0
+mistune == 0.8.4
