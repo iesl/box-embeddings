@@ -12,8 +12,8 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.graphviz",
     "sphinx.ext.inheritance_diagram",
-#    "sphinx.ext.githubpages", # we don't need this because we will manually place CNAME and .nojekyll
-#    "sphinx.ext.coverage", # don't need this either. We will shift to docstr-coverage
+    #    "sphinx.ext.githubpages", # we don't need this because we will manually place CNAME and .nojekyll
+    #    "sphinx.ext.coverage", # don't need this either. We will shift to docstr-coverage
     "sphinx_multiversion",
     "m2r",
 ]
@@ -34,11 +34,11 @@ html_theme_options = {
     "github_repo": "box-embeddings",
     "github_banner": True,
     "github_button": True,
-    #"description": "Python implementation for box embeddings and box representations",
+    # "description": "Python implementation for box embeddings and box representations",
 }
 
-html_extra_path = ['../docs_source/static']
-html_css_files = ['../custom_t.css']
+html_extra_path = ["../docs_source/static"]
+html_css_files = ["../custom_t.css"]
 add_module_names = False
 
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#confval-autoclass_content
@@ -50,10 +50,10 @@ autoapi_dirs = ["../box_embeddings"]
 autoapi_root = "."
 autoapi_options = [
     "members",
-    "inherited-members",
-    "undoc-members",
+    #    "inherited-members",
+        "undoc-members",
     "show-inheritance",
-    #"show-module-summary",
+    # "show-module-summary",
 ]
 autoapi_add_toctree_entry = False
 autoapi_keep_files = True
