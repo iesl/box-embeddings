@@ -1,0 +1,19 @@
+:py:mod:`box_embeddings.common.constant`
+========================================
+
+.. py:module:: box_embeddings.common.constant
+
+
+Module Contents
+---------------
+
+.. py:data:: TANH_EPS
+   :annotation: = 1e-20
+
+   
+
+.. py:data:: EULER_GAMMA
+   :annotation: = 0.5772156649015329
+
+   
+

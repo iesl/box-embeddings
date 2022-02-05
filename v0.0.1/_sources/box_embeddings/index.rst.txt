@@ -1,0 +1,37 @@
+:py:mod:`box_embeddings`
+========================
+
+.. py:module:: box_embeddings
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   common/index.rst
+   initializations/index.rst
+   modules/index.rst
+   parameterizations/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: box_debug_level
+   :annotation: = 0
+
+   
+
+.. py:data:: box_debug_level
+   
+
+   
+
+.. py:function:: torch_is_available() -> bool
+
+
+.. py:function:: tensorflow_is_available() -> bool
+
+

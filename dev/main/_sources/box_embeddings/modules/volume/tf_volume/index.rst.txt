@@ -1,0 +1,21 @@
+:py:mod:`box_embeddings.modules.volume.tf_volume`
+=================================================
+
+.. py:module:: box_embeddings.modules.volume.tf_volume
+
+
+Module Contents
+---------------
+
+.. py:data:: eps
+   
+
+   
+
+.. py:class:: TFVolume(log_scale: bool = True, volume_temperature: float = 0.0, intersection_temperature: float = 0.0, **kwargs: Any)
+
+   Bases: :py:obj:`box_embeddings.modules.volume._tf_volume._TFVolume`
+
+   One for All volume class
+
+

@@ -1,0 +1,8 @@
+:orphan:
+
+:py:mod:`box_embeddings.modules.volume._volume`
+===============================================
+
+.. py:module:: box_embeddings.modules.volume._volume
+
+

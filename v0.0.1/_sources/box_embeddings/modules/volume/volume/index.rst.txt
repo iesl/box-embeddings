@@ -1,0 +1,25 @@
+:py:mod:`box_embeddings.modules.volume.volume`
+==============================================
+
+.. py:module:: box_embeddings.modules.volume.volume
+
+
+Module Contents
+---------------
+
+.. py:class:: Volume(log_scale: bool = True, volume_temperature: float = 0.0, intersection_temperature: float = 0.0, **kwargs: Any)
+
+   Bases: :py:obj:`box_embeddings.modules.volume._volume._Volume`
+
+   One for All volume class
+
+   .. py:method:: forward(self, box_tensor: box_embeddings.parameterizations.box_tensor.BoxTensor) -> torch.Tensor
+
+      Base implementation is hard (ReLU) volume.
+
+      :param box_tensor: Input box tensor
+
+      :returns: torch.Tensor
+
+
+

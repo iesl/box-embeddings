@@ -1,0 +1,44 @@
+:py:mod:`box_embeddings.modules.volume.tf_bessel_volume`
+========================================================
+
+.. py:module:: box_embeddings.modules.volume.tf_bessel_volume
+
+
+Module Contents
+---------------
+
+.. py:data:: eps
+   :annotation: = 1e-23
+
+   
+
+.. py:data:: euler_gamma
+   :annotation: = 0.5772156649015329
+
+   
+
+.. py:function:: tf_bessel_volume_approx(box_tensor: box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor, volume_temperature: float = 1.0, intersection_temperature: float = 1.0, log_scale: bool = True, scale: float = 1.0) -> tensorflow.Tensor
+
+   Volume of boxes. Uses the Softplus as an approximation of
+   Bessel funtion.
+
+   :param box_tensor: input
+   :param volume_temperature: 1/volume_temperature is the beta parameter for the softplus
+   :param intersection_temperature: the intersection_temperature parameter (same value used in intersection).
+   :param log_scale: Whether the output should be in log scale or not.
+   :param scale: scale parameter. Should be left as 1.0 (default)
+                 in most cases.
+
+   :returns: Tensor of shape (..., ) when self has shape (..., 2, num_dims)
+
+   :raises ValueError: if scale not in (0,1] or volume_temperature is 0.
+
+
+.. py:class:: TFBesselApproxVolume(log_scale: bool = True, volume_temperature: float = 1.0, intersection_temperature: float = 1.0)
+
+   Bases: :py:obj:`box_embeddings.modules.volume._tf_volume._TFVolume`
+
+   Uses the Softplus as an approximation of
+   Bessel function.
+
+

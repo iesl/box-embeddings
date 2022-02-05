@@ -1,0 +1,23 @@
+:py:mod:`box_embeddings.modules.tf_embedding`
+=============================================
+
+.. py:module:: box_embeddings.modules.tf_embedding
+
+
+Module Contents
+---------------
+
+.. py:class:: TFBoxEmbedding(num_embeddings: int, embedding_dim: int, box_factory: box_embeddings.parameterizations.tf_box_tensor.TFBoxFactory = None, box_initializer: box_embeddings.initializations.tf_initializer.TFBoxInitializer = None, **kwargs: Any)
+
+   Bases: :py:obj:`tensorflow.keras.layers.Embedding`
+
+   Embedding which returns boxes instead of vectors
+
+   .. py:method:: all_boxes(self) -> box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor
+      :property:
+
+
+   .. py:method:: get_bounding_box(self) -> box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor
+
+
+

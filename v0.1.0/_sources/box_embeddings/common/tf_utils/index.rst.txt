@@ -1,0 +1,118 @@
+:py:mod:`box_embeddings.common.tf_utils`
+========================================
+
+.. py:module:: box_embeddings.common.tf_utils
+
+
+Module Contents
+---------------
+
+.. py:function:: tiny_value_of_dtype(dtype: tensorflow.dtypes.DType) -> float
+
+   This implementation is adopted from AllenNLP.
+
+   Returns a moderately tiny value for a given PyTorch data type that is used to avoid numerical
+   issues such as division by zero.
+   This is different from `info_value_of_dtype(dtype).tiny` because it causes some NaN bugs.
+   Only supports floating point dtypes.
+
+   :param dtype: torch dtype of supertype float
+
+   :returns: Tiny value
+   :rtype: float
+
+   :raises TypeError: Given non-float or unknown type
+
+
+.. py:function:: log1mexp(x: tensorflow.Tensor, split_point: float = _log1mexp_switch, exp_zero_eps: float = 1e-07) -> tensorflow.Tensor
+
+   Computes log(1 - exp(x)).
+
+   Splits at x=log(1/2) for x in (-inf, 0] i.e. at -x=log(2) for -x in [0, inf).
+
+   = log1p(-exp(x)) when x <= log(1/2)
+   or
+   = log(-expm1(x)) when log(1/2) < x <= 0
+
+   For details, see
+
+   https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf
+
+   https://github.com/visinf/n3net/commit/31968bd49c7d638cef5f5656eb62793c46b41d76
+
+   :param x: input tensor
+   :param split_point: Should be kept to the default of log(0.5)
+   :param exp_zero_eps: Default 1e-7
+
+   :returns: Elementwise log1mexp(x) = log(1-exp(x))
+   :rtype: torch.Tensor
+
+
+.. py:function:: log1pexp(x: tensorflow.Tensor) -> tensorflow.Tensor
+
+   Computes log(1+exp(x))
+
+   see: Page 7, eqn 10 of https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf
+   also see: https://github.com/SurajGupta/r-source/blob/master/src/nmath/plogis.c
+
+   :param x: Tensor
+
+   :returns: Elementwise log1pexp(x) = log(1+exp(x))
+   :rtype: torch.Tensor
+
+
+.. py:function:: softplus_inverse(t: tensorflow.Tensor, beta: float = 1.0, threshold: float = 20) -> tensorflow.Tensor
+
+   Computes the inverse softplus
+
+   :param t: input tensor
+   :param beta: TODO
+   :param threshold: TODO
+
+   :returns: softplus inverse of the input
+
+
+.. py:data:: lse_eps
+   :annotation: = 1e-38
+
+   
+
+.. py:data:: log_lse_eps
+   
+
+   
+
+.. py:function:: logsumexp2(t1: tensorflow.Tensor, t2: tensorflow.Tensor) -> tensorflow.Tensor
+
+   Performs element-wise logsumexp of two tensors in a numerically stable manner. This can also
+   be thought as a soft/differentiable version of the max operator.
+
+   Specifically, it computes log(exp(t1) + exp(t2)).
+
+   :param t1: First tensor (left operand)
+   :param t2: Second tensor (right operand)
+
+   :returns: logsumexp
+
+
+.. py:function:: inv_sigmoid(t1: tensorflow.Tensor) -> tensorflow.Tensor
+
+   Calculate the inverse of the sigmoid function
+
+   :param t1: a tensor
+
+   :returns: inverse sigmoid of the input
+
+
+.. py:function:: tf_index_select(input_: tensorflow.Tensor, dim: int, indices: List) -> tensorflow.Tensor
+
+   :param input_: input tensor
+   :type input_: tensor
+   :param dim: dimension
+   :type dim: int
+   :param indices: selected indices list
+   :type indices: List
+
+   :returns: Tensor
+
+

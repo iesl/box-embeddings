@@ -1,0 +1,48 @@
+:py:mod:`box_embeddings.common.registrable`
+===========================================
+
+.. py:module:: box_embeddings.common.registrable
+
+.. autoapi-nested-parse::
+
+   Ability to register classes. If AllenNLP is not available, then currently registering won't work.
+
+
+
+Module Contents
+---------------
+
+.. py:data:: logger
+   
+
+   
+
+.. py:data:: T
+   
+
+   
+
+.. py:class:: DummyRegistrable
+
+   Bases: :py:obj:`object`
+
+   Dummy class which implements 'registrable' method which does nothing.
+
+   .. py:method:: register(cls: Type[T], name: str, constructor: str = None, exist_ok: bool = False) -> Callable[[Type[T]], Type[T]]
+      :classmethod:
+
+      Transparent method
+
+      :param name: TODO
+      :param constructor: TODO
+      :param exist_ok: TODO
+
+      :returns: a wrapped callable
+
+
+
+.. py:data:: Registrable
+   
+
+   
+

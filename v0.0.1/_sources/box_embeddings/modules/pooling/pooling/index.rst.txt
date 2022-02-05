@@ -1,0 +1,20 @@
+:py:mod:`box_embeddings.modules.pooling.pooling`
+================================================
+
+.. py:module:: box_embeddings.modules.pooling.pooling
+
+
+Module Contents
+---------------
+
+.. py:class:: BoxPooler
+
+   Bases: :py:obj:`torch.nn.Module`, :py:obj:`box_embeddings.common.registrable.Registrable`
+
+   Base class for Box Pooling
+
+   .. py:method:: forward(self, box_tensor: box_embeddings.parameterizations.BoxTensor, **kwargs: Any) -> box_embeddings.parameterizations.BoxTensor
+      :abstractmethod:
+
+
+

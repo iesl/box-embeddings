@@ -1,0 +1,19 @@
+:py:mod:`box_embeddings.modules.intersection.tf_intersection`
+=============================================================
+
+.. py:module:: box_embeddings.modules.intersection.tf_intersection
+
+
+Module Contents
+---------------
+
+.. py:class:: TFIntersection(name=None)
+
+   Bases: :py:obj:`tensorflow.Module`, :py:obj:`box_embeddings.common.registrable.Registrable`
+
+   Base class for intersection Layer
+
+   .. py:method:: forward(self, left: box_embeddings.parameterizations.TFBoxTensor, right: box_embeddings.parameterizations.TFBoxTensor) -> box_embeddings.parameterizations.TFBoxTensor
+
+
+

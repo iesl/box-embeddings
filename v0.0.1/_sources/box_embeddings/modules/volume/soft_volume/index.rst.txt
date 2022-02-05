@@ -1,0 +1,45 @@
+:py:mod:`box_embeddings.modules.volume.soft_volume`
+===================================================
+
+.. py:module:: box_embeddings.modules.volume.soft_volume
+
+
+Module Contents
+---------------
+
+.. py:data:: eps
+   
+
+   
+
+.. py:function:: soft_volume(box_tensor: box_embeddings.parameterizations.box_tensor.BoxTensor, volume_temperature: float = 1.0, log_scale: bool = True, scale: float = 1.0) -> torch.Tensor
+
+   Volume of boxes. Uses softplus instead of ReLU/clamp
+
+   :param box_tensor: input
+   :param volume_temperature: 1/volume_temperature is the beta parameter for the softplus
+   :param log_scale: Whether the output should be in log scale or not.
+   :param scale: scale parameter. Should be left as 1.0 (default)
+                 in most cases.
+
+   :returns: Tensor of shape (..., ) when self has shape (..., 2, num_dims)
+
+   :raises ValueError: if scale not in (0,1] or volume_temperature is 0.
+
+
+.. py:class:: SoftVolume(log_scale: bool = True, volume_temperature: float = 1.0)
+
+   Bases: :py:obj:`box_embeddings.modules.volume._volume._Volume`
+
+   Softplus based volume.
+
+   .. py:method:: forward(self, box_tensor: box_embeddings.parameterizations.box_tensor.BoxTensor) -> torch.Tensor
+
+      Soft softplus base (instead of ReLU) volume.
+
+      :param box_tensor: TODO
+
+      :returns: torch.Tensor
+
+
+

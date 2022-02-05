@@ -1,0 +1,31 @@
+:py:mod:`box_embeddings.common`
+===============================
+
+.. py:module:: box_embeddings.common
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   constant/index.rst
+   registrable/index.rst
+   tf_utils/index.rst
+   utils/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: ALLENNLP_PRESENT
+   :annotation: = True
+
+   
+
+.. py:data:: ALLENNLP_PRESENT
+   :annotation: = False
+
+   
+

@@ -1,0 +1,33 @@
+:py:mod:`box_embeddings.initializations.tf_uniform_boxes`
+=========================================================
+
+.. py:module:: box_embeddings.initializations.tf_uniform_boxes
+
+
+Module Contents
+---------------
+
+.. py:function:: tf_uniform_boxes(dimensions: int, num_boxes: int, minimum: float = 0.0, maximum: float = 1.0, delta_min: float = 0.01, delta_max: float = 0.5) -> Tuple[tensorflow.Tensor, tensorflow.Tensor]
+
+   Creates uniform boxes such that each box is inside the
+   bounding box defined by (minimum,maximum) in each dimension.
+
+   :param dimensions: TODO
+   :param num_boxes: TODO
+   :param minimum: TODO
+   :param maximum: TODO
+   :param delta_min: TODO
+   :param delta_max: TODO
+
+   :returns: z, Z tensors
+
+   :raises ValueError: TODO
+
+
+.. py:class:: TFUniformBoxInitializer(dimensions: int, num_boxes: int, box_type_factory: box_embeddings.parameterizations.tf_box_tensor.TFBoxFactory, minimum: float = 0.0, maximum: float = 1.0, delta_min: float = 0.01, delta_max: float = 0.5)
+
+   Bases: :py:obj:`box_embeddings.initializations.tf_initializer.TFBoxInitializer`
+
+   Docstring for UniformBoxInitializer.
+
+

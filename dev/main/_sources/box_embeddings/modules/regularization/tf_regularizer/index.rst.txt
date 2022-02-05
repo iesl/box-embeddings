@@ -1,0 +1,16 @@
+:py:mod:`box_embeddings.modules.regularization.tf_regularizer`
+==============================================================
+
+.. py:module:: box_embeddings.modules.regularization.tf_regularizer
+
+
+Module Contents
+---------------
+
+.. py:class:: TFBoxRegularizer(weight: float, log_scale: bool = True, reduction: str = 'sum', **kwargs: Any)
+
+   Bases: :py:obj:`tensorflow.Module`, :py:obj:`box_embeddings.common.registrable.Registrable`
+
+   Base box-regularizer class
+
+

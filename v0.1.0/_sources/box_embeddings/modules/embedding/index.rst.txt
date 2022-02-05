@@ -1,0 +1,26 @@
+:py:mod:`box_embeddings.modules.embedding`
+==========================================
+
+.. py:module:: box_embeddings.modules.embedding
+
+
+Module Contents
+---------------
+
+.. py:class:: BoxEmbedding(num_embeddings: int, embedding_dim: int, box_factory: box_embeddings.parameterizations.box_tensor.BoxFactory = None, box_initializer: box_embeddings.initializations.initializer.BoxInitializer = None, **kwargs: Any)
+
+   Bases: :py:obj:`torch.nn.Embedding`
+
+   Embedding which returns boxes instead of vectors
+
+   .. py:method:: forward(self, inputs: torch.Tensor) -> box_embeddings.parameterizations.box_tensor.BoxTensor
+
+
+   .. py:method:: all_boxes(self) -> box_embeddings.parameterizations.box_tensor.BoxTensor
+      :property:
+
+
+   .. py:method:: get_bounding_box(self) -> box_embeddings.parameterizations.box_tensor.BoxTensor
+
+
+

@@ -1,0 +1,28 @@
+:py:mod:`box_embeddings.modules.intersection`
+=============================================
+
+.. py:module:: box_embeddings.modules.intersection
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   gumbel_intersection/index.rst
+   hard_intersection/index.rst
+   intersection/index.rst
+   tf_gumbel_intersection/index.rst
+   tf_hard_intersection/index.rst
+   tf_intersection/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: logger
+   
+
+   
+

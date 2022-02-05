@@ -1,0 +1,89 @@
+:py:mod:`box_embeddings.parameterizations.tf_delta_box_tensor`
+==============================================================
+
+.. py:module:: box_embeddings.parameterizations.tf_delta_box_tensor
+
+.. autoapi-nested-parse::
+
+   Implementation of min-delta box parameterization.
+
+
+
+Module Contents
+---------------
+
+.. py:class:: TFMinDeltaBoxTensor(data: Union[tensorflow.Tensor, Tuple[tensorflow.Tensor, tensorflow.Tensor]], beta: float = 1.0, threshold: float = 20)
+
+   Bases: :py:obj:`box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor`
+
+   Unconstrained min-delta box tensor.
+
+   For input of the shape (..., 2, box_dim), this parameterization
+   defines z=w, and Z=w + delta, where w and delta come from the -2th dimension
+   of the input. It uses softplus to keep the delta positive.
+
+
+   .. py:method:: kwargs(self) -> Dict
+      :property:
+
+      Configuration attribute values
+
+      :returns: Dict
+
+
+   .. py:method:: args(self) -> Tuple
+      :property:
+
+
+   .. py:method:: Z(self) -> tensorflow.Tensor
+      :property:
+
+      Top right coordinate as Tensor
+
+      :returns: top right corner
+      :rtype: Tensor
+
+
+   .. py:method:: W(cls: Type[box_embeddings.parameterizations.tf_box_tensor.TFTBoxTensor], z: tensorflow.Tensor, Z: tensorflow.Tensor, beta: float = 1.0, threshold: float = 20.0) -> tensorflow.Tensor
+      :classmethod:
+
+      Given (z,Z), it returns one set of valid box weights W, such that
+      Box(W) = (z,Z).
+
+      The min coordinate is stored as is:
+      W[...,0,:] = z
+      W[...,1,:] = softplus_inverse(Z-z)
+
+      The max coordinate is transformed
+
+
+      :param z: Lower left coordinate of shape (..., hidden_dims)
+      :param Z: Top right coordinate of shape (..., hidden_dims)
+      :param beta: TODO
+      :param threshold: TODO
+
+      :returns:
+
+                Parameters of the box. In base class implementation, this
+                    will have shape (..., 2, hidden_dims).
+      :rtype: Tensor
+
+
+   .. py:method:: from_vector(cls, vector: tensorflow.Tensor, beta: float = 1.0, threshold: float = 20) -> box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor
+      :classmethod:
+
+      Creates a box for a vector. In this base implementation the vector is split
+      into two pieces and these are used as z and delta.
+
+      :param vector: tensor
+      :param beta: beta parameter for softplus for delta. Depending on the
+                   universe box and your inputs ranges, you might want to change this.
+                   Higher values of beta will make softplus harder and bring it close to ReLU.
+      :param threshold: parameter for the softplus for delta
+
+      :returns: A BoxTensor
+
+      :raises ValueError: if last dimension is not even
+
+
+

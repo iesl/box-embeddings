@@ -1,0 +1,28 @@
+:py:mod:`box_embeddings.parameterizations`
+==========================================
+
+.. py:module:: box_embeddings.parameterizations
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   box_tensor/index.rst
+   delta_box_tensor/index.rst
+   sigmoid_box_tensor/index.rst
+   tf_box_tensor/index.rst
+   tf_delta_box_tensor/index.rst
+   tf_sigmoid_box_tensor/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: logger
+   
+
+   
+

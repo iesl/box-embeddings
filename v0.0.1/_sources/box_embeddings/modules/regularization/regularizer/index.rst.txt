@@ -1,0 +1,25 @@
+:py:mod:`box_embeddings.modules.regularization.regularizer`
+===========================================================
+
+.. py:module:: box_embeddings.modules.regularization.regularizer
+
+
+Module Contents
+---------------
+
+.. py:class:: BoxRegularizer(weight: float, log_scale: bool = True, **kwargs: Any)
+
+   Bases: :py:obj:`torch.nn.Module`, :py:obj:`box_embeddings.common.registrable.Registrable`
+
+   Base box-regularizer class
+
+   .. py:method:: forward(self, box_tensor: box_embeddings.parameterizations.box_tensor.BoxTensor) -> Union[float, torch.Tensor]
+
+      Calls the _forward and multiplies the weight
+
+      :param box_tensor: Input box tensor
+
+      :returns: scalar regularization loss
+
+
+

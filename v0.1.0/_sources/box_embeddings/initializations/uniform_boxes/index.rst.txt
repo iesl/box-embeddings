@@ -1,0 +1,33 @@
+:py:mod:`box_embeddings.initializations.uniform_boxes`
+======================================================
+
+.. py:module:: box_embeddings.initializations.uniform_boxes
+
+
+Module Contents
+---------------
+
+.. py:function:: uniform_boxes(dimensions: int, num_boxes: int, minimum: float = 0.0, maximum: float = 1.0, delta_min: float = 0.01, delta_max: float = 0.5) -> Tuple[torch.Tensor, torch.Tensor]
+
+   Creates uniform boxes such that each box is inside the
+   bounding box defined by (minimum,maximum) in each dimension.
+
+   :param dimensions: number of dimensions for the box
+   :param num_boxes: number of boxes to be created
+   :param minimum: min dimension of the bounding box in each dimension.
+   :param maximum: maximum dimension of the bounding box in each dimension.
+   :param delta_min: TODO
+   :param delta_max: TODO
+
+   :returns: z, Z tensors
+
+   :raises ValueError: TODO
+
+
+.. py:class:: UniformBoxInitializer(dimensions: int, num_boxes: int, box_type_factory: box_embeddings.parameterizations.box_tensor.BoxFactory, minimum: float = 0.0, maximum: float = 1.0, delta_min: float = 0.01, delta_max: float = 0.5)
+
+   Bases: :py:obj:`box_embeddings.initializations.initializer.BoxInitializer`
+
+   Docstring for UniformBoxInitializer.
+
+

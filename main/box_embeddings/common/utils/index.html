@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>box_embeddings.common.utils &#8212; Box Embeddings  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/../custom_t.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="canonical" href="http://iesl.cs.umass.edu/box-embeddings/box_embeddings/common/utils/index.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="box_embeddings.initializations" href="../../initializations/index.html" />
+    <link rel="prev" title="box_embeddings.common.tf_utils" href="../tf_utils/index.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-box_embeddings.common.utils">
+<span id="box-embeddings-common-utils"></span><h1><a class="reference internal" href="#module-box_embeddings.common.utils" title="box_embeddings.common.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">box_embeddings.common.utils</span></code></a><a class="headerlink" href="#module-box_embeddings.common.utils" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="box_embeddings.common.utils.tiny_value_of_dtype">
+<span class="sig-name descname"><span class="pre">tiny_value_of_dtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.dtype</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#box_embeddings.common.utils.tiny_value_of_dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>This implementation is adopted from AllenNLP.</p>
+<p>Returns a moderately tiny value for a given PyTorch data type that is used to avoid numerical
+issues such as division by zero.
+This is different from <cite>info_value_of_dtype(dtype).tiny</cite> because it causes some NaN bugs.
+Only supports floating point dtypes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> – torch dtype of supertype float</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tiny value</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TypeError</strong> – Given non-float or unknown type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="box_embeddings.common.utils.log1mexp">
+<span class="sig-name descname"><span class="pre">log1mexp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">_log1mexp_switch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp_zero_eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#box_embeddings.common.utils.log1mexp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes log(1 - exp(x)).</p>
+<p>Splits at x=log(1/2) for x in (-inf, 0] i.e. at -x=log(2) for -x in [0, inf).</p>
+<p>= log1p(-exp(x)) when x &lt;= log(1/2)
+or
+= log(-expm1(x)) when log(1/2) &lt; x &lt;= 0</p>
+<p>For details, see</p>
+<p><a class="reference external" href="https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf">https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf</a></p>
+<p><a class="reference external" href="https://github.com/visinf/n3net/commit/31968bd49c7d638cef5f5656eb62793c46b41d76">https://github.com/visinf/n3net/commit/31968bd49c7d638cef5f5656eb62793c46b41d76</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – input tensor</p></li>
+<li><p><strong>split_point</strong> – Should be kept to the default of log(0.5)</p></li>
+<li><p><strong>exp_zero_eps</strong> – Default 1e-7</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Elementwise log1mexp(x) = log(1-exp(x))</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="box_embeddings.common.utils.log1pexp">
+<span class="sig-name descname"><span class="pre">log1pexp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#box_embeddings.common.utils.log1pexp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes log(1+exp(x))</p>
+<p>see: Page 7, eqn 10 of <a class="reference external" href="https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf">https://cran.r-project.org/web/packages/Rmpfr/vignettes/log1mexp-note.pdf</a>
+also see: <a class="reference external" href="https://github.com/SurajGupta/r-source/blob/master/src/nmath/plogis.c">https://github.com/SurajGupta/r-source/blob/master/src/nmath/plogis.c</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – Tensor</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Elementwise log1pexp(x) = log(1+exp(x))</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="box_embeddings.common.utils.softplus_inverse">
+<span class="sig-name descname"><span class="pre">softplus_inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#box_embeddings.common.utils.softplus_inverse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="box_embeddings.common.utils.lse_eps">
+<span class="sig-name descname"><span class="pre">lse_eps</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">1e-38</span></em><a class="headerlink" href="#box_embeddings.common.utils.lse_eps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="box_embeddings.common.utils.log_lse_eps">
+<span class="sig-name descname"><span class="pre">log_lse_eps</span></span><a class="headerlink" href="#box_embeddings.common.utils.log_lse_eps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="box_embeddings.common.utils.logsumexp2">
+<span class="sig-name descname"><span class="pre">logsumexp2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#box_embeddings.common.utils.logsumexp2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs element-wise logsumexp of two tensors in a numerically stable manner. This can also
+be thought as a soft/differentiable version of the max operator.</p>
+<p>Specifically, it computes log(exp(t1) + exp(t2)).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t1</strong> – First tensor (left operand)</p></li>
+<li><p><strong>t2</strong> – Second tensor (right operand)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>logsumexp</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="box_embeddings.common.utils.inv_sigmoid">
+<span class="sig-name descname"><span class="pre">inv_sigmoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#box_embeddings.common.utils.inv_sigmoid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/UMass_IESL.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../../../index.html">Box Embeddings</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=iesl&repo=box-embeddings&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Code</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">box_embeddings.common</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../initializations/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">box_embeddings.initializations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../modules/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">box_embeddings.modules</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../parameterizations/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">box_embeddings.parameterizations</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">box_embeddings</span></code></a><ul>
+  <li><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">box_embeddings.common</span></code></a><ul>
+      <li>Previous: <a href="../tf_utils/index.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">box_embeddings.common.tf_utils</span></code></a></li>
+      <li>Next: <a href="../../initializations/index.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">box_embeddings.initializations</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+<h3>Branches</h3>
+<ul>
+  <li><a href="index.html">main</a></li>
+  <li><a href="../../../../dev/main/index.html">dev/main</a></li>
+</ul>
+<h3>Tags</h3>
+<ul>
+  <li><a href="../../../../v0.0.1/index.html">v0.0.1</a></li>
+  <li><a href="../../../../v0.1.0/index.html">v0.1.0</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Information Extraction and Synthesis Lab, UMass.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../../_sources/box_embeddings/common/utils/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/iesl/box-embeddings" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

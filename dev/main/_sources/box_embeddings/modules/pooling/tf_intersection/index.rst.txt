@@ -1,0 +1,19 @@
+:py:mod:`box_embeddings.modules.pooling.tf_intersection`
+========================================================
+
+.. py:module:: box_embeddings.modules.pooling.tf_intersection
+
+
+Module Contents
+---------------
+
+.. py:function:: tf_hard_intersection_pooler(boxes: box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor, mask: tensorflow.Tensor = None, dim: int = 0, keepdim: bool = False) -> box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor
+
+
+.. py:class:: TFHardIntersectionBoxPooler(dim: int = 0, keepdim: bool = False)
+
+   Bases: :py:obj:`box_embeddings.modules.pooling.tf_pooling.TFBoxPooler`
+
+   Pools a box tensor using hard intersection operation
+
+

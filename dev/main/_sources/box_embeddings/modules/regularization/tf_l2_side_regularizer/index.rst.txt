@@ -1,0 +1,31 @@
+:py:mod:`box_embeddings.modules.regularization.tf_l2_side_regularizer`
+======================================================================
+
+.. py:module:: box_embeddings.modules.regularization.tf_l2_side_regularizer
+
+
+Module Contents
+---------------
+
+.. py:data:: eps
+   :annotation: = 1e-23
+
+   
+
+.. py:function:: tf_l2_side_regularizer(box_tensor: box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor, log_scale: bool = False) -> tensorflow.Tensor
+
+   Applies l2 regularization on all sides of all boxes.
+
+   :param box_tensor: TODO
+   :param log_scale: mean in log scale
+
+   :returns: (None)
+
+
+.. py:class:: TFL2SideBoxRegularizer(weight: float, log_scale: bool = False, reduction: str = 'sum')
+
+   Bases: :py:obj:`box_embeddings.modules.regularization.tf_regularizer.TFBoxRegularizer`
+
+   Applies l2 regularization on side lengths.
+
+

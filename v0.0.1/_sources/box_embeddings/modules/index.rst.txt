@@ -1,0 +1,29 @@
+:py:mod:`box_embeddings.modules`
+================================
+
+.. py:module:: box_embeddings.modules
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   intersection/index.rst
+   pooling/index.rst
+   regularization/index.rst
+   volume/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   box_module/index.rst
+   embedding/index.rst
+   tf_embedding/index.rst
+
+

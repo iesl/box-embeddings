@@ -1,0 +1,40 @@
+:py:mod:`box_embeddings.modules.volume.hard_volume`
+===================================================
+
+.. py:module:: box_embeddings.modules.volume.hard_volume
+
+
+Module Contents
+---------------
+
+.. py:data:: eps
+   
+
+   
+
+.. py:function:: hard_volume(box_tensor: box_embeddings.parameterizations.BoxTensor, log_scale: bool = True) -> torch.Tensor
+
+   Volume of boxes. Returns 0 where boxes are flipped.
+
+   :param box_tensor: input
+   :param log_scale: Whether the output should be in log scale or not.
+
+   :returns: Tensor of shape (..., ) when self has shape (..., 2, num_dims)
+
+
+.. py:class:: HardVolume(log_scale: bool = True, **kwargs: Any)
+
+   Bases: :py:obj:`box_embeddings.modules.volume._volume._Volume`
+
+   Hard ReLU based volume.
+
+   .. py:method:: forward(self, box_tensor: box_embeddings.parameterizations.BoxTensor) -> torch.Tensor
+
+      Hard ReLU base volume.
+
+      :param box_tensor: TODO
+
+      :returns: torch.Tensor
+
+
+

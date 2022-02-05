@@ -1,0 +1,16 @@
+:py:mod:`box_embeddings.modules.pooling.tf_pooling`
+===================================================
+
+.. py:module:: box_embeddings.modules.pooling.tf_pooling
+
+
+Module Contents
+---------------
+
+.. py:class:: TFBoxPooler(name=None)
+
+   Bases: :py:obj:`tensorflow.Module`, :py:obj:`box_embeddings.common.registrable.Registrable`
+
+   Base class for Box Pooling
+
+

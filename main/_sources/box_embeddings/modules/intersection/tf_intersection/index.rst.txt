@@ -1,0 +1,16 @@
+:py:mod:`box_embeddings.modules.intersection.tf_intersection`
+=============================================================
+
+.. py:module:: box_embeddings.modules.intersection.tf_intersection
+
+
+Module Contents
+---------------
+
+.. py:class:: TFIntersection(intersection_temperature: float = 0.0, approximation_mode: Optional[str] = None)
+
+   Bases: :py:obj:`box_embeddings.modules.intersection._tf_intersection._TFIntersection`
+
+   All for one Intersection operation as Layer/Module
+
+

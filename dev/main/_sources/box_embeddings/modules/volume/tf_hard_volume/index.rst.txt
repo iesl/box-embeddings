@@ -1,0 +1,24 @@
+:py:mod:`box_embeddings.modules.volume.tf_hard_volume`
+======================================================
+
+.. py:module:: box_embeddings.modules.volume.tf_hard_volume
+
+
+Module Contents
+---------------
+
+.. py:data:: eps
+   :annotation: = 1e-23
+
+   
+
+.. py:function:: tf_hard_volume(box_tensor: box_embeddings.parameterizations.TFBoxTensor, log_scale: bool = True) -> tensorflow.Tensor
+
+
+.. py:class:: TFHardVolume(log_scale: bool = True, **kwargs: Any)
+
+   Bases: :py:obj:`box_embeddings.modules.volume._tf_volume._TFVolume`
+
+   Hard ReLU based volume.
+
+

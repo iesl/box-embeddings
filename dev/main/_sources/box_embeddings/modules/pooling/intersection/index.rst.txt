@@ -1,0 +1,22 @@
+:py:mod:`box_embeddings.modules.pooling.intersection`
+=====================================================
+
+.. py:module:: box_embeddings.modules.pooling.intersection
+
+
+Module Contents
+---------------
+
+.. py:function:: hard_intersection_pooler(boxes: box_embeddings.parameterizations.box_tensor.BoxTensor, mask: torch.BoolTensor = None, dim: int = 0, keepdim: bool = False) -> box_embeddings.parameterizations.box_tensor.BoxTensor
+
+
+.. py:class:: HardIntersectionBoxPooler(dim: int = 0, keepdim: bool = False)
+
+   Bases: :py:obj:`box_embeddings.modules.pooling.pooling.BoxPooler`
+
+   Pools a box tensor using hard intersection operation
+
+   .. py:method:: forward(self, box_tensor: box_embeddings.parameterizations.box_tensor.BoxTensor, mask: torch.BoolTensor = None) -> box_embeddings.parameterizations.box_tensor.BoxTensor
+
+
+

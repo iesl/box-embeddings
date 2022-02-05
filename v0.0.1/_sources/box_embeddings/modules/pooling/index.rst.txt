@@ -1,0 +1,17 @@
+:py:mod:`box_embeddings.modules.pooling`
+========================================
+
+.. py:module:: box_embeddings.modules.pooling
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   bag_of_boxes/index.rst
+   intersection/index.rst
+   pooling/index.rst
+
+

@@ -1,0 +1,29 @@
+:py:mod:`box_embeddings.modules.volume`
+=======================================
+
+.. py:module:: box_embeddings.modules.volume
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   bessel_volume/index.rst
+   hard_volume/index.rst
+   soft_volume/index.rst
+   tf_bessel_volume/index.rst
+   tf_soft_volume/index.rst
+   tf_volume/index.rst
+   volume/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: logger
+   
+
+   
+

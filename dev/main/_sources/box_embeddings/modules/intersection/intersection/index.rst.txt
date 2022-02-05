@@ -1,0 +1,16 @@
+:py:mod:`box_embeddings.modules.intersection.intersection`
+==========================================================
+
+.. py:module:: box_embeddings.modules.intersection.intersection
+
+
+Module Contents
+---------------
+
+.. py:class:: Intersection(intersection_temperature: float = 0.0, approximation_mode: Optional[str] = None)
+
+   Bases: :py:obj:`box_embeddings.modules.intersection._intersection._Intersection`
+
+   All for one Intersection operation as Layer/Module
+
+

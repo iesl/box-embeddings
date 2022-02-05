@@ -1,0 +1,30 @@
+:py:mod:`box_embeddings.modules.pooling.bag_of_boxes`
+=====================================================
+
+.. py:module:: box_embeddings.modules.pooling.bag_of_boxes
+
+
+Module Contents
+---------------
+
+.. py:function:: bag_of_boxes_pooler(boxes: box_embeddings.parameterizations.box_tensor.BoxTensor, mask: Optional[torch.BoolTensor] = None, weights: Optional[torch.Tensor] = None, dim: int = 0, keepdim: bool = False) -> box_embeddings.parameterizations.box_tensor.BoxTensor
+
+
+.. py:class:: BagOfBoxesBoxPooler(dim: int = 0, keepdim: bool = False)
+
+   Bases: :py:obj:`box_embeddings.modules.pooling.pooling.BoxPooler`
+
+   Pools a box tensor using hard intersection operation
+
+   .. py:method:: forward(self, box_tensor: box_embeddings.parameterizations.box_tensor.BoxTensor, mask: torch.BoolTensor = None, weights: torch.BoolTensor = None) -> box_embeddings.parameterizations.box_tensor.BoxTensor
+
+      :param box_tensor: Input
+      :param mask: With shape as box_tensor.box_shape[:-1].
+                   0 at a position means mask it.
+      :param weights: With shape as box_tensor.box_shape[:-1].
+
+      :returns: Pooled output
+      :rtype: BoxTensor
+
+
+

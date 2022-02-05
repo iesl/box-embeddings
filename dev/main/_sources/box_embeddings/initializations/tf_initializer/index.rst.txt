@@ -1,0 +1,16 @@
+:py:mod:`box_embeddings.initializations.tf_initializer`
+=======================================================
+
+.. py:module:: box_embeddings.initializations.tf_initializer
+
+
+Module Contents
+---------------
+
+.. py:class:: TFBoxInitializer
+
+   Bases: :py:obj:`object`
+
+   A base class interface which will initialize a :class:`torch.Tensor` or :class:`torch.nn.Parameter`
+
+

@@ -1,0 +1,8 @@
+:orphan:
+
+:py:mod:`box_embeddings.modules.intersection._intersection`
+===========================================================
+
+.. py:module:: box_embeddings.modules.intersection._intersection
+
+

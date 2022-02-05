@@ -1,0 +1,26 @@
+:py:mod:`box_embeddings.modules.regularization`
+===============================================
+
+.. py:module:: box_embeddings.modules.regularization
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   l2_side_regularizer/index.rst
+   regularizer/index.rst
+   tf_l2_side_regularizer/index.rst
+   tf_regularizer/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: logger
+   
+
+   
+

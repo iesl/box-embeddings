@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Box Embeddings &#8212; Box Embeddings  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="_static/../custom_t.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="canonical" href="http://iesl.cs.umass.edu/box-embeddings/index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="box_embeddings" href="box_embeddings/index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="box-embeddings">
+<h1>Box Embeddings<a class="headerlink" href="#box-embeddings" title="Permalink to this headline">¶</a></h1>
+<p>A fully open source Python library for <strong>geometric representation learning</strong>, compatible with both PyTorch and
+TensorFlow, which allows existing neural network layers to be replaced  with or transformed into boxes easily.</p>
+<a class="reference external image-reference" href="https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg"><img alt="Tests" src="https://github.com/iesl/box-embeddings/workflows/Tests/badge.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg"><img alt="Typing/Doc/Style" src="https://github.com/iesl/box-embeddings/workflows/Typing/Doc/Style/badge.svg" /></a>
+<a class="reference external image-reference" href="https://mybinder.org/v2/gh/iesl/box-embeddings/dev/main"><img alt="Binder" src="https://mybinder.org/badge_logo.svg" /></a>
+<a class="reference external image-reference" href="https://codecov.io/gh/iesl/box-embeddings"><img alt="codecov" src="https://codecov.io/gh/iesl/box-embeddings/branch/main/graph/badge.svg?token=XPNQI0QXFZ" /></a>
+<hr/><section id="features">
+<h2>🌟 Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Modular and reusable library that aids the researchers in studying probabilistic box embeddings.</p></li>
+<li><p>Extensive documentation and example code, demonstrating the use of the library to make it easy to
+adapt to existing codebases.</p></li>
+<li><p>Rigorously unit-test the codebase with high coverage, ensuring an additional layer of reliability.</p></li>
+<li><p>Customizable pipelines</p></li>
+<li><p>Actively being maintained by <a class="reference external" href="http://www.iesl.cs.umass.edu/">IESL at UMass</a></p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>💻 Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<section id="installing-via-pip">
+<h3>Installing via pip<a class="headerlink" href="#installing-via-pip" title="Permalink to this headline">¶</a></h3>
+<p>The preferred way to install Box Embeddings for regular usage, test, or integration into the existing workflow
+is via <code class="docutils literal notranslate"><span class="pre">pip</span></code>. Just run</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip install box-embeddings
+</pre></div>
+</div>
+</section>
+<section id="installing-from-source">
+<h3>Installing from source<a class="headerlink" href="#installing-from-source" title="Permalink to this headline">¶</a></h3>
+<p>You can also install Box Embeddings by cloning our git repository</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/iesl/box-embeddings
+</pre></div>
+</div>
+<p>Create a Python 3.7 or 3.8 virtual environment under the project directory and install the <code class="docutils literal notranslate"><span class="pre">Box</span> <span class="pre">Embeddings</span></code>
+package in editable mode by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>virtualenv box_venv
+<span class="nb">source</span> box_venv/bin/activate
+pip install --editable . --user
+pip install -r core_requirements.txt
+</pre></div>
+</div>
+</section>
+</section>
+<section id="quick-start">
+<h2>👟 Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<p>After installing <code class="docutils literal notranslate"><span class="pre">Box</span> <span class="pre">Embeddings</span></code>, a box can be initialized from a tensor as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">box_embeddings.parameterizations.box_tensor</span> <span class="kn">import</span> <span class="n">BoxTensor</span>
+<span class="n">data_x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">]])</span>
+<span class="n">box_x</span> <span class="o">=</span> <span class="n">BoxTensor</span><span class="p">(</span><span class="n">data_x</span><span class="p">)</span>
+<span class="n">box_x</span>
+</pre></div>
+</div>
+<p>The result <code class="docutils literal notranslate"><span class="pre">box_x</span></code> is now a <code class="docutils literal notranslate"><span class="pre">BoxTensor</span></code> object. To view other examples, visit the
+<a class="reference external" href="https://github.com/iesl/box-embeddings/tree/main/usage_doc">examples section</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">BoxTensor</span><span class="p">(</span><span class="n">tensor</span><span class="p">([[</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">2</span><span class="p">],</span>
+        <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">5</span><span class="p">]]))</span>
+</pre></div>
+</div>
+</section>
+<section id="command-overview">
+<h2>📖 Command Overview<a class="headerlink" href="#command-overview" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">box_embeddings</span></code></p></td>
+<td><p>An open-source library for NLP or graph learning</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">box_embeddings.common</span></code></p></td>
+<td><p>Utility modules that are used across the library</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">box_embeddings.initializations</span></code></p></td>
+<td><p>Initialization modules</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">box_embeddings.modules</span></code></p></td>
+<td><p>A collection of modules to operate on boxes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">box_embeddings.parameterizations</span></code></p></td>
+<td><p>A collection of modules to parameterize boxes</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="navigating-the-codebase">
+<h2>📍 Navigating the codebase<a class="headerlink" href="#navigating-the-codebase" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Task</p></th>
+<th class="head"><p>Where to go</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Contribution manual</p></td>
+<td><p><a class="reference external" href="https://github.com/iesl/box-embeddings/blob/main/.github/CONTRIBUTING.md">Link</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Source codes</p></td>
+<td><p><a class="reference external" href="https://github.com/iesl/box-embeddings/tree/main/box_embeddings">Link</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Usage documentation</p></td>
+<td><p><a class="reference external" href="https://github.com/iesl/box-embeddings/tree/main/usage_doc">Link</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Training examples</p></td>
+<td><p><a class="reference external" href="https://github.com/iesl/box-embeddings/tree/main/examples">Link</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Unit tests</p></td>
+<td><p><a class="reference external" href="https://github.com/iesl/box-embeddings/tree/main/tests">Link</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="reference">
+<h2>📚 Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>If you use this library in you work, please cite the following arXiv version of the paper</p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">chheda2021box</span><span class="p">,</span><span class="w"></span>
+<span class="na">title</span><span class="p">=</span><span class="s">{Box Embeddings: An open-source library for representation learning using geometric structures}</span><span class="p">,</span><span class="w"></span>
+<span class="na">author</span><span class="p">=</span><span class="s">{Chheda, Tejas and Goyal, Purujit and Tran, Trang and Patel, Dhruvesh and Boratko, Michael</span>
+<span class="s">and Dasgupta, Shib Sankar and McCallum, Andrew}</span><span class="p">,</span><span class="w"></span>
+<span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2109.04997}</span><span class="p">,</span><span class="w"></span>
+<span class="na">year</span><span class="p">=</span><span class="s">{2021}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>If you use simple hard boxes with surrogate loss then cite the following paper:</p></li>
+</ol>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">vilnis2018probabilistic</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Probabilistic Embedding of Knowledge Graphs with Box Lattice Measures}</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Vilnis, Luke and Li, Xiang and Murty, Shikhar and McCallum, Andrew}</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="na">booktitle</span><span class="p">=</span><span class="s">{Proceedings of the 56th Annual Meeting of the Association for</span>
+<span class="s">  Computational Linguistics (Volume 1: Long Papers)}</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="na">pages</span><span class="p">=</span><span class="s">{263--272}</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2018}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>If you use softboxes without any regularizaton the cite the following paper:</p></li>
+</ol>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">li2018smoothing</span><span class="p">,</span><span class="w"></span>
+<span class="na">title</span><span class="p">=</span><span class="s">{Smoothing the Geometry of Probabilistic Box Embeddings}</span><span class="p">,</span><span class="w"></span>
+<span class="na">author</span><span class="p">=</span><span class="s">{Xiang Li and Luke Vilnis and Dongxu Zhang and Michael Boratko and Andrew McCallum}</span><span class="p">,</span><span class="w"></span>
+<span class="na">booktitle</span><span class="p">=</span><span class="s">{International Conference on Learning Representations}</span><span class="p">,</span><span class="w"></span>
+<span class="na">year</span><span class="p">=</span><span class="s">{2019}</span><span class="p">,</span><span class="w"></span>
+<span class="na">url</span><span class="p">=</span><span class="s">{https://openreview.net/forum?id=H1xSNiRcF7}</span><span class="p">,</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>If you use softboxes with regularizations defined in the <code class="docutils literal notranslate"><span class="pre">Regularizations</span></code> module then cite the following paper:</p></li>
+</ol>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">patel2020representing</span><span class="p">,</span><span class="w"></span>
+<span class="na">title</span><span class="p">=</span><span class="s">{Representing Joint Hierarchies with Box Embeddings}</span><span class="p">,</span><span class="w"></span>
+<span class="na">author</span><span class="p">=</span><span class="s">{Dhruvesh Patel and Shib Sankar Dasgupta and Michael Boratko and Xiang Li and Luke Vilnis</span>
+<span class="s">and Andrew McCallum}</span><span class="p">,</span><span class="w"></span>
+<span class="na">booktitle</span><span class="p">=</span><span class="s">{Automated Knowledge Base Construction}</span><span class="p">,</span><span class="w"></span>
+<span class="na">year</span><span class="p">=</span><span class="s">{2020}</span><span class="p">,</span><span class="w"></span>
+<span class="na">url</span><span class="p">=</span><span class="s">{https://openreview.net/forum?id=J246NSqR_l}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>If you use Gumbel box then cite the following paper:</p></li>
+</ol>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">dasgupta2020improving</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Improving Local Identifiability in Probabilistic Box Embeddings}</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Dasgupta, Shib Sankar and Boratko, Michael and Zhang, Dongxu and Vilnis, Luke</span>
+<span class="s">  and Li, Xiang Lorraine and McCallum, Andrew}</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2010.04831}</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2020}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="contributors">
+<h2>💪 Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Dhruvesh Patel <a class="reference external" href="https://github.com/dhruvdcoder">&#64;dhruvdcoder</a></p></li>
+<li><p>Shib Sankar Dasgupta <a class="reference external" href="https://github.com/ssdasgupta">&#64;ssdasgupta</a></p></li>
+<li><p>Michael Boratko <a class="reference external" href="https://github.com/mboratko">&#64;mboratko</a></p></li>
+<li><p>Xiang (Lorraine) Li <a class="reference external" href="https://github.com/Lorraine333">&#64;Lorraine333</a></p></li>
+<li><p>Trang Tran <a class="reference external" href="https://github.com/trangtran72">&#64;trangtran72</a></p></li>
+<li><p>Purujit Goyal <a class="reference external" href="https://github.com/purujitgoyal">&#64;purujitgoyal</a></p></li>
+<li><p>Tejas Chheda <a class="reference external" href="https://github.com/tejas4888">&#64;tejas4888</a></p></li>
+</ul>
+<p>We welcome all contributions from the community to make Box Embeddings a better package.
+If you’re a first time contributor, we recommend you start by reading our
+<a class="reference external" href="https://github.com/iesl/box-embeddings/blob/main/.github/CONTRIBUTING.md">CONTRIBUTING.md</a> guide.</p>
+</section>
+<section id="news-and-updates">
+<h2>💡 News and Updates<a class="headerlink" href="#news-and-updates" title="Permalink to this headline">¶</a></h2>
+<p>Our library <code class="docutils literal notranslate"><span class="pre">Box</span> <span class="pre">Embeddings</span></code> will be officially introduced at EMNLP 2021!</p>
+</section>
+<section id="acknowledgments">
+<h2>🤗 Acknowledgments<a class="headerlink" href="#acknowledgments" title="Permalink to this headline">¶</a></h2>
+<p>Box Embeddings is an open-source project developed by the research team from the
+<a class="reference external" href="http://www.iesl.cs.umass.edu/">Information Extraction and Synthesis Laboratory</a> at the
+<a class="reference external" href="https://www.cics.umass.edu/">College of Information and Computer Sciences (UMass Amherst)</a>.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Code</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="box_embeddings/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings/common/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">box_embeddings.common</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings/initializations/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">box_embeddings.initializations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings/modules/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">box_embeddings.modules</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings/parameterizations/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">box_embeddings.parameterizations</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="box_embeddings/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings/index.html#box_embeddings.box_debug_level">box_debug_level</a></li>
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings/index.html#id0">box_debug_level</a></li>
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings/index.html#box_embeddings.torch_is_available">torch_is_available</a></li>
+<li class="toctree-l3"><a class="reference internal" href="box_embeddings/index.html#box_embeddings.tensorflow_is_available">tensorflow_is_available</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="#">
+              <img class="logo" src="_static/UMass_IESL.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="#">Box Embeddings</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=iesl&repo=box-embeddings&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Code</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="box_embeddings/index.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="box_embeddings/index.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">box_embeddings</span></code></a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+<h3>Branches</h3>
+<ul>
+  <li><a href="../../main/index.html">main</a></li>
+  <li><a href="index.html">dev/main</a></li>
+</ul>
+<h3>Tags</h3>
+<ul>
+  <li><a href="../../v0.0.1/index.html">v0.0.1</a></li>
+  <li><a href="../../v0.1.0/index.html">v0.1.0</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Information Extraction and Synthesis Lab, UMass.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/iesl/box-embeddings" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

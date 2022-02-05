@@ -1,0 +1,39 @@
+:py:mod:`box_embeddings.modules.intersection.tf_gumbel_intersection`
+====================================================================
+
+.. py:module:: box_embeddings.modules.intersection.tf_gumbel_intersection
+
+
+Module Contents
+---------------
+
+.. py:function:: tf_gumbel_intersection(left: box_embeddings.parameterizations.TFTBoxTensor, right: box_embeddings.parameterizations.TFTBoxTensor, gumbel_beta: float = 1.0, approximation_mode: Optional[str] = None) -> box_embeddings.parameterizations.TFTBoxTensor
+
+   Hard Intersection operation as a function.
+
+   .. note:: This function can give fipped boxes, i.e. where z[i] > Z[i]
+
+   .. todo:: Add support for automatic broadcasting
+
+   :param left: BoxTensor which is the left operand
+   :param right: BoxTensor which is the right operand
+   :param gumbel_beta: Beta parameter
+   :param approximation_mode: Use hard clipping ('clipping') or hard clipping with separeate value
+                              for forward and backward passes  ('clipping_forward') to satisfy the required inequalities.
+                              Set `None` to not use any approximation. (default: `None`)
+
+   :returns: The resulting BoxTensor obtained by interection.
+             It has the same concrete type as the `self` (left operand).
+
+   :raises ValueError: When approximation_mode is not in [None, 'clipping', 'clipping_forward']
+
+
+.. py:class:: TFGumbelIntersection(beta: float = 1.0, approximation_mode: Optional[str] = None)
+
+   Bases: :py:obj:`box_embeddings.modules.intersection.TFIntersection`
+
+   Gumbel intersection operation as a Layer/Module.
+
+   Performs the intersection operation as described in `Improving Local Identifiability in Probabilistic Box Embeddings <https://arxiv.org/abs/2010.04831>`_ .
+
+

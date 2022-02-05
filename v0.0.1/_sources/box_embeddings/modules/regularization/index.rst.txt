@@ -1,0 +1,16 @@
+:py:mod:`box_embeddings.modules.regularization`
+===============================================
+
+.. py:module:: box_embeddings.modules.regularization
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   l2_side_regularizer/index.rst
+   regularizer/index.rst
+
+

@@ -1,0 +1,31 @@
+:py:mod:`box_embeddings.modules.intersection.tf_hard_intersection`
+==================================================================
+
+.. py:module:: box_embeddings.modules.intersection.tf_hard_intersection
+
+
+Module Contents
+---------------
+
+.. py:function:: tf_hard_intersection(left: box_embeddings.parameterizations.TFTBoxTensor, right: box_embeddings.parameterizations.TFTBoxTensor) -> box_embeddings.parameterizations.TFTBoxTensor
+
+   Hard Intersection operation as a function.
+
+   .. note:: This function can give fipped boxes, i.e. where z[i] > Z[i]
+
+   .. todo:: Add support for broadcasting
+
+   :param left: BoxTensor which is the left operand
+   :param right: BoxTensor which is the right operand
+
+   :returns: The resulting BoxTensor obtained by interection.
+             It has the same concrete type as the `self` (left operand).
+
+
+.. py:class:: TFHardIntersection(name=None)
+
+   Bases: :py:obj:`box_embeddings.modules.intersection._tf_intersection._TFIntersection`
+
+   Hard intersection operation as a Layer/Module
+
+

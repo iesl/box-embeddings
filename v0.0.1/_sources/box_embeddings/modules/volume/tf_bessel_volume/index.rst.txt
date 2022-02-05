@@ -1,0 +1,59 @@
+:py:mod:`box_embeddings.modules.volume.tf_bessel_volume`
+========================================================
+
+.. py:module:: box_embeddings.modules.volume.tf_bessel_volume
+
+
+Module Contents
+---------------
+
+.. py:data:: eps
+   :annotation: = 1e-23
+
+   
+
+.. py:data:: euler_gamma
+   :annotation: = 0.5772156649015329
+
+   
+
+.. py:function:: tf_bessel_volume_approx(box_tensor: box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor, beta: float = 1.0, gumbel_beta: float = 1.0, scale: float = 1.0) -> tensorflow.Tensor
+
+   Volume of boxes. Uses the Softplus as an approximation of
+   Bessel funtion.
+
+   :param box_tensor: input
+   :param beta: the beta parameter for the softplus.
+   :param gumbel_beta: the gumbel_beta parameter (same value used in intersection).
+   :param scale: scale parameter. Should be left as 1.0 (default)
+                 in most cases.
+
+   :returns: Tensor of shape (..., ) when self has shape (..., 2, num_dims)
+
+   :raises ValueError: if scale not in (0,1]
+
+
+.. py:function:: tf_log_bessel_volume_approx(box_tensor: box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor, beta: float = 1.0, gumbel_beta: float = 1.0, scale: float = 1.0) -> tensorflow.Tensor
+
+   Volume of boxes. Uses the Softplus as an approximation of
+   Bessel funtion.
+
+   :param box_tensor: input.
+   :param beta: the beta parameter for the softplus.
+   :param gumbel_beta: the gumbel_beta parameter (same value used in intersection).
+   :param scale: scale parameter. Should be left as 1.0 (default)
+                 in most cases.
+
+   :returns: Tensor of shape (..., ) when self has shape (..., 2, num_dims)
+
+   :raises ValueError: if scale not in (0,1]
+
+
+.. py:class:: TFBesselApproxVolume(log_scale: bool = True, beta: float = 1.0, gumbel_beta: float = 1.0)
+
+   Bases: :py:obj:`box_embeddings.modules.volume.tf_volume.TFVolume`
+
+   Uses the Softplus as an approximation of
+   Bessel function.
+
+

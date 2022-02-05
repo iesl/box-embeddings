@@ -1,0 +1,55 @@
+:py:mod:`box_embeddings.modules.volume.tf_volume`
+=================================================
+
+.. py:module:: box_embeddings.modules.volume.tf_volume
+
+
+Module Contents
+---------------
+
+.. py:data:: eps
+   
+
+   
+
+.. py:class:: TFVolume(log_scale: bool = True, **kwargs: Any)
+
+   Bases: :py:obj:`tensorflow.Module`, :py:obj:`box_embeddings.common.registrable.Registrable`
+
+   Base volume class
+
+   .. py:attribute:: default_implementation
+      :annotation: = hard
+
+      
+
+   .. py:method:: forward(self, box_tensor: box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor) -> tensorflow.Tensor
+      :abstractmethod:
+
+      Base implementation is hard (ReLU) volume.
+
+      :param box_tensor: Input box tensor
+
+      :raises NotImplementedError: base class
+
+
+
+.. py:function:: tf_hard_volume(box_tensor: box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor) -> tensorflow.Tensor
+
+   Volume of boxes. Returns 0 where boxes are flipped.
+
+   :param box_tensor: input
+
+   :returns: Tensor of shape (..., ) when self has shape (..., 2, num_dims)
+
+
+.. py:function:: tf_log_hard_volume(box_tensor: box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor) -> tensorflow.Tensor
+
+
+.. py:class:: TFHardVolume(log_scale: bool = True, **kwargs: Any)
+
+   Bases: :py:obj:`TFVolume`
+
+   Hard ReLU based volume.
+
+

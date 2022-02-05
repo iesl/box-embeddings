@@ -1,0 +1,72 @@
+:py:mod:`box_embeddings.parameterizations.tanh_box_tensor`
+==========================================================
+
+.. py:module:: box_embeddings.parameterizations.tanh_box_tensor
+
+.. autoapi-nested-parse::
+
+   Implementation of Tanh box parameterization.
+
+
+
+Module Contents
+---------------
+
+.. py:class:: TanhBoxTensor(data: Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]])
+
+   Bases: :py:obj:`box_embeddings.parameterizations.box_tensor.BoxTensor`
+
+   Tanh Activated Box Tensor
+
+   .. py:method:: z(self) -> torch.Tensor
+      :property:
+
+      Lower left coordinate as Tensor
+
+      :returns: lower left corner
+      :rtype: Tensor
+
+
+   .. py:method:: Z(self) -> torch.Tensor
+      :property:
+
+      Top right coordinate as Tensor
+
+      :returns: top right corner
+      :rtype: Tensor
+
+
+   .. py:method:: W(cls: Type[box_embeddings.parameterizations.box_tensor.TBoxTensor], z: torch.Tensor, Z: torch.Tensor, *args: Any, **kwargs: Any) -> torch.Tensor
+      :classmethod:
+
+      Given (z,Z), it returns one set of valid box weights W, such that
+      Box(W) = (z,Z).
+
+      :param z: Lower left coordinate of shape (..., hidden_dims)
+      :param Z: Top right coordinate of shape (..., hidden_dims)
+      :param \*args: extra arguments for child class
+      :param \*\*kwargs: extra arguments for child class
+
+      :returns:
+
+                Parameters of the box. In base class implementation, this
+                    will have shape (..., 2, hidden_dims).
+      :rtype: Tensor
+
+
+   .. py:method:: from_vector(cls: Type[box_embeddings.parameterizations.box_tensor.TBoxTensor], vector: torch.Tensor, *args: Any, **kwargs: Any) -> box_embeddings.parameterizations.box_tensor.BoxTensor
+      :classmethod:
+
+      Creates a box for a vector. In this base implementation the vector is split
+      into two pieces and these are used as box weights.
+
+      :param vector: tensor
+      :param \*args: extra arguments for child class
+      :param \*\*kwargs: extra arguments for child class
+
+      :returns: A BoxTensor
+
+      :raises ValueError: if last dimension is not even
+
+
+

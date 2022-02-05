@@ -1,0 +1,31 @@
+:py:mod:`box_embeddings.modules.regularization.l2_side_regularizer`
+===================================================================
+
+.. py:module:: box_embeddings.modules.regularization.l2_side_regularizer
+
+
+Module Contents
+---------------
+
+.. py:data:: eps
+   :annotation: = 1e-23
+
+   
+
+.. py:function:: l2_side_regularizer(box_tensor: box_embeddings.parameterizations.box_tensor.BoxTensor, log_scale: bool = False) -> Union[float, torch.Tensor]
+
+   Applies l2 regularization on all sides of all boxes and returns the sum.
+
+   :param box_tensor: TODO
+   :param log_scale: mean in log scale
+
+   :returns: (None)
+
+
+.. py:class:: L2SideBoxRegularizer(weight: float, log_scale: bool = False)
+
+   Bases: :py:obj:`box_embeddings.modules.regularization.regularizer.BoxRegularizer`
+
+   Applies l2 regularization on side lengths.
+
+

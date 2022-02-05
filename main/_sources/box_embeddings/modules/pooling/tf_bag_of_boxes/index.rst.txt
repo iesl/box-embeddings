@@ -1,0 +1,19 @@
+:py:mod:`box_embeddings.modules.pooling.tf_bag_of_boxes`
+========================================================
+
+.. py:module:: box_embeddings.modules.pooling.tf_bag_of_boxes
+
+
+Module Contents
+---------------
+
+.. py:function:: tf_bag_of_boxes_pooler(boxes: box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor, mask: Optional[tensorflow.Tensor] = None, weights: Optional[tensorflow.Tensor] = None, dim: int = 0, keepdim: bool = False) -> box_embeddings.parameterizations.tf_box_tensor.TFBoxTensor
+
+
+.. py:class:: TFBagOfBoxesBoxPooler(dim: int = 0, keepdim: bool = False)
+
+   Bases: :py:obj:`box_embeddings.modules.pooling.tf_pooling.TFBoxPooler`
+
+   Pools a box tensor using hard intersection operation
+
+

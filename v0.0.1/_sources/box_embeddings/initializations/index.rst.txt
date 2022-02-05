@@ -1,0 +1,18 @@
+:py:mod:`box_embeddings.initializations`
+========================================
+
+.. py:module:: box_embeddings.initializations
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   initializer/index.rst
+   tf_initializer/index.rst
+   tf_uniform_boxes/index.rst
+   uniform_boxes/index.rst
+
+
