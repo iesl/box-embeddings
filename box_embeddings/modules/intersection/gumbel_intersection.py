@@ -11,17 +11,17 @@ from box_embeddings import box_debug_level
 def _compute_logaddexp_with_clipping_and_separate_forward(
     t1: TBoxTensor, t2: TBoxTensor, intersection_temperature: float
 ) -> Tuple[torch.Tensor, torch.Tensor]:
-    t1_data = torch.stack((t1.z, -t1.Z), -2)
-    t2_data = torch.stack((t2.z, -t2.Z), -2)
+    t1_data = torch.stack((t1.z.clone(), -t1.Z.clone()), -2)
+    t2_data = torch.stack((t2.z.clone(), -t2.Z.clone()), -2)
     lse = torch.logaddexp(
         t1_data / intersection_temperature, t2_data / intersection_temperature
     )
 
-    z = intersection_temperature * lse[..., 0, :]
-    Z = -intersection_temperature * lse[..., 1, :]
+    z = intersection_temperature * lse[..., 0, :].clone()
+    Z = -intersection_temperature * lse[..., 1, :].clone()
 
-    z_value = torch.max(z, torch.max(t1.z, t2.z))  # type: ignore
-    Z_value = torch.min(Z, torch.min(t1.Z, t2.Z))
+    z_value = torch.max(z, torch.max(t1.z.clone(), t2.z.clone()))  # type: ignore
+    Z_value = torch.min(Z, torch.min(t1.Z.clone(), t2.Z.clone()))
 
     z_final = (z - z.detach()) + z_value.detach()
     Z_final = (Z - Z.detach()) + Z_value.detach()
@@ -32,17 +32,17 @@ def _compute_logaddexp_with_clipping_and_separate_forward(
 def _compute_logaddexp_with_clipping(
     t1: TBoxTensor, t2: TBoxTensor, intersection_temperature: float
 ) -> Tuple[torch.Tensor, torch.Tensor]:
-    t1_data = torch.stack((t1.z, -t1.Z), -2)
-    t2_data = torch.stack((t2.z, -t2.Z), -2)
+    t1_data = torch.stack((t1.z.clone(), -t1.Z.clone()), -2)
+    t2_data = torch.stack((t2.z.clone(), -t2.Z.clone()), -2)
     lse = torch.logaddexp(
         t1_data / intersection_temperature, t2_data / intersection_temperature
     )
 
-    z = intersection_temperature * lse[..., 0, :]
-    Z = -intersection_temperature * lse[..., 1, :]
+    z = intersection_temperature * lse[..., 0, :].clone()
+    Z = -intersection_temperature * lse[..., 1, :].clone()
 
-    z_value = torch.max(z, torch.max(t1.z, t2.z))  # type: ignore
-    Z_value = torch.min(Z, torch.min(t1.Z, t2.Z))
+    z_value = torch.max(z, torch.max(t1.z.clone(), t2.z.clone()))  # type: ignore
+    Z_value = torch.min(Z, torch.min(t1.Z.clone(), t2.Z.clone()))
 
     return z_value, Z_value
 
@@ -50,14 +50,14 @@ def _compute_logaddexp_with_clipping(
 def _compute_logaddexp(
     t1: TBoxTensor, t2: TBoxTensor, intersection_temperature: float
 ) -> Tuple[torch.Tensor, torch.Tensor]:
-    t1_data = torch.stack((t1.z, -t1.Z), -2)
-    t2_data = torch.stack((t2.z, -t2.Z), -2)
+    t1_data = torch.stack((t1.z.clone(), -t1.Z.clone()), -2)
+    t2_data = torch.stack((t2.z.clone(), -t2.Z.clone()), -2)
     lse = torch.logaddexp(
         t1_data / intersection_temperature, t2_data / intersection_temperature
     )
 
-    z = intersection_temperature * lse[..., 0, :]
-    Z = -intersection_temperature * lse[..., 1, :]
+    z = intersection_temperature * lse[..., 0, :].clone()
+    Z = -intersection_temperature * lse[..., 1, :].clone()
 
     return z, Z
 
@@ -116,10 +116,10 @@ def gumbel_intersection(
     if box_debug_level > 0:
         with torch.no_grad():  # type:ignore
             assert (
-                torch.max(t1.z, t2.z) < z
+                torch.max(t1.z.clone(), t2.z.clone()) < z
             ), "max(a,b) < beta*log(exp(a/beta) + exp(b/beta)) not holding"
             assert (
-                torch.min(t1.z, t2.z) > Z
+                torch.min(t1.z.clone(), t2.z.clone()) > Z
             ), "min(a,b) > -beta*log(exp(-a/beta) + exp(-b/beta)) not holding"
 
     return left.from_zZ(z, Z)
